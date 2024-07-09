@@ -1,8 +1,8 @@
 import { useRef } from "react";
 
-import Field from "../../formComponents/Field/Field";
-
-import Button from "../../formComponents/Button/Button";
+import Form     from "../../formComponents/Form/Form";
+import Fieldset from "../../formComponents/Fieldset/Fieldset";
+import Field    from "../../formComponents/Field/Field";
 
 export default function SignInView({ users, setError }) {
     const emailRef    = useRef();
@@ -16,29 +16,28 @@ export default function SignInView({ users, setError }) {
         );    
     }
 
+    const fieldSchemata = [{
+        name        : "email",
+        label       : "Email",
+        type        : "email",
+        placeholder : "Email",
+        autoComplete: "email",
+        ref         : emailRef
+    }, {
+        name        : "password",
+        label       : "Password",
+        type        : "password",
+        placeholder : "password",
+        autoComplete: "current-password",
+        ref         : passwordRef
+    }]; 
+    
     return (
-        <form>            
-            <Field 
-                name         = "email"
-                label        = "Email"
-                type         = "email"
-                placeholder  = "Email"
-                autoComplete = "email"
-                ref          = {emailRef}
+        <Form onSubmit={handleSignIn}>
+            <Fieldset 
+                legend   = "Sign in"
+                schemata = {fieldSchemata}
             />
-
-            <Field 
-                name         = "password"
-                label        = "Password"
-                type         = "password"
-                placeholder  = "password"
-                autoComplete = "current-password"
-                ref          = {passwordRef}
-            />
-            
-            <Button onClick={handleSignIn}>
-                Sign In
-            </Button>
-        </form>
+        </Form>
     );
 }

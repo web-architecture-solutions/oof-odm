@@ -1,11 +1,19 @@
 import Fieldset from "../Fieldset/Fieldset";
+import Button   from "../Button/Button";
 
-export default function Form({ schema }) {
+export default function Form({ 
+    children, 
+    schemata = null,
+    buttonLabel = "Submit", 
+    onSubmit 
+}) {
     return (
         <form>
-            {schema.map((fieldsetSchema) =>
-                <Fieldset {...fieldsetSchema} key={fieldsetSchema.legend} />
-            )}
+            {schemata ? schemata.map((props, index) =>
+                <Fieldset {...props} key={index} />
+            ) : null}
+            {children}
+            <Button onClick={onSubmit}>{buttonLabel}</Button>
         </form>
     );
 }
