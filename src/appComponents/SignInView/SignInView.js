@@ -2,7 +2,6 @@ import { useRef } from "react";
 
 import Form     from "../../formComponents/Form/Form";
 import Fieldset from "../../formComponents/Fieldset/Fieldset";
-import Field    from "../../formComponents/Field/Field";
 
 export default function SignInView({ users, setError }) {
     const emailRef    = useRef();
@@ -16,7 +15,7 @@ export default function SignInView({ users, setError }) {
         );    
     }
 
-    const fieldSchemata = [{
+    const fields = [{
         name        : "email",
         label       : "Email",
         type        : "email",
@@ -36,7 +35,7 @@ export default function SignInView({ users, setError }) {
         <Form onSubmit={handleSignIn}>
             <Fieldset 
                 legend   = "Sign in"
-                schemata = {fieldSchemata}
+                fields = {fields}
             />
         </Form>
     );

@@ -5,21 +5,23 @@ const conditionalFieldsetErrorMessage
 
 export default function Fieldset({ 
     legend,
-    schemata = null,
     children, 
+    fields    = null,
     fieldMap  = null, 
     condition = null 
 }) {
     if (condition && fieldMap) {
-        children = fieldMap[condition];
+        fields = fieldMap[condition];
     } else if (condition || fieldMap) {
         throw new Error(conditionalFieldsetErrorMessage);
     }
     return (
         <fieldset>
-            <legend>{legend}</legend>
-            {schemata ? schemata.map((props, index) =>
-                <Field {...props} key={index} />
+            {legend ? (
+                <legend>{legend}</legend>
+            ) : null}
+            {fields ? fields.map((field, index) =>
+                <Field {...field} key={index} />
             ) : null}
             {children}
         </fieldset>
