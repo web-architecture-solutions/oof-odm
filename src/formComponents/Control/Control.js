@@ -6,6 +6,7 @@ const ControlType = {
 };
 
 export default function Control({ 
+    autoComplete,
     type, 
     name, 
     value, 
@@ -26,11 +27,12 @@ export default function Control({
         default:
             return (
                 <Input 
-                    name        = {name}
-                    type        = {type}
-                    value       = {value}
-                    onChange    = {onChange}
-                    placeholder = {placeholder}
+                    autoComplete = {autoComplete}
+                    name         = {name}
+                    type         = {type}
+                    value        = {value}
+                    onChange     = {onChange}
+                    placeholder  = {placeholder}
                 />
             );
     }

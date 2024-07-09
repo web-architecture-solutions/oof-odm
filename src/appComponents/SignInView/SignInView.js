@@ -18,9 +18,25 @@ export default function SignInView({ users, setError }) {
 
     return (
         <form>            
-            <Field autoComplete="email" ref={emailRef} />
+            <Field 
+                name         = "email"
+                label        = "Email"
+                type         = "email"
+                value        = ""
+                placeholder  = "Email"
+                autoComplete = "email"
+                ref          = {emailRef}
+            />
 
-            <Field autoComplete="current-password" ref={passwordRef} />
+            <Field 
+                name         = "password"
+                label        = "Password"
+                type         = "password"
+                value        = ""
+                placeholder  = "password"
+                autoComplete = "current-password"
+                ref          = {passwordRef}
+            />
             
             <Button onClick={handleSignIn}>
                 Sign In

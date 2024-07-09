@@ -15,7 +15,9 @@ function Field({
     placeholder = null
 }, ref) {
     const [value, setValue] = useState(initialValue);
-    
+
+    console.log(autoComplete)
+
     useEffect(() => {
         if (onChange) onChange(value);
         if (ref) ref.current = value;
@@ -24,7 +26,7 @@ function Field({
     return (
         <label htmlFor={name}>
             <span className={styles.label}>
-                {label}:
+                {label}
             </span>
             
             <Control 
