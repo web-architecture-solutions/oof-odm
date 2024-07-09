@@ -19,7 +19,7 @@ export default class FirebaseCollection {
         firebase, 
         isRecursive, 
         collectionPath,
-        DatabaseDocument,
+        FirebaseDocument,
         collectionName,
         subcollectionSchema
     }) {
@@ -28,7 +28,7 @@ export default class FirebaseCollection {
         this.firebase                 = firebase;
         this.isRecursive              = isRecursive;
         this.path                     = collectionPath;
-        this.DatabaseDocument         = DatabaseDocument;  
+        this.FirebaseDocument         = FirebaseDocument;  
         this.collectionName           = collectionName;
         this.subcollectionSchema      = subcollectionSchema || null;
 
@@ -42,10 +42,8 @@ export default class FirebaseCollection {
             this.reference = collection(firestore, ...collectionPath);
         }
 
-        //console.log(this.subcollectionSchema)
-
         if (subcollectionSchema) {
-            firebase.initializeSubcollections(
+            firebase._initializeSubcollections(
                 this.subcollectionSchema,
                 this,
                 true
@@ -111,19 +109,19 @@ export default class FirebaseCollection {
 
     /* #region Factory Methods */
 
-    abstractDocumentFactory = (DatabaseDocument) => {
+    _abstractDocumentFactory = (FirebaseDocument) => {
         return (documentSnapshot) => {
-            return new DatabaseDocument({
+            return new FirebaseDocument({
                 collection: this,
                 data      : documentSnapshot.data()
             });
         }
     }
 
-    documentFactory = (documentSnapshot) => {
-        const _documentFactory 
-            = this.abstractDocumentFactory(this.DatabaseDocument);
-        return _documentFactory(documentSnapshot);
+    _documentFactory = (documentSnapshot) => {
+        const __documentFactory 
+            = this._abstractDocumentFactory(this.FirebaseDocument);
+        return __documentFactory(documentSnapshot);
     }
 
     /* #endregion Factory Methods */
@@ -137,17 +135,17 @@ export default class FirebaseCollection {
     includesWithValue = async (field, value) => {
         const whereClause   = where(field, "==", value);
         const querySnapshot = query(this.reference, whereClause);
-        return !await this.firebase.snapshotIsEmpty(querySnapshot);
+        return !await this.firebase._snapshotIsEmpty(querySnapshot);
     }
 
     /* #endregion Existence Methods  */
 
     /* #region Subscription Methods */
 
-    onSubscribeSuccessFactory = (callback) => {
+    _onSubscribeSuccessFactory = (callback) => {
         return (resultSnapshot) => {
-            const documents = this.firebase.getFromSnapshot(
-                this.documentFactory,
+            const documents = this.firebase._getFromSnapshot(
+                this._documentFactory,
                 resultSnapshot
             );
             callback(documents);
@@ -155,14 +153,14 @@ export default class FirebaseCollection {
     }   
 
     subscribeWhere = (whereClause, _limit, callback) => {
-        const onSuccess     = this.onSubscribeSuccessFactory(callback);
+        const onSuccess     = this._onSubscribeSuccessFactory(callback);
         const limitClause   = limit(_limit);
         const querySnapshot = query(this.reference, whereClause, limitClause);
         return onSnapshot(querySnapshot, onSuccess);
     }
 
     subscribe = (_limit, callback) => {
-        const onSuccess     = this.onSubscribeSuccessFactory(callback);
+        const onSuccess     = this._onSubscribeSuccessFactory(callback);
         const limitClause   = limit(_limit);
         const querySnapshot = query(this.reference, limitClause);
         return onSnapshot(querySnapshot, onSuccess);
@@ -223,7 +221,7 @@ export default class FirebaseCollection {
             throw new TypeError("Cannot add to a recursive collection");
         } else {
             const documentReference 
-                = this.firebase.getReference(...this.path, id);
+                = this.firebase._getReference(...this.path, id);
             return await this._set(data, documentReference);
         }
     }
@@ -234,8 +232,8 @@ export default class FirebaseCollection {
 
     getAll = async () => {
         const resultSnapshot = await getDocs(this.reference);
-        return this.firebase.getFromSnapshot(
-            this.documentFactory, 
+        return this.firebase._getFromSnapshot(
+            this._documentFactory, 
             resultSnapshot
         );
     }
@@ -247,17 +245,17 @@ export default class FirebaseCollection {
         }  
         // returns a single document
         const documentSnapshot 
-            = await this.firebase.getSnapshot(...this.path, id);
+            = await this.firebase._getSnapshot(...this.path, id);
         if (documentSnapshot.exists()) {
-            return this.documentFactory(documentSnapshot);
+            return this._documentFactory(documentSnapshot);
         };
     }
 
     getWhere = async (whereClause) => {
         const querySnapshot  = query(this.reference, whereClause);
         const resultSnapshot = await getDocs(querySnapshot);
-        return this.firebase.getFromSnapshot(
-            this.documentFactory, 
+        return this.firebase._getFromSnapshot(
+            this._documentFactory, 
             resultSnapshot
         );
     }
@@ -276,14 +274,14 @@ export default class FirebaseCollection {
 
     update = async (data, id) => {
         const documentReference
-            = await this.firebase.getReference(...this.path, id);   
+            = await this.firebase._getReference(...this.path, id);   
         await updateDoc(documentReference, data);
     }
 
     /* #region Delete Methods */
     
     delete = async (id) => {
-        const documentReference = this.firebase.getReference(...this.path, id);
+        const documentReference = this.firebase._getReference(...this.path, id);
         await deleteDoc(documentReference);
         return;
     }

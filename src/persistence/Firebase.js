@@ -9,41 +9,42 @@ import {
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-import FirebaseCollection from "./FirebaseCollection";
-import FirebaseDocument   from "./FirebaseDocument";
+import UserCollection from "./UserCollection";
+import UserDocument   from "./UserDocument";
 
 export default class Firebase {
     constructor(configuration) {
         const application = initializeApp(configuration);
         this.firestore    = getFirestore(application);    
     }
-    
-    initializeAuthentication(
-        UserCollection      = null,
-        UserDocument        = null,
+
+    initializeUsers = (
+        _UserCollection     = UserCollection,
+        _UserDocument       = UserDocument,
         subcollectionSchema = {}
-    ) {
-        UserCollection = UserCollection ?? FirebaseCollection;
-        UserDocument   = UserDocument   ?? FirebaseDocument;
-        
-        const authentication = getAuth(this.application);    
-        
-        this.authentication = authentication
-        this.currentUserId  = authentication?.currentUser?.uid || null;
-        this.currentUser    = null;
-        this.users          = new UserCollection({
+    ) => {
+        this.UserDocument = _UserDocument;
+        this.users = new _UserCollection({
             firebase           : this,
             isRecursive        : false,
             collectionPath     : ["users"],
-            DatabaseDocument   : this.UserDocument,
+            FirebaseDocument   : _UserDocument,
             collectionName     : "users",
             subcollectionSchema: subcollectionSchema
         });
-
+        return this;
+    }   
+    
+    initializeAuthentication = () => {
+        const authentication = getAuth(this.application);    
+        this.authentication = authentication
+        // TODO: do I need these?
+        this.currentUserId  = authentication?.currentUser?.uid || null;
+        this.currentUser    = null;
         return this;
     }
 
-    initializeSubcollections = (
+    _initializeSubcollections = (
         subcollectionSchema, 
         modelInstance, 
         isRecursive
@@ -53,8 +54,8 @@ export default class Firebase {
             data
         ]) => {
             const { 
-                DatabaseCollection,
-                DatabaseDocument,
+                FirebaseCollection,
+                FirebaseDocument,
                 collectionName,
                 parentCollectionName,
                 subcollectionSchema,
@@ -68,11 +69,11 @@ export default class Firebase {
                 modelInstance.id, 
                 subcollectionName
             ]; 
-            const collection = new DatabaseCollection({
+            const collection = new FirebaseCollection({
                 firebase   : this,
                 isRecursive: isRecursive,
                 collectionPath,
-                DatabaseDocument,
+                FirebaseDocument,
                 collectionName,
                 parentCollectionName,
                 subcollectionSchema,
@@ -84,8 +85,12 @@ export default class Firebase {
         });
     }
 
-    getReference = (...documentPath) => {
-        if (documentPath.length % 2 !== 0) {
+    static _isValidDocumentPath = (documentPath) => {
+        return documentPath.length % 2 === 0;
+    }
+
+    _getReference = (...documentPath) => {
+        if (!Firebase._isValidDocumentPath(documentPath)) {
             throw new TypeError("Invalid document path length.");
         }
         return doc(this.firestore, ...documentPath);
@@ -93,18 +98,18 @@ export default class Firebase {
 
     /* #region Snapshot Methods */
 
-    getSnapshot = async (...documentPath) => {
-        const documentReference = this.getReference(...documentPath);
+    _getSnapshot = async (...documentPath) => {
+        const documentReference = this._getReference(...documentPath);
         return await getDoc(documentReference);
     }
 
-    snapshotIsEmpty = async (snapshot) => {
+    _snapshotIsEmpty = async (snapshot) => {
         const countSnapshot = await getCountFromServer(snapshot);
         const count         = countSnapshot.data().count;
         return count === 0;
     }
 
-    getFromSnapshot = (documentFactory, resultSnapshot) => {  
+    _getFromSnapshot = (documentFactory, resultSnapshot) => {  
         const documents = [];
         const buildDocument = async (documentSnapshot) => {
             const _document = documentFactory(documentSnapshot);
@@ -118,34 +123,37 @@ export default class Firebase {
 
     /* #region User Methods */
 
-    getUserProfileData = async (userId) => {
-        const profileSnapshot = await this.getSnapshot("users", userId);
+    _getUserProfileData = async (userId) => {
+        const profileSnapshot = await this._getSnapshot("users", userId);
         return profileSnapshot.data();
     }
 
-    setCurrentUser = async (_currentUserData) => {
+    _makeCurrentUser = async (_currentUserData) => {
         const currentUserId   = _currentUserData.uid;
-        const profileData     = await this.getUserProfileData(currentUserId);
+        const profileData     = await this._getUserProfileData(currentUserId);
+        // Integrate utility IDs and profile data
         const currentUserData = {
             id    : currentUserId,
             userId: currentUserId,  
             ..._currentUserData,
             ...profileData
         };
+        // Build currentUser document
         const currentUser = new this.UserDocument({ 
             collection: this.users,
             data      : currentUserData
         });
         currentUser.currentUser = currentUser;
-        this.currentUser        = currentUser;
+        return currentUser;
     }
     
-    onUserChange = (setCurrentUser, setIsLoading) => { 
+    onUserChange = (setCurrentUser, setIsLoading = null) => { 
         const onSuccess = async (currentUserData) => {    
-            setIsLoading(); 
             if (currentUserData) {                  
-                await this.setCurrentUser(currentUserData); 
-                setCurrentUser(this.currentUser);
+                if (setIsLoading) setIsLoading(true); 
+                const currentUser = await this._makeCurrentUser(currentUserData); 
+                setCurrentUser(currentUser);
+                if (setIsLoading) setIsLoading(false); 
             }
         };
         return onAuthStateChanged(this.authentication, onSuccess);        

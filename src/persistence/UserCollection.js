@@ -11,16 +11,12 @@ import FirebaseCollection from "./FirebaseCollection";
 import UserDocument       from "./UserDocument";
 
 export default class UserCollection extends FirebaseCollection {
-    static get DatabaseDocument () {
+    static get FirebaseDocument () {
         return UserDocument;
     }
 
-    existsWithUsername = async (username) => {
-        return await this.firebase.includesWithValue(
-            this.collectionName, 
-            "username", 
-            username
-        );
+    doesUsernameExist = async (username) => {
+        return await this.includesWithValue("username", username);
     }
 
     searchByUsername = (username, limit, callback) => {
@@ -78,19 +74,17 @@ export default class UserCollection extends FirebaseCollection {
     signInWithEmailAndPassword = async (
         email, 
         password, 
-        callback, 
-        setError
+        setError = null
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
-            .then(async ({ user }) => {
-                const onSuccess = this.onSignInSuccessFactory(callback);
-                return await onSuccess(user);
-            })
-            .catch((error) => setError(error.code));
+            .catch(({ code, message }) => {
+                console.error(code, message)
+                if (setError) setError(code);
+            });
     }
 
-    signOut = (callback) => { 
-        signOut(this.authentication).then(callback); 
+    signOut = (callback = null) => { 
+        signOut(this.authentication).then(() => callback && callback()); 
     }
 
     /* #endregion Sign in/out Methods */

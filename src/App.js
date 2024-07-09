@@ -4,103 +4,10 @@ import configuration from "./configuration.js";
 
 import Firebase from "./persistence/Firebase";
 
-const ApplicationErrorMessage = {
-    "auth/username-already-exists": "A user with that username already exists.",
-    "auth/passwords-do-not-match" : "The passwords you entered do not match"
-};
-
-const FirebaseErrorMessage = {
-    "auth/wrong-password"      : "Email/password is incorrect.",
-    "auth/invalid-email"       : "Email/password is incorrect.",
-    "auth/too-many-requests"   : "Too many requests, please try again later.",
-    "auth/email-already-exists": "A user with that email already exists.",
-    "auth/email-already-in-use": "A user with that email already exists.",
-};
-
-export const ErrorMessage = { 
-    ...ApplicationErrorMessage, 
-    ...FirebaseErrorMessage 
-};
-
-const firebase = new Firebase(configuration).initializeAuthentication();
-
-function LoadingView() {
-    return (
-        <>Loading...</>
-    );
-}
-
-function DefaultView({ currentUser, setView }) {
-    return currentUser ? (
-        <button>Sign out</button>
-    ) : (
-        <>
-            <button onClick={() => setView("signIn")}>
-                Sign in
-            </button>
-
-            <button onClick={() => setView("register")}>
-                Register
-            </button>
-        </>
-    );
-}
-
-/*
-function RegistrationView() {
-    const [username            , setUsername            ] = useState("");
-    const [email               , setEmail               ] = useState("");
-    const [password            , setPassword            ] = useState("");
-    const [passwordConfirmation, setPasswordConfirmation] = useState("");
-    const [errorCode           , setErrorCode           ] = useState(null);
-    const [errorMessage        , setErrorMessage        ] = useState(null);
-
-    useEffect(() => {
-        setErrorCode(null);
-    }, [username, email]);
-
-    useEffect(() => {
-        const errorMessage = errorCode ? ErrorMessage[errorCode] : "";
-        setErrorMessage(errorMessage);
-    }, [errorCode]);
-
-    useEffect(() => {
-        const errorCode 
-            = password !== passwordConfirmation 
-                ? "auth/passwords-do-not-match" 
-                : null;
-        setErrorCode(errorCode);    
-    }, [password, passwordConfirmation]);
-
-    function handleCreateUser () {
-        const callback = (profile) => {
-            //Users.setProfile({
-            //    following: [profile.userId],
-            //    ...profile
-            //});
-        };
-
-        if (username && email && password) {
-            const profile = { username };
-            Users.createWithEmailAndPassword(
-                profile, 
-                email, 
-                password, 
-                callback,
-                setErrorCode
-            );
-        }
-    }
-
-    return (
-        <>
-            <button onClick={handleCreateUser}>
-                Register
-            </button>
-        </>
-    );
-}
-    */
+import LoadingView      from "./components/LoadingView/LoadingView";
+import DefaultView      from "./components/DefaultView/DefaultView";
+import RegistrationView from "./components/RegistrationView/RegistrationView";
+import SignInView       from "./components/SignInView/SignInView";
 
 const View = {
     default : "default",
@@ -109,11 +16,21 @@ const View = {
     signIn  : "signIn"
 };
 
+const firebase = new Firebase(configuration)
+    .initializeUsers()
+    .initializeAuthentication();
+
 export default function App() {
-    const [view       ,        setView] = useState(View.loading);
+    const [view       ,        setView] = useState(View.default);
     const [currentUser, setCurrentUser] = useState(null);
-    
-    const setIsLoading = () => setView("loading");
+    const [isLoading  ,   setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setView(isLoading ? View.loading : View.default);
+    }, [isLoading])
+
+    console.log("isLoading:", isLoading);
+    console.log("currentUser:", currentUser);
 
     useEffect(() => {
         const unsubscribeFromCurrentUser = firebase.onUserChange(
@@ -122,37 +39,31 @@ export default function App() {
         );
         return () => unsubscribeFromCurrentUser(); 
     }, []);
-    
-    useEffect(() => {
-        setTimeout(() => setView(View.default), 1000);
-    }, [currentUser]);
 
-
-    useEffect(() => {
-        console.log(firebase);
-    }, [currentUser])
-
-    return (
-        <div>Hello World</div>
-    );
-
-    /*
     switch (view) {
-        case "loading":
+        case View.loading:
             return (
                 <LoadingView />
             );
-        case "register":
+        case View.register:
             return (
-                <RegistrationView />
+                <RegistrationView users={firebase.users} />
+            );
+        case View.signIn:
+            return (
+                <SignInView 
+                    users   = {firebase.users}
+                    setView = {setView}
+                />
             );
         default:
             return (
                 <DefaultView 
-                    currentUser = {currentUser}
-                    setView     = {setView}
+                    users          = {firebase.users}
+                    currentUser    = {currentUser}
+                    setCurrentUser = {setCurrentUser}
+                    setView        = {setView}
                 />
             );
     }
-    */
 }

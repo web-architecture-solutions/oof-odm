@@ -18,7 +18,7 @@ export default class FirebaseDocument {
 
         // TODO: document this process
         if (this.constructor.documentSubcollectionSchema) {
-            collection.firebase.initializeSubcollections(
+            collection.firebase._initializeSubcollections(
                 this.constructor.documentSubcollectionSchema,
                 this,
                 false

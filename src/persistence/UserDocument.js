@@ -1,8 +1,7 @@
-import DatabaseDocument from "./DatabaseDocument";
+import FirebaseDocument from "./FirebaseDocument";
 
-export default class UserDocument extends DatabaseDocument {
-    // TODO: Does it make sense to have this on the document itself? 
-    signOut = (callback) => {
+export default class UserDocument extends FirebaseDocument {
+    signOut = (callback = null) => {
         this.collection.signOut(callback);
     }
 }
