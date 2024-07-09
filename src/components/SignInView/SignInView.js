@@ -4,8 +4,7 @@ export default function SignInView({ users, setError }) {
     const [email   , setEmail   ] = useState("");
     const [password, setPassword] = useState("");
 
-    async function handleSignIn(event) {
-        event.preventDefault();
+    async function handleSignIn() {
         await users.signInWithEmailAndPassword(
             email, 
             password, 

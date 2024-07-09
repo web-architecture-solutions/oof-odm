@@ -19,7 +19,7 @@ const ErrorMessage = {
     ...FirebaseErrorMessage 
 };
 
-export default function RegistrationView({ users }) {
+function useRegistration(users) {
     const [username            , setUsername            ] = useState("");
     const [email               , setEmail               ] = useState("");
     const [password            , setPassword            ] = useState("");
@@ -44,67 +44,90 @@ export default function RegistrationView({ users }) {
         setErrorCode(errorCode);    
     }, [password, passwordConfirmation]);
 
-    // BUG: not firing
-    // TODO: move as much of this logic into OOF Core as possible
     function handleCreateUser () {
-        const callback = (profile) => {
-            users._setProfile({
-                following: [profile.userId],
-                ...profile
-            });
-        };
-
         if (username && email && password) {
             const profile = { username };
             users.createWithEmailAndPassword(
                 profile, 
                 email, 
                 password, 
-                callback,
+                null,
                 setErrorCode
             );
         }
     }
+
+    return { 
+        username,
+        setUsername,
+        email,
+        setEmail,
+        password,
+        setPassword,
+        passwordConfirmation,
+        setPasswordConfirmation,
+        errorMessage,
+        handleCreateUser
+    };
+}
+
+export default function RegistrationView({ users }) {
+    const { 
+        username,
+        setUsername,
+        email,
+        setEmail,
+        password,
+        setPassword,
+        passwordConfirmation,
+        setPasswordConfirmation,
+        errorMessage,
+        handleCreateUser
+    } = useRegistration(users);
 
     return (
         <form>
             <label>
                 Username:
                 <input 
-                    name     = "username"
-                    type     = "text"
-                    value    = {username}
-                    onChange = {({ target }) => setUsername(target.value)}
+                    autoComplete = "username"
+                    name         = "username"
+                    type         = "text"
+                    value        = {username}
+                    onChange     = {({ target }) => setUsername(target.value)}
                 />
             </label>
             
             <label>
                 Email:
                 <input 
-                    name     = "email"
-                    type     = "email"
-                    value    = {email}
-                    onChange = {({ target }) => setEmail(target.value)}
+                    autoComplete = "email"
+                    name         = "email"
+                    type         = "email"
+                    value        = {email}
+                    onChange     = {({ target }) => setEmail(target.value)}
                 />
             </label>
             
             <label>
                 Password:
                 <input 
-                    name     = "password"
-                    type     = "password"
-                    value    = {password}
-                    onChange = {({ target }) => setPassword(target.value)}
+                    autoComplete = "password"
+                    name         = "password"
+                    type         = "password"
+                    value        = {password}
+                    onChange     = {({ target }) => setPassword(target.value)}
                 />
             </label>
             
             <label>
                 Confirm Password:
                 <input 
-                    name     = "passwordConfirmation"
-                    type     = "password"
-                    value    = {passwordConfirmation}
-                    onChange = {({ target }) => setPasswordConfirmation(target.value)}
+                    autoComplete = "confirm-password"
+                    name         = "passwordConfirmation"
+                    type         = "password"
+                    value        = {passwordConfirmation}
+                    onChange     = {({ target }) => setPasswordConfirmation(target.value)}
                 />  
             </label>
 
