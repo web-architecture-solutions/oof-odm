@@ -127,6 +127,11 @@ export default function App() {
         setTimeout(() => setView(View.default), 1000);
     }, [currentUser]);
 
+
+    useEffect(() => {
+        console.log(firebase);
+    }, [currentUser])
+
     return (
         <div>Hello World</div>
     );

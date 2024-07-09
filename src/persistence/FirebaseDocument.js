@@ -4,18 +4,19 @@ export default class FirebaseDocument {
     constructor ({ collection, data: _data }) {
         const data = { 
             ..._data, 
-            collectionPath: collection.path,
+            collectionPath: collection.path, // TODO: document why we need this
             timestamp     : new Timestamp(_data.timestamp)
         };
 
         this.collection = collection;
         this.data       = data;
 
+        // TODO: document this step
         Object
             .entries(data)
             .forEach(([key, value]) => this[key] = value);  
 
-        //console.log(collection)
+        // TODO: document this process
         if (this.constructor.documentSubcollectionSchema) {
             collection.firebase.initializeSubcollections(
                 this.constructor.documentSubcollectionSchema,
