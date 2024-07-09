@@ -9,14 +9,12 @@ function Field({
     name, 
     label, 
     type, 
-    value: initialValue, 
+    value: initialValue = "", 
     onChange, 
     options     = null,
     placeholder = null
 }, ref) {
     const [value, setValue] = useState(initialValue);
-
-    console.log(autoComplete)
 
     useEffect(() => {
         if (onChange) onChange(value);

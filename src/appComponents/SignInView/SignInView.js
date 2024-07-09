@@ -22,7 +22,6 @@ export default function SignInView({ users, setError }) {
                 name         = "email"
                 label        = "Email"
                 type         = "email"
-                value        = ""
                 placeholder  = "Email"
                 autoComplete = "email"
                 ref          = {emailRef}
@@ -32,7 +31,6 @@ export default function SignInView({ users, setError }) {
                 name         = "password"
                 label        = "Password"
                 type         = "password"
-                value        = ""
                 placeholder  = "password"
                 autoComplete = "current-password"
                 ref          = {passwordRef}

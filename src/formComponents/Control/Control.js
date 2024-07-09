@@ -1,9 +1,7 @@
 import Input  from "../Input/Input";
 import Select from "../Select/Select";
 
-const ControlType = {
-    select: "select"
-};
+const ControlType = { select: "select" };
 
 export default function Control({ 
     autoComplete,

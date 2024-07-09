@@ -1,3 +1,3 @@
-const DefaultInput = (props)  => <input {...props} />;
+const Input = (props)  => <input {...props} />;
 
-export default DefaultInput;
+export default Input;
