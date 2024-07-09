@@ -44,7 +44,8 @@ function useRegistration(users) {
         setErrorCode(errorCode);    
     }, [password, passwordConfirmation]);
 
-    function handleCreateUser () {
+    function handleCreateUser (event) {
+        event.preventDefault();
         if (username && email && password) {
             const profile = { username };
             users.createWithEmailAndPassword(

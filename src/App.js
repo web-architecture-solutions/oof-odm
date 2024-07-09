@@ -4,10 +4,10 @@ import configuration from "./configuration.js";
 
 import Firebase from "./persistence/Firebase";
 
-import LoadingView      from "./components/LoadingView/LoadingView";
-import DefaultView      from "./components/DefaultView/DefaultView";
-import RegistrationView from "./components/RegistrationView/RegistrationView";
-import SignInView       from "./components/SignInView/SignInView";
+import LoadingView      from "./appComponents/LoadingView/LoadingView";
+import DefaultView      from "./appComponents/DefaultView/DefaultView";
+import RegistrationView from "./appComponents/RegistrationView/RegistrationView";
+import SignInView       from "./appComponents/SignInView/SignInView";
 
 const View = {
     default : "default",
@@ -29,7 +29,6 @@ export default function App() {
         setView(isLoading ? View.loading : View.default);
     }, [isLoading])
 
-    console.log("isLoading:", isLoading);
     console.log("currentUser:", currentUser);
 
     useEffect(() => {
