@@ -23,3 +23,16 @@ export const View = {
     register: "register",
     signIn  : "signIn"
 };
+
+export const FieldType = {
+    email   : "email",
+    password: "password",
+    text    : "text"
+};
+
+export const AutoComplete = {
+    currentPassword: "current-password",
+    newPassword    : "new-password",
+    email          : "email",
+    username       : "username"
+};

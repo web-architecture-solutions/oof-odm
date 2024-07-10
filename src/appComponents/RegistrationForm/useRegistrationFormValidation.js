@@ -28,5 +28,5 @@ export default function useRegistrationFormValidation({
         setErrorCode(errorCode);    
     }, [passwordRef, confirmPasswordRef]);
 
-    return { setErrorCode, errorMessage };
+    return { errorCode, setErrorCode, errorMessage };
 }

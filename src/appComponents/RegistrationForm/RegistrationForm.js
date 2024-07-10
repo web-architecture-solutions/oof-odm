@@ -15,8 +15,9 @@ export default function RegistrationForm({ users }) {
     const confirmPasswordRef = useRef();
 
     const { 
+        errorCode,
         setErrorCode, 
-        //errorMessage 
+        errorMessage 
     } = useRegistrationFormValidation({ 
         usernameRef,
         emailRef,
@@ -26,7 +27,8 @@ export default function RegistrationForm({ users }) {
 
     function handleRegistration () {
         if (
-            usernameRef.current.value 
+            !errorCode
+            && usernameRef.current.value 
             && emailRef.current.value 
             && passwordRef.current.value
         ) {
@@ -50,8 +52,9 @@ export default function RegistrationForm({ users }) {
 
     return (
         <Form 
-            className = {styles.RegistrationForm}
-            onSubmit  = {handleRegistration}
+            className    = {styles.RegistrationForm}
+            onSubmit     = {handleRegistration}
+            errorMessage = {errorMessage}
         >
             <Fieldset
                 legend = "Register"

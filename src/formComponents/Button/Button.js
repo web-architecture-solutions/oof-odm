@@ -1,8 +1,19 @@
-export default function Button({ children, onClick }) {
+export default function Button({ 
+    children, 
+    onClick, 
+    disabled = null 
+}) {
     function _onClick(event) {
         event.preventDefault();
         onClick();
     }
     
-    return <button onClick={_onClick}>{children}</button>;
+    return (
+        <button 
+            disabled = {disabled}
+            onClick  = {_onClick}
+        >
+            {children}
+        </button>
+    );
 }

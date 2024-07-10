@@ -4,9 +4,9 @@ import Button   from "../Button/Button";
 export default function Form({ 
     children, 
     onSubmit,
-    errorMessages,
-    fieldsets   = null,
-    buttonLabel = "Submit"
+    errorMessage = "",
+    fieldsets    = null,
+    buttonLabel  = "Submit"
 }) {
     return (
         <form>
@@ -15,7 +15,15 @@ export default function Form({
             ) : null}
             {children}
             {onSubmit ? (
-                <Button onClick={onSubmit}>{buttonLabel}</Button>
+                <Button 
+                    onClick  = {onSubmit}
+                    disabled = {errorMessage}
+                >
+                    {buttonLabel}
+                </Button>
+            ) : null}
+            {errorMessage ? (
+                <span>{errorMessage}</span>
             ) : null}
         </form>
     );
