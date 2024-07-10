@@ -13,7 +13,7 @@ export default function SignInForm({ users }) {
         await users.signInWithEmailAndPassword(
             emailRef.current.value, 
             passwordRef.current.value, 
-            (error) => console.log(error)
+            (error) => console.error(error)
         );    
     }
 

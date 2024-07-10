@@ -19,7 +19,6 @@ export const ErrorMessage = {
 
 export const View = {
     default : "default",
-    loading : "loading",
     register: "register",
     signIn  : "signIn"
 };

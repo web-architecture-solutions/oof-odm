@@ -34,16 +34,14 @@ export default class UserCollection extends FirebaseCollection {
         profile, 
         email, 
         password, 
-        callback = null, 
-        setError
+        setError,
+        callback = null
     ) => {
         const usernameExists = await this.doesUsernameExist(profile.username);
         if (usernameExists) {
             setError("auth/username-already-exists");    
         } else {
             const onSuccess = async ({ user }) => {
-                console.log("onSuccess")
-                console.log(user)
                 if (profile.username) {
                     profile.caseInsensitiveUsername 
                         = profile.username.toLowerCase();

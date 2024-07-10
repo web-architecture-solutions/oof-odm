@@ -3,6 +3,7 @@ import { useRef } from "react";
 import Form     from "../../../form-components/Form/Form";
 import Fieldset from "../../../form-components/Fieldset/Fieldset";
 
+import useProfile                    from "./useProfile";
 import useRegistrationFields         from "./useRegistrationFields";
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
@@ -25,6 +26,8 @@ export default function RegistrationForm({ users }) {
         confirmPasswordRef
     });
 
+    const profile = useProfile({ usernameRef });
+
     function handleRegistration () {
         if (
             !errorCode
@@ -32,12 +35,10 @@ export default function RegistrationForm({ users }) {
             && emailRef.current.value 
             && passwordRef.current.value
         ) {
-            const profile = { username: usernameRef.current.value };
             users.createWithEmailAndPassword(
                 profile, 
                 emailRef.current.value, 
                 passwordRef.current.value, 
-                null,
                 setErrorCode
             );
         }
