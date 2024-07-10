@@ -1,6 +1,6 @@
-export default function DefaultView({ users, currentUser, setCurrentUser, setView }) {
+export default function DefaultView({ users, currentUser, setView }) {
     return currentUser ? (
-        <button onClick={() => users.signOut(() => setCurrentUser(null))}>
+        <button onClick={() => users.signOut()}>
             Sign out
         </button>
     ) : (

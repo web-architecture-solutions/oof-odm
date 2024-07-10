@@ -154,6 +154,8 @@ export default class Firebase {
                 const currentUser = await this._makeCurrentUser(currentUserData); 
                 setCurrentUser(currentUser);
                 if (setIsLoading) setIsLoading(false); 
+            } else {
+                setCurrentUser(null);
             }
         };
         return onAuthStateChanged(this.authentication, onSuccess);        

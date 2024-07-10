@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 
 import configuration from "./configuration.js";
 
-import Firebase from "./persistence/Firebase";
+import Firebase from "./OOF/Firebase";
 
-import LoadingView      from "./appComponents/LoadingView/LoadingView";
-import DefaultView      from "./appComponents/DefaultView/DefaultView";
-import RegistrationView from "./appComponents/RegistrationView/RegistrationView";
-import SignInView       from "./appComponents/SignInView/SignInView";
+import LoadingView      from "./AppComponents/LoadingView/LoadingView";
+import DefaultView      from "./AppComponents/DefaultView/DefaultView";
+import RegistrationView from "./AppComponents/RegistrationView/RegistrationView";
+import SignInView       from "./AppComponents/SignInView/SignInView";
 
 const View = {
     default : "default",
@@ -20,24 +20,31 @@ const firebase = new Firebase(configuration)
     .initializeUsers()
     .initializeAuthentication();
 
-export default function App() {
-    const [view       ,        setView] = useState(View.default);
+function useCurrentUser({ firebase, setIsLoading }) {
     const [currentUser, setCurrentUser] = useState(null);
-    const [isLoading  ,   setIsLoading] = useState(false);
-
-    useEffect(() => {
-        setView(isLoading ? View.loading : View.default);
-    }, [isLoading])
-
-    console.log("currentUser:", currentUser);
-
     useEffect(() => {
         const unsubscribeFromCurrentUser = firebase.onUserChange(
             setCurrentUser,
             setIsLoading
         );
         return () => unsubscribeFromCurrentUser(); 
-    }, []);
+    }, [firebase, setIsLoading]);
+    return currentUser;
+}
+
+export default function App() {
+    const [view     ,      setView] = useState(View.default);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setView(isLoading ? View.loading : View.default);
+    }, [isLoading])
+
+    const currentUser = useCurrentUser({ firebase, setIsLoading });
+
+    console.log("currentUser:", currentUser);
+
+    
 
     switch (view) {
         case View.loading:
@@ -58,10 +65,9 @@ export default function App() {
         default:
             return (
                 <DefaultView 
-                    users          = {firebase.users}
-                    currentUser    = {currentUser}
-                    setCurrentUser = {setCurrentUser}
-                    setView        = {setView}
+                    users       = {firebase.users}
+                    currentUser = {currentUser}
+                    setView     = {setView}
                 />
             );
     }

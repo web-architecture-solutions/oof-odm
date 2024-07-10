@@ -1,9 +1,9 @@
 import { useRef } from "react";
 
-import Form     from "../../formComponents/Form/Form";
-import Fieldset from "../../formComponents/Fieldset/Fieldset";
+import Form     from "../../FormComponents/Form/Form";
+import Fieldset from "../../FormComponents/Fieldset/Fieldset";
 
-function useFields({ emailRef, passwordRef }) {
+function useSignInFields({ emailRef, passwordRef }) {
     return [{
         name        : "email",
         label       : "Email",
@@ -33,13 +33,13 @@ export default function SignInView({ users, setError }) {
         );    
     }
 
-    const fields = useFields({ emailRef, passwordRef }); 
+    const signInFields = useSignInFields({ emailRef, passwordRef }); 
     
     return (
         <Form onSubmit={handleSignIn}>
             <Fieldset 
                 legend = "Sign in"
-                fields = {fields}
+                fields = {signInFields}
             />
         </Form>
     );
