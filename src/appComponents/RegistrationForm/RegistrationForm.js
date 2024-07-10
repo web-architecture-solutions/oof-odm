@@ -1,39 +1,28 @@
-import { useEffect, useRef, useState } from "react";
-
-import { ErrorMessage } from "../../constants";
+import { useRef } from "react";
 
 import Form     from "../../FormComponents/Form/Form";
 import Fieldset from "../../FormComponents/Fieldset/Fieldset";
 
-import useRegistrationFields from "./useRegistrationFields";
+import useRegistrationFields         from "./useRegistrationFields";
+import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
 import styles from "./RegistrationForm.module.css";
 
 export default function RegistrationForm({ users }) {
-    const [errorCode   , setErrorCode           ] = useState(null);
-    const [errorMessage, setErrorMessage        ] = useState(null);
-
-    useEffect(() => {
-        const errorMessage = errorCode ? ErrorMessage[errorCode] : "";
-        setErrorMessage(errorMessage);
-    }, [errorCode]);
-
     const usernameRef        = useRef();
     const emailRef           = useRef();
     const passwordRef        = useRef();
     const confirmPasswordRef = useRef();
 
-    useEffect(() => {
-        setErrorCode(null);
-    }, [usernameRef, emailRef]);
-
-    useEffect(() => {
-        const errorCode 
-            = passwordRef.current.value !== confirmPasswordRef.current.value 
-                ? "auth/passwords-do-not-match" 
-                : null;
-        setErrorCode(errorCode);    
-    }, [passwordRef, confirmPasswordRef]);
+    const { 
+        setErrorCode, 
+        //errorMessage 
+    } = useRegistrationFormValidation({ 
+        usernameRef,
+        emailRef,
+        passwordRef,
+        confirmPasswordRef
+    });
 
     function handleRegistration () {
         if (
