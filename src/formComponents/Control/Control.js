@@ -6,13 +6,13 @@ import Select from "../Select/Select";
 const ControlType = { select: "select" };
 
 function Control({ 
-    autoComplete,
     type, 
     name, 
     value, 
     onChange, 
-    placeholder = null,
-    options     = null 
+    autoComplete = null,
+    placeholder  = null,
+    options      = null 
 }, ref) {    
     switch (type) {
         case ControlType.select:

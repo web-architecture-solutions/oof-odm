@@ -3,19 +3,8 @@ import { useRef } from "react";
 import Form     from "../../formComponents/Form/Form";
 import Fieldset from "../../formComponents/Fieldset/Fieldset";
 
-export default function SignInView({ users, setError }) {
-    const emailRef    = useRef();
-    const passwordRef = useRef();
-
-    async function handleSignIn() {
-        await users.signInWithEmailAndPassword(
-            emailRef.current.value, 
-            passwordRef.current.value, 
-            setError
-        );    
-    }
-
-    const fields = [{
+function useFields({ emailRef, passwordRef }) {
+    return [{
         name        : "email",
         label       : "Email",
         type        : "email",
@@ -29,7 +18,22 @@ export default function SignInView({ users, setError }) {
         placeholder : "password",
         autoComplete: "current-password",
         ref         : passwordRef
-    }]; 
+    }];
+}
+
+export default function SignInView({ users, setError }) {
+    const emailRef    = useRef();
+    const passwordRef = useRef();
+
+    async function handleSignIn() {
+        await users.signInWithEmailAndPassword(
+            emailRef.current.value, 
+            passwordRef.current.value, 
+            setError
+        );    
+    }
+
+    const fields = useFields({ emailRef, passwordRef }); 
     
     return (
         <Form onSubmit={handleSignIn}>
