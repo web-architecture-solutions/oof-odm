@@ -10,7 +10,7 @@ import AuthNav          from "./auth/components/AuthNav/AuthNav.js";
 import RegistrationForm from "./auth/components/RegistrationForm/RegistrationForm.js";
 import SignInForm       from "./auth/components/SignInForm/SignInForm.js";
 
-import { useCurrentUser } from "./auth/hooks.js";
+import useCurrentUser   from "./auth/hooks/useCurrentUser.js";
 
 export default function App() {
     const [view     ,      setView] = useState(View.default);
