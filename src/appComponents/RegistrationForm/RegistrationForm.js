@@ -10,34 +10,47 @@ import useRegistrationFields from "./useRegistrationFields";
 import styles from "./RegistrationForm.module.css";
 
 export default function RegistrationForm({ users }) {
-    const [username            , setUsername            ] = useState("");
-    const [email               , setEmail               ] = useState("");
-    const [password            , setPassword            ] = useState("");
-    const [passwordConfirmation, setPasswordConfirmation] = useState("");
-    const [errorCode           , setErrorCode           ] = useState(null);
-    const [errorMessage        , setErrorMessage        ] = useState(null);
-
-    useEffect(() => {
-        setErrorCode(null);
-    }, [username, email]);
+    const [errorCode   , setErrorCode           ] = useState(null);
+    const [errorMessage, setErrorMessage        ] = useState(null);
 
     useEffect(() => {
         const errorMessage = errorCode ? ErrorMessage[errorCode] : "";
         setErrorMessage(errorMessage);
     }, [errorCode]);
 
-    useEffect(() => {
-        const errorCode 
-            = password !== passwordConfirmation 
-                ? "auth/passwords-do-not-match" 
-                : null;
-        setErrorCode(errorCode);    
-    }, [password, passwordConfirmation]);
-
     const usernameRef        = useRef();
     const emailRef           = useRef();
     const passwordRef        = useRef();
     const confirmPasswordRef = useRef();
+
+    useEffect(() => {
+        setErrorCode(null);
+    }, [usernameRef, emailRef]);
+
+    useEffect(() => {
+        const errorCode 
+            = passwordRef.current.value !== confirmPasswordRef.current.value 
+                ? "auth/passwords-do-not-match" 
+                : null;
+        setErrorCode(errorCode);    
+    }, [passwordRef, confirmPasswordRef]);
+
+    function handleRegistration () {
+        if (
+            usernameRef.current.value 
+            && emailRef.current.value 
+            && passwordRef.current.value
+        ) {
+            const profile = { username: usernameRef.current.value };
+            users.createWithEmailAndPassword(
+                profile, 
+                emailRef.current.value, 
+                passwordRef.current.value, 
+                null,
+                setErrorCode
+            );
+        }
+    }
 
     const registrationFields = useRegistrationFields({
         usernameRef,
@@ -46,21 +59,11 @@ export default function RegistrationForm({ users }) {
         confirmPasswordRef
     });
 
-    function handleRegistration () {
-        if (username && email && password) {
-            const profile = { username };
-            users.createWithEmailAndPassword(
-                profile, 
-                email, 
-                password, 
-                null,
-                setErrorCode
-            );
-        }
-    }
-
     return (
-        <Form className={styles.RegistrationForm} onSubmit={handleRegistration}>
+        <Form 
+            className = {styles.RegistrationForm}
+            onSubmit  = {handleRegistration}
+        >
             <Fieldset
                 legend = "Register"
                 fields = {registrationFields}

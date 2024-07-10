@@ -4,6 +4,7 @@ import Button   from "../Button/Button";
 export default function Form({ 
     children, 
     onSubmit,
+    errorMessages,
     fieldsets   = null,
     buttonLabel = "Submit"
 }) {
