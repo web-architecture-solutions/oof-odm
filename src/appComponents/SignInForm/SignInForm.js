@@ -3,25 +3,9 @@ import { useRef } from "react";
 import Form     from "../../FormComponents/Form/Form";
 import Fieldset from "../../FormComponents/Fieldset/Fieldset";
 
-function useSignInFields({ emailRef, passwordRef }) {
-    return [{
-        name        : "email",
-        label       : "Email",
-        type        : "email",
-        placeholder : "Email",
-        autoComplete: "email",
-        ref         : emailRef
-    }, {
-        name        : "password",
-        label       : "Password",
-        type        : "password",
-        placeholder : "password",
-        autoComplete: "current-password",
-        ref         : passwordRef
-    }];
-}
+import useSignInFields from "./useSignInFields";
 
-export default function SignInView({ users, setError }) {
+export default function SignInForm({ users }) {
     const emailRef    = useRef();
     const passwordRef = useRef();
 
@@ -29,7 +13,7 @@ export default function SignInView({ users, setError }) {
         await users.signInWithEmailAndPassword(
             emailRef.current.value, 
             passwordRef.current.value, 
-            setError
+            (error) => console.log(error)
         );    
     }
 

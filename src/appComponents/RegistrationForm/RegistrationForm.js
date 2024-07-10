@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import styles from "./RegistrationForm.module.css";
+
 const ApplicationErrorMessage = {
     "auth/username-already-exists": "A user with that username already exists",
     "auth/passwords-do-not-match" : "The passwords you entered do not match",
@@ -19,7 +21,7 @@ const ErrorMessage = {
     ...FirebaseErrorMessage 
 };
 
-function useRegistration(users) {
+export default function RegistrationForm({ users }) {
     const [username            , setUsername            ] = useState("");
     const [email               , setEmail               ] = useState("");
     const [password            , setPassword            ] = useState("");
@@ -58,36 +60,8 @@ function useRegistration(users) {
         }
     }
 
-    return { 
-        username,
-        setUsername,
-        email,
-        setEmail,
-        password,
-        setPassword,
-        passwordConfirmation,
-        setPasswordConfirmation,
-        errorMessage,
-        handleCreateUser
-    };
-}
-
-export default function RegistrationView({ users }) {
-    const { 
-        username,
-        setUsername,
-        email,
-        setEmail,
-        password,
-        setPassword,
-        passwordConfirmation,
-        setPasswordConfirmation,
-        errorMessage,
-        handleCreateUser
-    } = useRegistration(users);
-
     return (
-        <form>
+        <form className={styles.RegistrationForm}>
             <label>
                 Username:
                 <input 

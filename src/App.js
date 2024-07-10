@@ -4,10 +4,12 @@ import configuration from "./configuration.js";
 
 import Firebase from "./OOF/Firebase";
 
-import LoadingView      from "./AppComponents/LoadingView/LoadingView";
-import DefaultView      from "./AppComponents/DefaultView/DefaultView";
-import RegistrationView from "./AppComponents/RegistrationView/RegistrationView";
-import SignInView       from "./AppComponents/SignInView/SignInView";
+import Loading          from "./AppComponents/Loading/Loading";
+import AuthNav          from "./AppComponents/AuthNav/AuthNav";
+import RegistrationForm from "./AppComponents/RegistrationForm/RegistrationForm";
+import SignInForm       from "./AppComponents/SignInForm/SignInForm";
+
+import { useCurrentUser } from "./hooks.js";
 
 const View = {
     default : "default",
@@ -20,18 +22,6 @@ const firebase = new Firebase(configuration)
     .initializeUsers()
     .initializeAuthentication();
 
-function useCurrentUser({ firebase, setIsLoading }) {
-    const [currentUser, setCurrentUser] = useState(null);
-    useEffect(() => {
-        const unsubscribeFromCurrentUser = firebase.onUserChange(
-            setCurrentUser,
-            setIsLoading
-        );
-        return () => unsubscribeFromCurrentUser(); 
-    }, [firebase, setIsLoading]);
-    return currentUser;
-}
-
 export default function App() {
     const [view     ,      setView] = useState(View.default);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,32 +30,26 @@ export default function App() {
         setView(isLoading ? View.loading : View.default);
     }, [isLoading])
 
+    const users       = firebase.users;
     const currentUser = useCurrentUser({ firebase, setIsLoading });
 
     console.log("currentUser:", currentUser);
 
-    
+    if (isLoading) return <Loading />;
 
     switch (view) {
-        case View.loading:
-            return (
-                <LoadingView />
-            );
         case View.register:
             return (
-                <RegistrationView users={firebase.users} />
+                <RegistrationForm users={users} />
             );
         case View.signIn:
             return (
-                <SignInView 
-                    users   = {firebase.users}
-                    setView = {setView}
-                />
+                <SignInForm users={users} />
             );
         default:
             return (
-                <DefaultView 
-                    users       = {firebase.users}
+                <AuthNav 
+                    users       = {users}
                     currentUser = {currentUser}
                     setView     = {setView}
                 />
