@@ -8,6 +8,7 @@ const FirebaseErrorMessage = {
     "auth/weak-password"       : "The password you entered is too weak",
     "auth/wrong-password"      : "Email/password is incorrect",
     "auth/invalid-email"       : "Email/password is incorrect",
+    "auth/invalid-credential"  : "Email/password is incorrect",
     "auth/email-already-exists": "A user with that email already exists",
     "auth/email-already-in-use": "A user with that email already exists",
 };
