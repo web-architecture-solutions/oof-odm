@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import configuration from "./configuration.js";
+import firebase from "./firebase.js";
 
-import Firebase from "./OOF/Firebase";
+import { View } from "./constants.js";
 
 import Loading          from "./AppComponents/Loading/Loading";
 import AuthNav          from "./AppComponents/AuthNav/AuthNav";
@@ -10,17 +10,6 @@ import RegistrationForm from "./AppComponents/RegistrationForm/RegistrationForm"
 import SignInForm       from "./AppComponents/SignInForm/SignInForm";
 
 import { useCurrentUser } from "./hooks.js";
-
-const View = {
-    default : "default",
-    loading : "loading",
-    register: "register",
-    signIn  : "signIn"
-};
-
-const firebase = new Firebase(configuration)
-    .initializeUsers()
-    .initializeAuthentication();
 
 export default function App() {
     const [view     ,      setView] = useState(View.default);
@@ -36,22 +25,18 @@ export default function App() {
     console.log("currentUser:", currentUser);
 
     if (isLoading) return <Loading />;
-
     switch (view) {
         case View.register:
-            return (
-                <RegistrationForm users={users} />
-            );
+            return <RegistrationForm users={users} />;
         case View.signIn:
-            return (
-                <SignInForm users={users} />
-            );
+            return <SignInForm users={users} />;
         default:
             return (
                 <AuthNav 
-                    users       = {users}
-                    currentUser = {currentUser}
-                    setView     = {setView}
+                    currentUser      = {currentUser}
+                    handleOnSignOut  = {() => users.signOut()}
+                    handleOnSignIn   = {() => setView("signIn")}
+                    handleOnRegister = {() => setView("register")}
                 />
             );
     }

@@ -1,19 +1,26 @@
-export default function DefaultView({ users, currentUser, setView }) {
+import Button from "../../FormComponents/Button/Button";
+
+export default function AuthNav({ 
+    currentUser, 
+    handleOnSignOut,
+    handleOnSignIn,
+    handleOnRegister
+}) {
     return (
         <nav>
             {currentUser ? (
-                <button onClick={() => users.signOut()}>
+                <Button onClick={handleOnSignOut}>
                     Sign out
-                </button>
+                </Button>
             ) : (
                 <>
-                    <button onClick={() => setView("signIn")}>
+                    <Button onClick={handleOnSignIn}>
                         Sign in
-                    </button>
+                    </Button>
 
-                    <button onClick={() => setView("register")}>
+                    <Button onClick={handleOnRegister}>
                         Register
-                    </button>
+                    </Button>
                 </>
             )}
         </nav>

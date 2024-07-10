@@ -16,3 +16,10 @@ export const ErrorMessage = {
     ...ApplicationErrorMessage, 
     ...FirebaseErrorMessage 
 };
+
+export const View = {
+    default : "default",
+    loading : "loading",
+    register: "register",
+    signIn  : "signIn"
+};
