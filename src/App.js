@@ -4,12 +4,13 @@ import firebase from "./firebase.js";
 
 import { View } from "./constants.js";
 
-import Loading          from "./AppComponents/Loading/Loading";
-import AuthNav          from "./AppComponents/AuthNav/AuthNav";
-import RegistrationForm from "./AppComponents/RegistrationForm/RegistrationForm";
-import SignInForm       from "./AppComponents/SignInForm/SignInForm";
+import Loading from "./components/Loading/Loading.js";
 
-import { useCurrentUser } from "./hooks.js";
+import AuthNav          from "./auth/components/AuthNav/AuthNav.js";
+import RegistrationForm from "./auth/components/RegistrationForm/RegistrationForm.js";
+import SignInForm       from "./auth/components/SignInForm/SignInForm.js";
+
+import { useCurrentUser } from "./auth/hooks.js";
 
 export default function App() {
     const [view     ,      setView] = useState(View.default);

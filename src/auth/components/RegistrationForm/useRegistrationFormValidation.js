@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { ErrorMessage } from "../../constants";
+import { ErrorMessage } from "../../../constants";
 
 export default function useRegistrationFormValidation({ 
     usernameRef,

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
-import Form     from "../../FormComponents/Form/Form";
-import Fieldset from "../../FormComponents/Fieldset/Fieldset";
+import Form     from "../../../form-components/Form/Form";
+import Fieldset from "../../../form-components/Fieldset/Fieldset";
 
 import useRegistrationFields         from "./useRegistrationFields";
 import useRegistrationFormValidation from "./useRegistrationFormValidation";

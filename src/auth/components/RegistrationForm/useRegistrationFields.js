@@ -1,4 +1,4 @@
-import { AutoComplete, FieldType } from "../../constants";
+import { AutoComplete, FieldType } from "../../../constants";
 
 const username = { lowercase:"username" , uppercase: "Username" };
 const email    = { lowercase: "email"   , uppercase: "Email" };

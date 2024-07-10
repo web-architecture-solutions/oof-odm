@@ -1,6 +1,6 @@
 import configuration from "./configuration.js";
 
-import Firebase from "./OOF/Firebase";
+import Firebase from "./oof/Firebase";
 
 const firebase = new Firebase(configuration)
     .initializeUsers()
