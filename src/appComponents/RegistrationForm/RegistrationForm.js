@@ -1,25 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { ErrorMessage } from "../../constants";
+
+import Form     from "../../FormComponents/Form/Form";
+import Fieldset from "../../FormComponents/Fieldset/Fieldset";
+
+import useRegistrationFields from "./useRegistrationFields";
 
 import styles from "./RegistrationForm.module.css";
-
-const ApplicationErrorMessage = {
-    "auth/username-already-exists": "A user with that username already exists",
-    "auth/passwords-do-not-match" : "The passwords you entered do not match",
-};
-
-const FirebaseErrorMessage = {
-    "auth/too-many-requests"   : "Too many failed login attempts. Please reset your password or try again later",
-    "auth/weak-password"       : "The password you entered is too weak",
-    "auth/wrong-password"      : "Email/password is incorrect",
-    "auth/invalid-email"       : "Email/password is incorrect",
-    "auth/email-already-exists": "A user with that email already exists",
-    "auth/email-already-in-use": "A user with that email already exists",
-};
-
-const ErrorMessage = { 
-    ...ApplicationErrorMessage, 
-    ...FirebaseErrorMessage 
-};
 
 export default function RegistrationForm({ users }) {
     const [username            , setUsername            ] = useState("");
@@ -46,8 +34,19 @@ export default function RegistrationForm({ users }) {
         setErrorCode(errorCode);    
     }, [password, passwordConfirmation]);
 
-    function handleCreateUser (event) {
-        event.preventDefault();
+    const usernameRef        = useRef();
+    const emailRef           = useRef();
+    const passwordRef        = useRef();
+    const confirmPasswordRef = useRef();
+
+    const registrationFields = useRegistrationFields({
+        usernameRef,
+        emailRef,
+        passwordRef,
+        confirmPasswordRef
+    });
+
+    function handleRegistration () {
         if (username && email && password) {
             const profile = { username };
             users.createWithEmailAndPassword(
@@ -61,56 +60,11 @@ export default function RegistrationForm({ users }) {
     }
 
     return (
-        <form className={styles.RegistrationForm}>
-            <label>
-                Username:
-                <input 
-                    autoComplete = "username"
-                    name         = "username"
-                    type         = "text"
-                    value        = {username}
-                    onChange     = {({ target }) => setUsername(target.value)}
-                />
-            </label>
-            
-            <label>
-                Email:
-                <input 
-                    autoComplete = "email"
-                    name         = "email"
-                    type         = "email"
-                    value        = {email}
-                    onChange     = {({ target }) => setEmail(target.value)}
-                />
-            </label>
-            
-            <label>
-                Password:
-                <input 
-                    autoComplete = "password"
-                    name         = "password"
-                    type         = "password"
-                    value        = {password}
-                    onChange     = {({ target }) => setPassword(target.value)}
-                />
-            </label>
-            
-            <label>
-                Confirm Password:
-                <input 
-                    autoComplete = "confirm-password"
-                    name         = "passwordConfirmation"
-                    type         = "password"
-                    value        = {passwordConfirmation}
-                    onChange     = {({ target }) => setPasswordConfirmation(target.value)}
-                />  
-            </label>
-
-            <button onClick={handleCreateUser}>
-                Register
-            </button>
-
-            <span>{errorMessage}</span>
-        </form>
+        <Form className={styles.RegistrationForm} onSubmit={handleRegistration}>
+            <Fieldset
+                legend = "Register"
+                fields = {registrationFields}
+            />
+        </Form>
     );
 }
