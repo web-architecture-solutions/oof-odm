@@ -1,16 +1,19 @@
+import { forwardRef } from "react";
+
 import Option from "../Option/Option";
 
-export default function Select({ 
+function Select({ 
     name, 
     value, 
     onChange, 
     options 
-}) {
+}, ref) {
     return (
         <select 
             name     = {name}
             value    = {value}
             onChange = {onChange}
+            ref      = {ref}
         >
             {options.map((option) =>
                 <Option {...option} key={option.value} />
@@ -18,3 +21,5 @@ export default function Select({
         </select>
     );
 }
+
+export default forwardRef(Select);

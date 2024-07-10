@@ -1,9 +1,11 @@
+import { forwardRef } from "react";
+
 import Input  from "../Input/Input";
 import Select from "../Select/Select";
 
 const ControlType = { select: "select" };
 
-export default function Control({ 
+function Control({ 
     autoComplete,
     type, 
     name, 
@@ -11,7 +13,7 @@ export default function Control({
     onChange, 
     placeholder = null,
     options     = null 
-}) {
+}, ref) {    
     switch (type) {
         case ControlType.select:
             return (
@@ -20,6 +22,7 @@ export default function Control({
                     value       = {value}
                     onChange    = {onChange}
                     options     = {options}
+                    ref         = {ref}
                 />
             );
         default:
@@ -31,7 +34,10 @@ export default function Control({
                     value        = {value}
                     onChange     = {onChange}
                     placeholder  = {placeholder}
+                    ref          = {ref}
                 />
             );
     }
 }
+
+export default forwardRef(Control);

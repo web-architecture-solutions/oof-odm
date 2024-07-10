@@ -9,8 +9,8 @@ export default function SignInView({ users, setError }) {
 
     async function handleSignIn() {
         await users.signInWithEmailAndPassword(
-            emailRef.current, 
-            passwordRef.current, 
+            emailRef.current.value, 
+            passwordRef.current.value, 
             setError
         );    
     }
@@ -34,7 +34,7 @@ export default function SignInView({ users, setError }) {
     return (
         <Form onSubmit={handleSignIn}>
             <Fieldset 
-                legend   = "Sign in"
+                legend = "Sign in"
                 fields = {fields}
             />
         </Form>

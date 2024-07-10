@@ -1,3 +1,5 @@
-const Input = (props)  => <input {...props} />;
+import { forwardRef } from "react";
 
-export default Input;
+const Input = (props, ref)  => <input {...props} ref={ref} />;
+
+export default forwardRef(Input);

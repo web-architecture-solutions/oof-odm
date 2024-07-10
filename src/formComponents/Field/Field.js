@@ -5,21 +5,19 @@ import Control from "../Control/Control";
 import styles from "./Field.module.css";
 
 function Field({ 
-    autoComplete = null,
     name, 
     label, 
     type, 
-    value: initialValue = "", 
     onChange, 
-    options     = null,
-    placeholder = null
+    autoComplete = null,
+    options      = null,
+    placeholder  = null
 }, ref) {
-    const [value, setValue] = useState(initialValue);
+    const [value, setValue] = useState("");
 
     useEffect(() => {
         if (onChange) onChange(value);
-        if (ref) ref.current = value;
-    }, [value, onChange, ref]);
+    }, [value, onChange]);
 
     return (
         <label htmlFor={name}>
@@ -35,6 +33,7 @@ function Field({
                 onChange     = {({ target }) => setValue(target.value)}
                 options      = {options}
                 placeholder  = {placeholder}
+                ref          = {ref}
             />
         </label>
     );
