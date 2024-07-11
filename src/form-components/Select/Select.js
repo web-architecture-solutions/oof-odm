@@ -6,14 +6,16 @@ function Select({
     name, 
     value, 
     onChange, 
-    options 
+    options,
+    className
 }, ref) {
     return (
         <select 
-            name     = {name}
-            value    = {value}
-            onChange = {onChange}
-            ref      = {ref}
+            className = {className}
+            name      = {name}
+            value     = {value}
+            onChange  = {onChange}
+            ref       = {ref}
         >
             {options.map((option) =>
                 <Option {...option} key={option.value} />

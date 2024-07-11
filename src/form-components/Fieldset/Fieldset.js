@@ -6,9 +6,11 @@ const conditionalFieldsetErrorMessage
 export default function Fieldset({ 
     legend,
     children, 
-    fields    = null,
-    fieldMap  = null, 
-    condition = null 
+    className      = "",
+    fieldClassName = "",
+    fields         = null,
+    fieldMap       = null,
+    condition      = null
 }) {
     if (condition && fieldMap) {
         fields = fieldMap[condition];
@@ -16,12 +18,16 @@ export default function Fieldset({
         throw new Error(conditionalFieldsetErrorMessage);
     }
     return (
-        <fieldset>
+        <fieldset className={className}>
             {legend ? (
                 <legend>{legend}</legend>
             ) : null}
             {fields ? fields.map((field, index) =>
-                <Field {...field} key={index} />
+                <Field 
+                    className = {fieldClassName}
+                    key       = {index}
+                    {...field}
+                />
             ) : null}
             {children}
         </fieldset>

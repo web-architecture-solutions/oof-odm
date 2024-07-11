@@ -9,9 +9,11 @@ function Field({
     label, 
     type, 
     onChange, 
-    autoComplete = null,
-    options      = null,
-    placeholder  = null
+    className        = "",
+    controlClassName = "",
+    autoComplete     = null,
+    options          = null,
+    placeholder      = null
 }, ref) {
     const [value, setValue] = useState("");
 
@@ -20,13 +22,14 @@ function Field({
     }, [value, onChange]);
 
     return (
-        <label htmlFor={name}>
+        <label htmlFor={name} className={className}>
             <span className={styles.label}>
                 {label}
             </span>
             
             <Control 
                 autoComplete = {autoComplete}
+                className    = {controlClassName}
                 type         = {type}
                 name         = {name}
                 value        = {value ?? ""}

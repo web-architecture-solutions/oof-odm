@@ -10,6 +10,7 @@ function Control({
     name, 
     value, 
     onChange, 
+    className    = "",
     autoComplete = null,
     placeholder  = null,
     options      = null 
@@ -18,6 +19,7 @@ function Control({
         case ControlType.select:
             return (
                 <Select 
+                    className   = {className}
                     name        = {name}
                     value       = {value}
                     onChange    = {onChange}
@@ -28,6 +30,7 @@ function Control({
         default:
             return (
                 <Input 
+                    className    = {className}    
                     autoComplete = {autoComplete}
                     name         = {name}
                     type         = {type}

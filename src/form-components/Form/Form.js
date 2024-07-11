@@ -4,14 +4,20 @@ import Button   from "../Button/Button";
 export default function Form({ 
     children, 
     onSubmit,
-    errorMessage = "",
-    fieldsets    = null,
-    buttonLabel  = "Submit"
+    className         = "",
+    fieldsetClassName = "",
+    errorMessage      = "",
+    fieldsets         = null,
+    buttonLabel       = "Submit"
 }) {
     return (
-        <form>
+        <form className={className}>
             {fieldsets ? fieldsets.map((fieldset, index) =>
-                <Fieldset {...fieldset} key={index} />
+                <Fieldset 
+                    className = {fieldsetClassName}
+                    key       = {index}
+                    {...fieldset}  
+                />
             ) : null}
             {children}
             {onSubmit ? (
