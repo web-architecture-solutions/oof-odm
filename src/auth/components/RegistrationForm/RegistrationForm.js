@@ -13,15 +13,12 @@ export default function RegistrationForm({ users }) {
     const usernameRef        = useRef();
     const emailRef           = useRef();
     const passwordRef        = useRef();
-    const confirmPasswordRef = useRef();
+    const confirmPasswordRef = useRef();   
 
     const { 
-        errorCode,
-        setErrorCode, 
-        errorMessage 
+        errors,
+        validatePassword
     } = useRegistrationFormValidation({ 
-        usernameRef,
-        emailRef,
         passwordRef,
         confirmPasswordRef
     });
@@ -30,7 +27,7 @@ export default function RegistrationForm({ users }) {
 
     function handleRegistration () {
         if (
-            !errorCode
+            errors.length === 0
             && usernameRef.current.value 
             && emailRef.current.value 
             && passwordRef.current.value
@@ -38,8 +35,7 @@ export default function RegistrationForm({ users }) {
             users.createWithEmailAndPassword(
                 profile, 
                 emailRef.current.value, 
-                passwordRef.current.value, 
-                setErrorCode
+                passwordRef.current.value
             );
         }
     }
@@ -48,14 +44,15 @@ export default function RegistrationForm({ users }) {
         usernameRef,
         emailRef,
         passwordRef,
-        confirmPasswordRef
+        confirmPasswordRef,
+        validatePassword
     });
 
     return (
         <Form 
-            className    = {styles.RegistrationForm}
-            onSubmit     = {handleRegistration}
-            errorMessage = {errorMessage}
+            className  = {styles.RegistrationForm}
+            onSubmit   = {handleRegistration}
+            errors     = {errors}
         >
             <Fieldset
                 legend = "Register"

@@ -6,10 +6,11 @@ export default function Form({
     onSubmit,
     className         = "",
     fieldsetClassName = "",
-    errorMessage      = "",
+    errors            = [],
     fieldsets         = null,
     buttonLabel       = "Submit"
 }) {
+    const isError = errors.length > 0;
     return (
         <form className={className}>
             {fieldsets ? fieldsets.map((fieldset, index) =>
@@ -19,17 +20,20 @@ export default function Form({
                     {...fieldset}  
                 />
             ) : null}
+
             {children}
+            
             {onSubmit ? (
                 <Button 
                     onClick  = {onSubmit}
-                    disabled = {errorMessage}
+                    disabled = {isError}
                 >
                     {buttonLabel}
                 </Button>
             ) : null}
-            {errorMessage ? (
-                <span>{errorMessage}</span>
+            
+            {isError ? errors.map((error, index) => 
+                <span key={index}>{error}</span>
             ) : null}
         </form>
     );

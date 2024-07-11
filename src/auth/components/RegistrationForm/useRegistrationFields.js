@@ -1,8 +1,6 @@
 import { AutoComplete, FieldType } from "../../../constants";
 
-const username = { lowercase:"username" , uppercase: "Username" };
-const email    = { lowercase: "email"   , uppercase: "Email" };
-const password = { lowercase: "password", uppercase: "Password"};
+import { username, email, password } from "../../terms";
 
 const usernameName         = username.lowercase;
 const usernameLabel        = username.uppercase;
@@ -17,7 +15,8 @@ export default function useRegistrationFields({
     usernameRef, 
     emailRef,
     passwordRef,
-    confirmPasswordRef
+    confirmPasswordRef,
+    validatePassword
 }) {
     return [{
         autoComplete: AutoComplete.username,
@@ -38,6 +37,7 @@ export default function useRegistrationFields({
         name        : passwordName,
         label       : passwordLabel,
         placeholder : passwordLabel,
+        onChange    : validatePassword,
         type        : FieldType.password,
         ref         : passwordRef
     }, {
@@ -45,6 +45,7 @@ export default function useRegistrationFields({
         name        : confirmPasswordName,
         label       : confirmPasswordLabel,
         placeholder : confirmPasswordLabel,
+        onChange    : validatePassword,
         type        : FieldType.password,
         ref         : confirmPasswordRef
     }];

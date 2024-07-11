@@ -1,32 +1,25 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { ErrorMessage } from "../../../constants";
+import { ErrorMessage, PasswordError } from "../../../constants";
 
 export default function useRegistrationFormValidation({ 
-    usernameRef,
-    emailRef,
     passwordRef,
     confirmPasswordRef
 }) {
-    const [errorCode   , setErrorCode   ] = useState(null);
-    const [errorMessage, setErrorMessage] = useState(null);
+    const [passwordError, setPasswordError] = useState(null);
+    
+    function validatePassword() {
+        const { value:        password } = passwordRef.current;
+        const { value: confirmPassword } = confirmPasswordRef.current;
+        const errorCode = password !== confirmPassword 
+            ? PasswordError.doNotMatch 
+            : null;
+        const _passwordError = ErrorMessage[errorCode];
+        setPasswordError(_passwordError);    
+    };
 
-    useEffect(() => {
-        const errorMessage = errorCode ? ErrorMessage[errorCode] : "";
-        setErrorMessage(errorMessage);
-    }, [errorCode]);
-
-    useEffect(() => {
-        setErrorCode(null);
-    }, [usernameRef, emailRef]);
-
-    useEffect(() => {
-        const errorCode 
-            = passwordRef.current.value !== confirmPasswordRef.current.value 
-                ? "auth/passwords-do-not-match" 
-                : null;
-        setErrorCode(errorCode);    
-    }, [passwordRef, confirmPasswordRef]);
-
-    return { errorCode, setErrorCode, errorMessage };
+    return { 
+        errors          : passwordError ? [passwordError]: [],
+        validatePassword: useCallback(validatePassword)
+    };
 }

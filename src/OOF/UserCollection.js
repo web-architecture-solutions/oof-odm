@@ -10,6 +10,12 @@ import { where } from "firebase/firestore";
 import FirebaseCollection from "./FirebaseCollection";
 import UserDocument       from "./UserDocument";
 
+import ErrorMessage from "./ErrorMessage";
+
+function _handleError(errorCode) {
+    console.error(`${errorCode}:`, ErrorMessage[errorCode]);
+}
+
 export default class UserCollection extends FirebaseCollection {
     static get FirebaseDocument () {
         return UserDocument;
@@ -34,12 +40,12 @@ export default class UserCollection extends FirebaseCollection {
         profile, 
         email, 
         password, 
-        setError,
+        handleError = _handleError,
         callback = null
     ) => {
         const usernameExists = await this.doesUsernameExist(profile.username);
         if (usernameExists) {
-            setError("auth/username-already-exists");    
+            handleError("auth/username-already-exists");    
         } else {
             const onSuccess = async ({ user }) => {
                 if (profile.username) {
@@ -52,7 +58,7 @@ export default class UserCollection extends FirebaseCollection {
             };
             createUserWithEmailAndPassword(this.authentication, email, password)
                 .then(onSuccess)
-                .catch((error) => setError(error.code));    
+                .catch((error) => handleError(error.code));    
         }
     }
 
