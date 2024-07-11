@@ -11,15 +11,14 @@ export default function useRegistrationFormValidation({
     function validatePassword() {
         const { value:        password } = passwordRef.current;
         const { value: confirmPassword } = confirmPasswordRef.current;
-        const errorCode = password !== confirmPassword 
-            ? PasswordError.doNotMatch 
-            : null;
-        const _passwordError = ErrorMessage[errorCode];
-        setPasswordError(_passwordError);    
+        const doPasswordsMatch = password === confirmPassword;
+        if (!doPasswordsMatch) {
+            setPasswordError(ErrorMessage[PasswordError.doNotMatch]);    
+        }
     };
 
     return { 
         errors          : passwordError ? [passwordError]: [],
-        validatePassword: useCallback(validatePassword)
+        validatePassword: useCallback(validatePassword, [])
     };
 }

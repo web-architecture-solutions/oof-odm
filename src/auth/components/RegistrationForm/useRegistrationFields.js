@@ -24,6 +24,7 @@ export default function useRegistrationFields({
         label       : usernameLabel,
         placeholder : usernameLabel,
         type        : FieldType.text,
+        isRequired  : true,
         ref         : usernameRef
     }, {
         autoComplete: AutoComplete.email,
@@ -31,6 +32,7 @@ export default function useRegistrationFields({
         label       : emailLabel,
         placeholder : emailLabel,
         type        : FieldType.email,
+        isRequired  : true,
         ref         : emailRef
     }, {
         autoComplete: AutoComplete.newPassword,
@@ -39,6 +41,7 @@ export default function useRegistrationFields({
         placeholder : passwordLabel,
         onChange    : validatePassword,
         type        : FieldType.password,
+        isRequired  : true,
         ref         : passwordRef
     }, {
         autoComplete: AutoComplete.newPassword,
@@ -47,6 +50,7 @@ export default function useRegistrationFields({
         placeholder : confirmPasswordLabel,
         onChange    : validatePassword,
         type        : FieldType.password,
+        isRequired  : true,
         ref         : confirmPasswordRef
     }];
 }

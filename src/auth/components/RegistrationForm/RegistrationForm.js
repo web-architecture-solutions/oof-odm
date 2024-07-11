@@ -16,8 +16,8 @@ export default function RegistrationForm({ users }) {
     const confirmPasswordRef = useRef();   
 
     const { 
-        errors,
-        validatePassword
+        errors, 
+        validatePassword 
     } = useRegistrationFormValidation({ 
         passwordRef,
         confirmPasswordRef

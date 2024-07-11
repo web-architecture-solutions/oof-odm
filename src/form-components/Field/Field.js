@@ -9,13 +9,19 @@ function Field({
     label, 
     type, 
     onChange, 
+    isRequired       = false,
     className        = "",
     controlClassName = "",
     autoComplete     = null,
     options          = null,
     placeholder      = null
 }, ref) {
-    const [value, setValue] = useState("");
+    const [value          ,           setValue] = useState("");
+    const [isRequiredError, setIsRequiredError] = useState(false);
+
+    useEffect(() => {
+        setIsRequiredError(isRequired && !value)
+    }, [isRequired, value]);
 
     useEffect(() => {
         if (onChange) onChange(value);
@@ -38,6 +44,10 @@ function Field({
                 placeholder  = {placeholder}
                 ref          = {ref}
             />
+
+            {isRequiredError ? (
+                <span>Field is required</span>
+            ) : null}
         </label>
     );
 };

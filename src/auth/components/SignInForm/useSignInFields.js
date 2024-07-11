@@ -9,6 +9,7 @@ export default function useSignInFields({ emailRef, passwordRef }) {
         placeholder : email.uppercase,
         type        : FieldType.email,
         autoComplete: AutoComplete.email,
+        isRequired  : true,
         ref         : emailRef
     }, {
         name        : password.lowercase,
@@ -16,6 +17,7 @@ export default function useSignInFields({ emailRef, passwordRef }) {
         placeholder : password.uppercase,
         type        : FieldType.password,
         autoComplete: AutoComplete.currentPassword,
+        isRequired  : true,
         ref         : passwordRef
     }];
 }
