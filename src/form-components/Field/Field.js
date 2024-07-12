@@ -16,12 +16,14 @@ function Field({
     options          = null,
     placeholder      = null
 }, ref) {
-    const [value          ,           setValue] = useState("");
+    const [value          ,           setValue] = useState(null);
     const [isRequiredError, setIsRequiredError] = useState(false);
 
+    const hasUserEdited = value !== null;    
+
     useEffect(() => {
-        setIsRequiredError(isRequired && !value)
-    }, [isRequired, value]);
+        setIsRequiredError(isRequired && !value && hasUserEdited);
+    }, [isRequired, value, hasUserEdited]);
 
     useEffect(() => {
         if (onChange) onChange(value);
