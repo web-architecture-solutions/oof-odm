@@ -6,19 +6,22 @@ export default function useRegistrationFormValidation({
     passwordRef,
     confirmPasswordRef
 }) {
-    const [passwordError, setPasswordError] = useState(null);
+    const [passwordError, setPasswordError] = useState("");
     
-    function validatePassword() {
-        const { value:        password } = passwordRef.current;
+    const validatePassword = useCallback(() => {
+        const { value:        password } =        passwordRef.current;
         const { value: confirmPassword } = confirmPasswordRef.current;
         const doPasswordsMatch = password === confirmPassword;
-        if (!doPasswordsMatch) {
-            setPasswordError(ErrorMessage[PasswordError.doNotMatch]);    
-        }
-    };
+        
+        setPasswordError(() => {
+            return !doPasswordsMatch
+                ? ErrorMessage[PasswordError.doNotMatch]
+                : "";
+        });
+    }, [passwordRef, confirmPasswordRef]);
 
     return { 
         errors          : passwordError ? [passwordError]: [],
-        validatePassword: useCallback(validatePassword, [])
+        validatePassword: validatePassword
     };
 }
