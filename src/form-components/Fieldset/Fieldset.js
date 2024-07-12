@@ -22,6 +22,7 @@ export default function Fieldset({
             {legend ? (
                 <legend>{legend}</legend>
             ) : null}
+
             {fields ? fields.map((field, index) =>
                 <Field 
                     className = {fieldClassName}
@@ -29,6 +30,7 @@ export default function Fieldset({
                     {...field}
                 />
             ) : null}
+            
             {children}
         </fieldset>
     );

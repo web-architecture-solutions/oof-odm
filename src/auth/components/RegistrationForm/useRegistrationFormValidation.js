@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { ErrorMessage, PasswordError } from "../../../constants";
+import { PasswordError } from "../../errors";
 
 export default function useRegistrationFormValidation({ 
     passwordRef,
@@ -11,17 +11,18 @@ export default function useRegistrationFormValidation({
     const validatePassword = useCallback(() => {
         const { value:        password } =        passwordRef.current;
         const { value: confirmPassword } = confirmPasswordRef.current;
+        
         const doPasswordsMatch = password === confirmPassword;
         
         setPasswordError(() => {
             return !doPasswordsMatch
-                ? ErrorMessage[PasswordError.doNotMatch]
-                : "";
+                ? new PasswordError("Passwords do not match")
+                : null;
         });
     }, [passwordRef, confirmPasswordRef]);
 
     return { 
-        errors          : passwordError ? [passwordError]: [],
+        formErrors      : passwordError ? [passwordError]: [],
         validatePassword: validatePassword
     };
 }

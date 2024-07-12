@@ -4,13 +4,14 @@ import Button   from "../Button/Button";
 export default function Form({ 
     children, 
     onSubmit,
-    className         = "",
-    fieldsetClassName = "",
-    errors            = [],
-    fieldsets         = null,
-    buttonLabel       = "Submit"
+    className          = "",
+    fieldsetClassName  = "",
+    errors: formErrors = [],
+    fieldsets          = null,
+    buttonLabel        = "Submit"
 }) {
-    const isError = errors.length > 0;
+    const isFormError = formErrors.length > 0;
+
     return (
         <form className={className}>
             {fieldsets ? fieldsets.map((fieldset, index) =>
@@ -26,14 +27,14 @@ export default function Form({
             {onSubmit ? (
                 <Button 
                     onClick  = {onSubmit}
-                    disabled = {isError}
+                    disabled = {isFormError}
                 >
                     {buttonLabel}
                 </Button>
             ) : null}
             
-            {isError ? errors.map((error, index) => 
-                <span key={index}>{error}</span>
+            {isFormError ? formErrors.map(({ message }, index) => 
+                <span key={index}>{message}</span>
             ) : null}
         </form>
     );

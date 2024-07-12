@@ -8,7 +8,8 @@ function Field({
     name, 
     label, 
     type, 
-    onChange, 
+    onChange         = null,
+    onError          = null,
     isRequired       = false,
     className        = "",
     controlClassName = "",
@@ -28,6 +29,10 @@ function Field({
     useEffect(() => {
         if (onChange) onChange(value);
     }, [value, onChange]);
+
+    useEffect(() => {
+        if (onError) onError(isRequiredError);
+    }, [isRequiredError, onError]);
 
     return (
         <label htmlFor={name} className={className}>
