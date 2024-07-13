@@ -14,6 +14,13 @@ function errorReducer(formErrors, error) {
     };
 }
 
+class Ref {
+    static getValue(ref) {
+      return ref?.current?.value;
+    }
+}
+
+
 export default function useRegistrationFormValidation({
     passwordRef,
     confirmPasswordRef,
@@ -21,8 +28,8 @@ export default function useRegistrationFormValidation({
     const [formErrors, dispatchError] = useReducer(errorReducer, initialErrors);
 
     const validatePassword = useCallback(() => {
-        const { value:        password } =        passwordRef.current;
-        const { value: confirmPassword } = confirmPasswordRef.current;
+        const password = Ref.getValue(passwordRef);
+        const confirmPassword = Ref.getValue(confirmPasswordRef);
 
         const doPasswordsMatch = password === confirmPassword;
         
@@ -37,7 +44,7 @@ export default function useRegistrationFormValidation({
     }, [passwordRef, confirmPasswordRef]);
 
     return {
-        formErrors: Object.values(formErrors).filter(Boolean),
+        formErrors:             Object.values(formErrors).filter(Boolean),
         validatePassword,
     };
 }

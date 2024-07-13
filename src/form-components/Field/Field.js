@@ -4,6 +4,26 @@ import Control from "../Control/Control";
 
 import styles from "./Field.module.css";
 
+const initialErrors = { "form/field-is-required": null };
+
+function errorReducer(fieldErrors, error) {
+    return error === null ? { 
+        ...fieldErrors, 
+        "form/field-is-required": null  
+    } : { 
+        ...fieldErrors, 
+        [error.code]: error 
+    };
+}
+
+class FormError extends Error {
+    constructor({ code, message }) {
+        super(message);
+        this.code = code:
+        this.name = "FormError";
+    }
+}
+
 function Field({ 
     name, 
     label, 
@@ -18,12 +38,21 @@ function Field({
     placeholder      = null
 }, ref) {
     const [value          ,           setValue] = useState(null);
-    const [isRequiredError, setIsRequiredError] = useState(false);
+    const [fieldErrors, dispatchError] = useReducer(errorReducer, initialErrors);
 
     const hasUserEdited = value !== null;    
 
     useEffect(() => {
-        setIsRequiredError(isRequired && !value && hasUserEdited);
+        const isRequiredFieldSatisfied = isRequired && !value && hasUserEdited;
+        const isRequiredError = !isRequiredFieldSatisfied
+            ? new FormError({
+                code   : "form/field-is-required",
+                message: "Field is required"
+              })
+            : null;
+
+        dispatchError(isRequiredError);
+        
     }, [isRequired, value, hasUserEdited]);
 
     useEffect(() => {
@@ -32,8 +61,7 @@ function Field({
 
     useEffect(() => {
         if (onError) onError(isRequiredError);
-    }, [isRequiredError, onError]);
-
+    }, 
     return (
         <label htmlFor={name} className={className}>
             <span className={styles.label}>
@@ -52,8 +80,8 @@ function Field({
                 ref          = {ref}
             />
 
-            {isRequiredError ? (
-                <span>Field is required</span>
+            {Object.keys(fieldErrors).length > 0 ? Object.values(fieldErrors).filter(Boolean).map(({ message }) => 
+                <span>{message}</span>
             ) : null}
         </label>
     );
