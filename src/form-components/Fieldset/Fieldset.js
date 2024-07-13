@@ -2,6 +2,8 @@ import Field from "../Field/Field";
 
 import { useKey } from "../hooks";
 
+import { aggregateFields } from "../util";
+
 const conditionalFieldsetErrorMessage 
     = "Conditional Fieldsets must be given both a 'condition' and a 'fieldMap'";
 
@@ -24,12 +26,7 @@ export default function Fieldset({
     const { key, incrementKey } = useKey();
 
     if (onChange) {
-        const fieldRecords = fields.flatMap(({ name, ref }) => {
-            return Object.entries({ [name]: ref.current?.value });
-        });
-    
-        const fieldsetData = Object.fromEntries(fieldRecords);
-
+        const fieldsetData = aggregateFields(fields);
         onChange(fieldsetData);
     }
 

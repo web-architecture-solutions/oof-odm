@@ -3,6 +3,8 @@ import Button   from "../Button/Button";
 
 import { useKey } from "../hooks";
 
+import { aggregateFieldsets } from "../util";
+
 export default function Form({ 
     onSubmit,
     className          = "",
@@ -16,20 +18,12 @@ export default function Form({
 }) {
     const { key, incrementKey } = useKey();
 
-    const isFormError = formErrors.length > 0;
-
     if (onChange) {
-        const formData = fieldsets.map(({ fields }) => {
-            const fieldRecords = fields.flatMap(({ name, ref }) => {
-                return Object.entries({ [name]: ref.current?.value });
-            });
-        
-            const fieldsetData = Object.fromEntries(fieldRecords);
-            return fieldsetData;
-        });
-
+        const formData = aggregateFieldsets(fieldsets);
         onChange(formData);
     }
+
+    const isFormError = formErrors.length > 0;
 
     return (
         <form className={className} key={key}>
