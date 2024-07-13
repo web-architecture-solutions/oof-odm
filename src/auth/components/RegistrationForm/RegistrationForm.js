@@ -22,8 +22,6 @@ export default function RegistrationForm({ users }) {
         confirmPasswordRef
     });
 
-    const profile = useProfile({ usernameRef });
-
     const registrationFields = useRegistrationFields({
         usernameRef,
         emailRef,
@@ -36,6 +34,8 @@ export default function RegistrationForm({ users }) {
         legend: "Register",
         fields: registrationFields
     }];
+
+    const profile = useProfile({ usernameRef });
 
     function handleRegistration () {
         if (
@@ -58,7 +58,7 @@ export default function RegistrationForm({ users }) {
             onSubmit   = {handleRegistration}
             errors     = {formErrors}
             fieldsets  = {registrationFieldsets}
-            onChange   = {(foo) => console.log(foo)}
+            onChange   = {(formData) => console.log(formData)}
         />
     );
 }

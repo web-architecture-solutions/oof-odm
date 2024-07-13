@@ -4,9 +4,6 @@ import { useKey } from "../hooks";
 
 import { aggregateFields } from "../util";
 
-const conditionalFieldsetErrorMessage 
-    = "Conditional Fieldsets must be given both a 'condition' and a 'fieldMap'";
-
 export default function Fieldset({ 
     legend,
     className      = "",
@@ -17,10 +14,16 @@ export default function Fieldset({
     onChange       = null,
     incrementFormKey
 }) {
-    if (condition && fieldMap) {
+    if (condition && fieldMap && fieldMap[condition]) {
         fields = fieldMap[condition];
+    } else if (condition && fieldMap) {
+        throw new Error(
+            "No field was found in the provided fieldMap for the given condition"
+        );
     } else if (condition || fieldMap) {
-        throw new Error(conditionalFieldsetErrorMessage);
+        throw new Error(
+            "Conditional Fieldsets must specify both a 'condition' and a 'fieldMap'"
+        );
     }
 
     const { key, incrementKey } = useKey();
