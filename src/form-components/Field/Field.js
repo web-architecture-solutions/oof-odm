@@ -10,7 +10,8 @@ function Field({
     name,
     label,
     type,
-    defaultOnChange,
+    incrementFormKey,
+    incrementFieldsetKey,
     onChange         = null,
     onError          = null,
     isRequired       = false,
@@ -26,7 +27,12 @@ function Field({
     const isFieldError = fieldErrors.length > 0;
     
     useEffect(() => {
-        onChange ? onChange(value) : defaultOnChange();
+        if (onChange) {
+            onChange(value) 
+        } else {
+            incrementFormKey(); 
+            incrementFieldsetKey();
+        }
     }, [value, onChange]);
 
     useEffect(() => {

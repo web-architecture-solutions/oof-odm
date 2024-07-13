@@ -1,7 +1,7 @@
-import { useState } from "react";
-
 import Fieldset from "../Fieldset/Fieldset";
 import Button   from "../Button/Button";
+
+import { useKey } from "../hooks";
 
 export default function Form({ 
     onSubmit,
@@ -13,20 +13,20 @@ export default function Form({
     fieldsets          = null,
     buttonLabel        = "Submit"
 }) {
+    const { key, incrementKey } = useKey();
+
     const isFormError = formErrors.length > 0;
 
-    const [key, setKey] = useState(0);
-
-    const defaultOnChange = () => setKey(({ key }) => ({ key: key + 1 }));
+    //console.log(fieldsets[0].fields.map(({ ref }) => ref.current?.value))
 
     return (
         <form className={className} key={key}>
             {fieldsets ? fieldsets.map((fieldset, index) =>
                 <Fieldset 
-                    className       = {fieldsetClassName}
-                    fieldClassName  = {fieldClassName}
-                    key             = {index}
-                    defaultOnChange = {defaultOnChange}
+                    className        = {fieldsetClassName}
+                    fieldClassName   = {fieldClassName}
+                    key              = {index}
+                    incrementFormKey = {incrementKey}
                     {...fieldset}  
                 />
             ) : null}
