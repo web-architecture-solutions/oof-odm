@@ -4,6 +4,8 @@ import Control from "../Control/Control";
 
 import styles from "./Field.module.css";
 
+import { FormError } from "../errors";
+
 const initialErrors = { "form/field-is-required": null };
 
 function errorReducer(fieldErrors, error) {
@@ -14,14 +16,6 @@ function errorReducer(fieldErrors, error) {
         ...fieldErrors, 
         [error.code]: error 
     };
-}
-
-class FormError extends Error {
-    constructor({ code, message }) {
-        super(message);
-        this.code = code:
-        this.name = "FormError";
-    }
 }
 
 function Field({ 
@@ -37,7 +31,8 @@ function Field({
     options          = null,
     placeholder      = null
 }, ref) {
-    const [value          ,           setValue] = useState(null);
+    const [value, setValue] = useState(null);
+    
     const [fieldErrors, dispatchError] = useReducer(errorReducer, initialErrors);
 
     const hasUserEdited = value !== null;    
@@ -60,7 +55,7 @@ function Field({
     }, [value, onChange]);
 
     useEffect(() => {
-        if (onError) onError(isRequiredError);
+        if (onError && Object.keys(fieldErrors).length > 0) onError(Object.values(fieldErrors));
     }, 
     return (
         <label htmlFor={name} className={className}>
