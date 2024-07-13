@@ -1,7 +1,6 @@
 import { useRef } from "react";
 
 import Form     from "../../../form-components/Form/Form";
-import Fieldset from "../../../form-components/Fieldset/Fieldset";
 
 import useProfile                    from "./useProfile";
 import useRegistrationFields         from "./useRegistrationFields";
@@ -48,16 +47,17 @@ export default function RegistrationForm({ users }) {
         validatePassword,
     });
 
+    const registrationFieldsets = [{
+        legend: "Register",
+        fields: registrationFields
+    }];
+
     return (
         <Form 
             className  = {styles.RegistrationForm}
             onSubmit   = {handleRegistration}
             errors     = {formErrors}
-        >
-            <Fieldset
-                legend = "Register"
-                fields = {registrationFields}
-            />
-        </Form>
+            fieldsets  = {registrationFieldsets}
+        />
     );
 }

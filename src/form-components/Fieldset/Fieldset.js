@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import Field from "../Field/Field";
 
@@ -7,7 +7,6 @@ const conditionalFieldsetErrorMessage
 
 export default function Fieldset({ 
     legend,
-    children, 
     className      = "",
     fieldClassName = "",
     fields         = null,
@@ -19,6 +18,8 @@ export default function Fieldset({
     } else if (condition || fieldMap) {
         throw new Error(conditionalFieldsetErrorMessage);
     }
+
+    const fieldRefs = fields.map(({ ref }) => ref);
 
     return (
         <fieldset className={className}>
@@ -33,8 +34,6 @@ export default function Fieldset({
                     {...field}
                 />
             ) : null}
-            
-            {children}
         </fieldset>
     );
 }

@@ -2,7 +2,6 @@ import Fieldset from "../Fieldset/Fieldset";
 import Button   from "../Button/Button";
 
 export default function Form({ 
-    children, 
     onSubmit,
     className          = "",
     fieldsetClassName  = "",
@@ -22,8 +21,6 @@ export default function Form({
                 />
             ) : null}
 
-            {children}
-            
             {onSubmit ? (
                 <Button 
                     onClick  = {onSubmit}

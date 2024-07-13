@@ -78,7 +78,7 @@ export default class UserCollection extends FirebaseCollection {
     signInWithEmailAndPassword = async (
         email, 
         password, 
-        setError = null
+        setError = (error) => console.error(error)
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
             .catch(({ code, message }) => {
