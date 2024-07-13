@@ -1,7 +1,7 @@
-export class FormError extends Error {
+export class FieldError extends Error {
     constructor({ code, message }) {
         super(message);
-        this.code = code:
-        this.name = "FormError";
+        this.code = code;
+        this.name = "FieldError";
     }
 }

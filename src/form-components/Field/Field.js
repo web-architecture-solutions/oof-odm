@@ -2,26 +2,14 @@ import { forwardRef, useEffect, useState } from "react";
 
 import Control from "../Control/Control";
 
+import useFieldValidation from "./useFieldValidation";
+
 import styles from "./Field.module.css";
 
-import { FormError } from "../errors";
-
-const initialErrors = { "form/field-is-required": null };
-
-function errorReducer(fieldErrors, error) {
-    return error === null ? { 
-        ...fieldErrors, 
-        "form/field-is-required": null  
-    } : { 
-        ...fieldErrors, 
-        [error.code]: error 
-    };
-}
-
-function Field({ 
-    name, 
-    label, 
-    type, 
+function Field({
+    name,
+    label,
+    type,
     onChange         = null,
     onError          = null,
     isRequired       = false,
@@ -29,41 +17,25 @@ function Field({
     controlClassName = "",
     autoComplete     = null,
     options          = null,
-    placeholder      = null
+    placeholder      = null,
 }, ref) {
     const [value, setValue] = useState(null);
+
+    const fieldErrors = useFieldValidation({ isRequired, value });
     
-    const [fieldErrors, dispatchError] = useReducer(errorReducer, initialErrors);
-
-    const hasUserEdited = value !== null;    
-
-    useEffect(() => {
-        const isRequiredFieldSatisfied = isRequired && !value && hasUserEdited;
-        const isRequiredError = !isRequiredFieldSatisfied
-            ? new FormError({
-                code   : "form/field-is-required",
-                message: "Field is required"
-              })
-            : null;
-
-        dispatchError(isRequiredError);
-        
-    }, [isRequired, value, hasUserEdited]);
-
     useEffect(() => {
         if (onChange) onChange(value);
     }, [value, onChange]);
 
     useEffect(() => {
-        if (onError && Object.keys(fieldErrors).length > 0) onError(Object.values(fieldErrors));
-    }, 
+        if (onError) onError(fieldErrors);
+    }, [onError, fieldErrors]);
+
     return (
         <label htmlFor={name} className={className}>
-            <span className={styles.label}>
-                {label}
-            </span>
-            
-            <Control 
+            <span className={styles.label}>{label}</span>
+
+            <Control
                 autoComplete = {autoComplete}
                 className    = {controlClassName}
                 type         = {type}
@@ -75,11 +47,13 @@ function Field({
                 ref          = {ref}
             />
 
-            {Object.keys(fieldErrors).length > 0 ? Object.values(fieldErrors).filter(Boolean).map(({ message }) => 
-                <span>{message}</span>
-            ) : null}
+            {fieldErrors.length > 0
+                ? fieldErrors.map(({ message }, index) => (
+                      <span key={index}>{message}</span>
+                  ))
+                : null}
         </label>
     );
-};
+}
 
 export default forwardRef(Field);

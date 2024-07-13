@@ -1,3 +1,5 @@
+import { useRef } from "react";
+
 import Field from "../Field/Field";
 
 const conditionalFieldsetErrorMessage 
@@ -17,6 +19,7 @@ export default function Fieldset({
     } else if (condition || fieldMap) {
         throw new Error(conditionalFieldsetErrorMessage);
     }
+
     return (
         <fieldset className={className}>
             {legend ? (
