@@ -1,19 +1,24 @@
 import { useCallback, useReducer } from "react";
+
 import { PasswordError } from "../../errors";
 
 const initialErrors = { "auth/passwords-do-not-match": null };
 
-function errorReducer(errors, error) {
-    return error === null
-        ? { ...errors, "auth/passwords-do-not-match": null  }
-        : { ...errors, [error.code]                 : error };
+function errorReducer(formErrors, error) {
+    return error === null ? { 
+        ...formErrors, 
+        "auth/passwords-do-not-match": null  
+    } : { 
+        ...formErrors, 
+        [error.code] : error 
+    };
 }
 
 export default function useRegistrationFormValidation({
     passwordRef,
     confirmPasswordRef,
 }) {
-    const [errors, dispatchError] = useReducer(errorReducer, initialErrors);
+    const [formErrors, dispatchError] = useReducer(errorReducer, initialErrors);
 
     const validatePassword = useCallback(() => {
         const { value:        password } =        passwordRef.current;
@@ -32,7 +37,7 @@ export default function useRegistrationFormValidation({
     }, [passwordRef, confirmPasswordRef]);
 
     return {
-        formErrors: Object.values(errors).filter(Boolean),
+        formErrors: Object.values(formErrors).filter(Boolean),
         validatePassword,
     };
 }
