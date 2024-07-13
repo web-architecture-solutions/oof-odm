@@ -12,6 +12,7 @@ export default function Fieldset({
     fields         = null,
     fieldMap       = null,
     condition      = null,
+    onChange       = null,
     incrementFormKey
 }) {
     if (condition && fieldMap) {
@@ -22,7 +23,15 @@ export default function Fieldset({
 
     const { key, incrementKey } = useKey();
 
-    console.log(fields);
+    if (onChange) {
+        const fieldRecords = fields.flatMap(({ name, ref }) => {
+            return Object.entries({ [name]: ref.current?.value });
+        });
+    
+        const fieldsetData = Object.fromEntries(fieldRecords);
+
+        onChange(fieldsetData);
+    }
 
     return (
         <fieldset className={className} key={key}>
@@ -36,6 +45,7 @@ export default function Fieldset({
                     key                  = {index}
                     incrementFormKey     = {incrementFormKey}
                     incrementFieldsetKey = {incrementKey}
+                    onFieldsetChange     = {onChange}
                     {...field}
                 />
             ) : null}

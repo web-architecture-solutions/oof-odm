@@ -19,7 +19,7 @@ function Field({
     controlClassName = "",
     autoComplete     = null,
     options          = null,
-    placeholder      = null,
+    placeholder      = null
 }, ref) {
     const [value, setValue] = useState(null);
 
@@ -28,7 +28,7 @@ function Field({
     
     useEffect(() => {
         if (onChange) {
-            onChange(value) 
+            onChange(value);
         } else {
             incrementFormKey(); 
             incrementFieldsetKey();

@@ -27,6 +27,7 @@ export default function Form({
                     fieldClassName   = {fieldClassName}
                     key              = {index}
                     incrementFormKey = {incrementKey}
+                    onChange={(fieldset) => console.log(fieldset)}
                     {...fieldset}  
                 />
             ) : null}
