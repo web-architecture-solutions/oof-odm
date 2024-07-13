@@ -1,7 +1,8 @@
 export default function Button({ 
     children, 
     onClick, 
-    disabled = null 
+    className = "",
+    disabled  = null
 }) {
     function _onClick(event) {
         event.preventDefault();
@@ -10,8 +11,9 @@ export default function Button({
     
     return (
         <button 
-            disabled = {disabled}
-            onClick  = {_onClick}
+            disabled  = {disabled}
+            onClick   = {_onClick}
+            className = {className}
         >
             {children}
         </button>

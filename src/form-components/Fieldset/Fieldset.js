@@ -1,5 +1,3 @@
-import { useEffect, useRef } from "react";
-
 import Field from "../Field/Field";
 
 const conditionalFieldsetErrorMessage 
@@ -11,15 +9,14 @@ export default function Fieldset({
     fieldClassName = "",
     fields         = null,
     fieldMap       = null,
-    condition      = null
+    condition      = null,
+    defaultOnChange
 }) {
     if (condition && fieldMap) {
         fields = fieldMap[condition];
     } else if (condition || fieldMap) {
         throw new Error(conditionalFieldsetErrorMessage);
     }
-
-    const fieldRefs = fields.map(({ ref }) => ref);
 
     return (
         <fieldset className={className}>
@@ -29,8 +26,9 @@ export default function Fieldset({
 
             {fields ? fields.map((field, index) =>
                 <Field 
-                    className = {fieldClassName}
-                    key       = {index}
+                    className       = {fieldClassName}
+                    key             = {index}
+                    defaultOnChange = {defaultOnChange}
                     {...field}
                 />
             ) : null}

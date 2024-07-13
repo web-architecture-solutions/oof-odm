@@ -2,6 +2,8 @@ import { useCallback, useReducer } from "react";
 
 import { PasswordError } from "../../errors";
 
+import Ref from "../../../Ref";
+
 const initialErrors = { "auth/passwords-do-not-match": null };
 
 function errorReducer(formErrors, error) {
@@ -13,13 +15,6 @@ function errorReducer(formErrors, error) {
         [error.code] : error 
     };
 }
-
-class Ref {
-    static getValue(ref) {
-      return ref?.current?.value;
-    }
-}
-
 
 export default function useRegistrationFormValidation({
     passwordRef,
@@ -44,7 +39,7 @@ export default function useRegistrationFormValidation({
     }, [passwordRef, confirmPasswordRef]);
 
     return {
-        formErrors:             Object.values(formErrors).filter(Boolean),
+        formErrors: Object.values(formErrors).filter(Boolean),
         validatePassword,
     };
 }

@@ -10,6 +10,7 @@ function Field({
     name,
     label,
     type,
+    defaultOnChange,
     onChange         = null,
     onError          = null,
     isRequired       = false,
@@ -21,10 +22,11 @@ function Field({
 }, ref) {
     const [value, setValue] = useState(null);
 
-    const fieldErrors = useFieldValidation({ isRequired, value });
+    const fieldErrors  = useFieldValidation({ isRequired, value });
+    const isFieldError = fieldErrors.length > 0;
     
     useEffect(() => {
-        if (onChange) onChange(value);
+        onChange ? onChange(value) : defaultOnChange();
     }, [value, onChange]);
 
     useEffect(() => {
@@ -47,11 +49,9 @@ function Field({
                 ref          = {ref}
             />
 
-            {fieldErrors.length > 0
-                ? fieldErrors.map(({ message }, index) => (
-                      <span key={index}>{message}</span>
-                  ))
-                : null}
+            {isFieldError ? fieldErrors.map(({ message }, index) => 
+                <span key={index}>{message}</span>
+            ) : null}
         </label>
     );
 }
