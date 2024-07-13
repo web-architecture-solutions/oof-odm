@@ -12,6 +12,8 @@ export default function Form({
 }) {
     const isFormError = formErrors.length > 0;
 
+    console.log(formErrors)
+
     return (
         <form className={className}>
             {fieldsets ? fieldsets.map((fieldset, index) =>
