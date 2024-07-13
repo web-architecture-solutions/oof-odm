@@ -24,6 +24,19 @@ export default function RegistrationForm({ users }) {
 
     const profile = useProfile({ usernameRef });
 
+    const registrationFields = useRegistrationFields({
+        usernameRef,
+        emailRef,
+        passwordRef,
+        confirmPasswordRef,
+        validatePassword,
+    });
+
+    const registrationFieldsets = [{
+        legend: "Register",
+        fields: registrationFields
+    }];
+
     function handleRegistration () {
         if (
             formErrors.length === 0
@@ -39,25 +52,13 @@ export default function RegistrationForm({ users }) {
         }
     }
 
-    const registrationFields = useRegistrationFields({
-        usernameRef,
-        emailRef,
-        passwordRef,
-        confirmPasswordRef,
-        validatePassword,
-    });
-
-    const registrationFieldsets = [{
-        legend: "Register",
-        fields: registrationFields
-    }];
-
     return (
         <Form 
             className  = {styles.RegistrationForm}
             onSubmit   = {handleRegistration}
             errors     = {formErrors}
             fieldsets  = {registrationFieldsets}
+            onChange   = {(foo) => console.log(foo)}
         />
     );
 }

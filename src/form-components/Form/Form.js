@@ -11,13 +11,25 @@ export default function Form({
     buttonClassName    = "",
     errors: formErrors = [],
     fieldsets          = null,
-    buttonLabel        = "Submit"
+    buttonLabel        = "Submit",
+    onChange           = null
 }) {
     const { key, incrementKey } = useKey();
 
     const isFormError = formErrors.length > 0;
 
-    //console.log(fieldsets[0].fields.map(({ ref }) => ref.current?.value))
+    if (onChange) {
+        const formData = fieldsets.map(({ fields }) => {
+            const fieldRecords = fields.flatMap(({ name, ref }) => {
+                return Object.entries({ [name]: ref.current?.value });
+            });
+        
+            const fieldsetData = Object.fromEntries(fieldRecords);
+            return fieldsetData;
+        });
+
+        onChange(formData);
+    }
 
     return (
         <form className={className} key={key}>
@@ -27,7 +39,6 @@ export default function Form({
                     fieldClassName   = {fieldClassName}
                     key              = {index}
                     incrementFormKey = {incrementKey}
-                    onChange={(fieldset) => console.log(fieldset)}
                     {...fieldset}  
                 />
             ) : null}
