@@ -1,7 +1,6 @@
-import { useEffect } from "react";
-import Field from "../Field/Field";
+import { useRef } from "react";
 
-import { aggregateFields } from "../util";
+import Field from "../Field/Field";
 
 export default function Fieldset({ 
     legend,
@@ -10,7 +9,8 @@ export default function Fieldset({
     fields         = null,
     fieldMap       = null,
     condition      = null,
-    onChange       = null
+    //onChange       = null,
+    onFieldsetChange
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
         fields = fieldMap[condition];
@@ -24,13 +24,13 @@ export default function Fieldset({
         );
     }
 
-    useEffect(() => {
-        if (onChange) {
-            const fieldsetData = aggregateFields(fields);
-            onChange(fieldsetData);
-        }
-    }, [onChange, fields])
-    
+    const fieldsetDataRef = useRef({ legend, fields: {}});
+
+    function onFieldChange(fieldData) {
+        const [name, value] = Object.entries(fieldData)[0];
+        fieldsetDataRef.current.fields[name] = value;
+        onFieldsetChange(fieldsetDataRef.current);
+    }  
 
     return (
         <fieldset className={className}>
@@ -40,9 +40,9 @@ export default function Fieldset({
 
             {fields ? fields.map((field, index) =>
                 <Field 
-                    className            = {fieldClassName}
-                    key                  = {index}
-                    onFieldsetChange     = {onChange}
+                    className = {fieldClassName}
+                    key       = {index}
+                    onFieldChange = {onFieldChange}
                     {...field}
                 />
             ) : null}

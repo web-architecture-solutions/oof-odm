@@ -17,7 +17,8 @@ function Field({
     controlClassName = "",
     autoComplete     = null,
     options          = null,
-    placeholder      = null
+    placeholder      = null,
+    onFieldChange
 }, ref) {
     const [value, setValue] = useState(null);
 
@@ -25,8 +26,16 @@ function Field({
     const isFieldError = fieldErrors.length > 0;
     
     useEffect(() => {
-        if (onChange) onChange(value);
-    }, [value, onChange]);
+        const fieldData = { [name]: value };
+        onFieldChange(fieldData);
+    }, [name, value, onFieldChange]);
+    
+    useEffect(() => {
+        if (onChange) {
+            const fieldData = { [name]: value };
+            onChange(fieldData);
+        }
+    }, [name, value, onChange]);
 
     useEffect(() => {
         if (onError) onError(fieldErrors);
