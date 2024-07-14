@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Field from "../Field/Field";
 
 import { useKey } from "../hooks";
@@ -28,10 +29,13 @@ export default function Fieldset({
 
     const { key, incrementKey } = useKey();
 
-    if (onChange) {
-        const fieldsetData = aggregateFields(fields);
-        onChange(fieldsetData);
-    }
+    useEffect(() => {
+        if (onChange) {
+            const fieldsetData = aggregateFields(fields);
+            onChange(fieldsetData);
+        }
+    }, [onChange, fields])
+    
 
     return (
         <fieldset className={className} key={key}>
