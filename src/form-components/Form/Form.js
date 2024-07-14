@@ -4,6 +4,7 @@ import Button   from "../Button/Button";
 import { useKey } from "../hooks";
 
 import { aggregateFieldsets } from "../util";
+import { useEffect } from "react";
 
 export default function Form({ 
     onSubmit,
@@ -18,11 +19,13 @@ export default function Form({
 }) {
     const { key, incrementKey } = useKey();
 
-    if (onChange) {
-        const formData = aggregateFieldsets(fieldsets);
-        onChange(formData);
-    }
-
+    useEffect(() => {
+        if (onChange) {
+            const formData = aggregateFieldsets(fieldsets);
+            onChange(formData);
+        }
+    }, [onChange, fieldsets]);
+    
     const isFormError = formErrors.length > 0;
 
     return (
