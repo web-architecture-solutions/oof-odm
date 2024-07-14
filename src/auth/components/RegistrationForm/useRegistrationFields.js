@@ -1,3 +1,5 @@
+import { useRef } from "react";
+
 import { AutoComplete, FieldType } from "../../../constants";
 
 import { username, email, password } from "../../terms";
@@ -11,13 +13,7 @@ const passwordLabel        = password.uppercase;
 const confirmPasswordName  = "confirmPassword";
 const confirmPasswordLabel = "Confirm Password";
 
-export default function useRegistrationFields({ 
-    usernameRef, 
-    emailRef,
-    passwordRef,
-    confirmPasswordRef,
-    validatePassword
-}) {
+export default function useRegistrationFields() {
     return [{
         autoComplete: AutoComplete.username,
         name        : usernameName,
@@ -25,7 +21,7 @@ export default function useRegistrationFields({
         placeholder : usernameLabel,
         type        : FieldType.text,
         isRequired  : true,
-        ref         : usernameRef
+        ref         : useRef()
     }, {
         autoComplete: AutoComplete.email,
         name        : emailName,
@@ -33,24 +29,22 @@ export default function useRegistrationFields({
         placeholder : emailLabel,
         type        : FieldType.email,
         isRequired  : true,
-        ref         : emailRef
+        ref         : useRef()
     }, {
         autoComplete: AutoComplete.newPassword,
         name        : passwordName,
         label       : passwordLabel,
         placeholder : passwordLabel,
-        onChange    : validatePassword,
         type        : FieldType.password,
         isRequired  : true,
-        ref         : passwordRef
+        ref         : useRef()
     }, {
         autoComplete: AutoComplete.newPassword,
         name        : confirmPasswordName,
         label       : confirmPasswordLabel,
         placeholder : confirmPasswordLabel,
-        onChange    : validatePassword,
         type        : FieldType.password,
         isRequired  : true,
-        ref         : confirmPasswordRef
+        ref         : useRef()
     }];
 }

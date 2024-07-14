@@ -1,33 +1,44 @@
-import { useRef } from "react";
-
-import Form     from "../../../form-components/Form/Form";
+import Form from "../../../form-components/Form/Form";
 
 import useProfile                    from "./useProfile";
 import useRegistrationFields         from "./useRegistrationFields";
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
 import styles from "./RegistrationForm.module.css";
+import { useRef } from "react";
 
 export default function RegistrationForm({ users }) {
-    const usernameRef        = useRef();
-    const emailRef           = useRef();
-    const passwordRef        = useRef();
-    const confirmPasswordRef = useRef();   
+    const _registrationFields = useRegistrationFields();
+
+    const usernameRef = _registrationFields.find(({ name }) => {
+        return name === "username";
+    })?.ref;
+    
+    const emailRef = _registrationFields.find(({ name }) => {
+        return name === "email";
+    })?.ref;
+
+    const passwordRef = _registrationFields.find(({ name }) => {
+        return name === "password";
+    })?.ref;
+
+    const confirmPasswordRef = _registrationFields.find(({ name }) => {
+        return name === "confirmPassword";
+    })?.ref;
 
     const { 
         formErrors, 
         validatePassword 
     } = useRegistrationFormValidation({ 
         passwordRef,
-        confirmPasswordRef
+        confirmPasswordRef,
     });
 
-    const registrationFields = useRegistrationFields({
-        usernameRef,
-        emailRef,
-        passwordRef,
-        confirmPasswordRef,
-        validatePassword,
+    const registrationFields = _registrationFields.map((field) => {
+        if (field.name === "password" || field.name === "confirmPassword") {
+            return { ...field, onChange: validatePassword };
+        }
+        return field;
     });
 
     const registrationFieldsets = [{
@@ -52,13 +63,18 @@ export default function RegistrationForm({ users }) {
         }
     }
 
+    const formDataRef = useRef();
+
+    console.log(formDataRef)
+
     return (
         <Form 
             className  = {styles.RegistrationForm}
             onSubmit   = {handleRegistration}
             errors     = {formErrors}
             fieldsets  = {registrationFieldsets}
-            onChange   = {(formData) => console.log(formData)}
+            onChange   = {(formData) => formDataRef.current = formData}
+            formDataRef = {formDataRef}
         />
     );
 }

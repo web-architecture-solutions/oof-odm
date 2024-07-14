@@ -18,7 +18,7 @@ function errorReducer(formErrors, error) {
 
 export default function useRegistrationFormValidation({
     passwordRef,
-    confirmPasswordRef,
+    confirmPasswordRef
 }) {
     const [formErrors, dispatchError] = useReducer(errorReducer, initialErrors);
 
