@@ -62,14 +62,13 @@ export default function RegistrationForm({ users }) {
         }
     }
 
-
     return (
         <Form 
-            className  = {styles.RegistrationForm}
-            onSubmit   = {handleRegistration}
-            errors     = {formErrors}
-            fieldsets  = {registrationFieldsets}
-            onChange={(formData) => console.log(formData)}
+            className = {styles.RegistrationForm}
+            onSubmit  = {handleRegistration}
+            errors    = {formErrors}
+            fieldsets = {registrationFieldsets}
+            onChange  = {(formData) => console.log(formData)}
         />
     );
 }

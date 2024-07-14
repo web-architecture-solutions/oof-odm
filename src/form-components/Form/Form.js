@@ -1,9 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import Fieldset from "../Fieldset/Fieldset";
 import Button   from "../Button/Button";
-
-import { aggregateFieldsets } from "../util";
 
 export default function Form({ 
     onSubmit,
@@ -16,13 +14,6 @@ export default function Form({
     buttonLabel        = "Submit",
     onChange           = null
 }) {
-    useEffect(() => {
-        if (onChange) {
-            const formData = aggregateFieldsets(fieldsets);
-            onChange(formData);
-        }
-    }, [onChange, fieldsets]);
-    
     const isFormError = formErrors.length > 0;
 
     const formDataRef = useRef(new Array(fieldsets.length).fill({}));

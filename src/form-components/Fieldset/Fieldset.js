@@ -9,7 +9,6 @@ export default function Fieldset({
     fields         = null,
     fieldMap       = null,
     condition      = null,
-    //onChange       = null,
     onFieldsetChange
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
