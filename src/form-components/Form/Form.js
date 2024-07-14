@@ -1,10 +1,9 @@
+import { useEffect } from "react";
+
 import Fieldset from "../Fieldset/Fieldset";
 import Button   from "../Button/Button";
 
-import { useKey } from "../hooks";
-
 import { aggregateFieldsets } from "../util";
-import { useEffect } from "react";
 
 export default function Form({ 
     onSubmit,
@@ -17,8 +16,6 @@ export default function Form({
     buttonLabel        = "Submit",
     onChange           = null
 }) {
-    const { key, incrementKey } = useKey();
-
     useEffect(() => {
         if (onChange) {
             const formData = aggregateFieldsets(fieldsets);
@@ -29,13 +26,12 @@ export default function Form({
     const isFormError = formErrors.length > 0;
 
     return (
-        <form className={className} key={key}>
+        <form className={className}>
             {fieldsets ? fieldsets.map((fieldset, index) =>
                 <Fieldset 
                     className        = {fieldsetClassName}
                     fieldClassName   = {fieldClassName}
                     key              = {index}
-                    incrementFormKey = {incrementKey}
                     {...fieldset}  
                 />
             ) : null}

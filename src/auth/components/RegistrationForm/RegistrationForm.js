@@ -5,7 +5,6 @@ import useRegistrationFields         from "./useRegistrationFields";
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
 import styles from "./RegistrationForm.module.css";
-import { useRef } from "react";
 
 export default function RegistrationForm({ users }) {
     const _registrationFields = useRegistrationFields();
@@ -63,9 +62,6 @@ export default function RegistrationForm({ users }) {
         }
     }
 
-    const formDataRef = useRef();
-
-    console.log(formDataRef)
 
     return (
         <Form 
@@ -73,8 +69,6 @@ export default function RegistrationForm({ users }) {
             onSubmit   = {handleRegistration}
             errors     = {formErrors}
             fieldsets  = {registrationFieldsets}
-            onChange   = {(formData) => formDataRef.current = formData}
-            formDataRef = {formDataRef}
         />
     );
 }

@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import Field from "../Field/Field";
 
-import { useKey } from "../hooks";
-
 import { aggregateFields } from "../util";
 
 export default function Fieldset({ 
@@ -12,8 +10,7 @@ export default function Fieldset({
     fields         = null,
     fieldMap       = null,
     condition      = null,
-    onChange       = null,
-    incrementFormKey
+    onChange       = null
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
         fields = fieldMap[condition];
@@ -27,8 +24,6 @@ export default function Fieldset({
         );
     }
 
-    const { key, incrementKey } = useKey();
-
     useEffect(() => {
         if (onChange) {
             const fieldsetData = aggregateFields(fields);
@@ -38,7 +33,7 @@ export default function Fieldset({
     
 
     return (
-        <fieldset className={className} key={key}>
+        <fieldset className={className}>
             {legend ? (
                 <legend>{legend}</legend>
             ) : null}
@@ -47,8 +42,6 @@ export default function Fieldset({
                 <Field 
                     className            = {fieldClassName}
                     key                  = {index}
-                    incrementFormKey     = {incrementFormKey}
-                    incrementFieldsetKey = {incrementKey}
                     onFieldsetChange     = {onChange}
                     {...field}
                 />
