@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
 import Field from "../Field/Field";
 
@@ -9,7 +9,7 @@ export default function Fieldset({
     fields         = null,
     fieldMap       = null,
     condition      = null,
-    onFieldsetChange
+    onChange       = null
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
         fields = fieldMap[condition];
@@ -23,13 +23,29 @@ export default function Fieldset({
         );
     }
 
-    const fieldsetDataRef = useRef({ legend, fields: {}});
-
-    function onFieldChange(fieldData) {
-        const [name, value] = Object.entries(fieldData)[0];
-        fieldsetDataRef.current.fields[name] = value;
-        onFieldsetChange(fieldsetDataRef.current);
+    const [fieldsetData, setFieldsetData] = useState({ legend, fields: {}});
+    
+    function updateFieldsetData(fieldData) {
+        setFieldsetData((prevFieldsetData) => {
+            const [name, value] = Object.entries(fieldData)[0];
+            if (prevFieldsetData.fields[name] !== value) {
+                const newFields = {
+                    ...prevFieldsetData.fields,
+                    [name]: value
+                };
+                const newFieldsetData = {
+                    ...prevFieldsetData,
+                    fields: newFields
+                };
+                return newFieldsetData;
+            }
+            return prevFieldsetData; 
+        });
     }  
+
+    useEffect(() => {
+        if (onChange) onChange(fieldsetData);
+    }, [fieldsetData]);
 
     return (
         <fieldset className={className}>
@@ -39,9 +55,9 @@ export default function Fieldset({
 
             {fields ? fields.map((field, index) =>
                 <Field 
-                    className     = {fieldClassName}
-                    key           = {index}
-                    onFieldChange = {onFieldChange}
+                    className          = {fieldClassName}
+                    key                = {index}
+                    updateFieldsetData = {updateFieldsetData}
                     {...field}
                 />
             ) : null}

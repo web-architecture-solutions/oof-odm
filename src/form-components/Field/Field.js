@@ -4,12 +4,11 @@ import Control from "../Control/Control";
 
 import useFieldValidation from "./useFieldValidation";
 
-import styles from "./Field.module.css";
-
 function Field({
     name,
     label,
     type,
+    updateFieldsetData,
     onChange         = null,
     onError          = null,
     isRequired       = false,
@@ -17,24 +16,20 @@ function Field({
     controlClassName = "",
     autoComplete     = null,
     options          = null,
-    placeholder      = null,
-    onFieldChange
+    placeholder      = null
 }, ref) {
     const [value, setValue] = useState(null);
 
+    const fieldData    = { [name]: value };
     const fieldErrors  = useFieldValidation({ isRequired, value });
     const isFieldError = fieldErrors.length > 0;
+
+    useEffect(() => {
+        updateFieldsetData(fieldData);
+    }, [name, value, updateFieldsetData]);
     
     useEffect(() => {
-        const fieldData = { [name]: value };
-        onFieldChange(fieldData);
-    }, [name, value, onFieldChange]);
-    
-    useEffect(() => {
-        if (onChange) {
-            const fieldData = { [name]: value };
-            onChange(fieldData);
-        }
+        if (onChange) onChange(fieldData);
     }, [name, value, onChange]);
 
     useEffect(() => {
@@ -42,8 +37,8 @@ function Field({
     }, [onError, fieldErrors]);
 
     return (
-        <label htmlFor={name} className={className}>
-            <span className={styles.label}>{label}</span>
+        <div className={className}>
+            <label htmlFor={name}>{label}</label>
 
             <Control
                 autoComplete = {autoComplete}
@@ -57,10 +52,10 @@ function Field({
                 ref          = {ref}
             />
 
-            {isFieldError ? fieldErrors.map(({ message }, index) => 
-                <span key={index}>{message}</span>
+            {isFieldError ? fieldErrors.map(({ code, message }) => 
+                <span key={code}>{message}</span>
             ) : null}
-        </label>
+        </div>
     );
 }
 
