@@ -5,32 +5,28 @@ import useRegistrationFields         from "./useRegistrationFields";
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
 import styles from "./RegistrationForm.module.css";
+import { useEffect, useState } from "react";
+
+function findRefByName(array, _name) {
+    return array.find(({ name }) => {
+        return name === _name;
+    })?.ref;
+}
 
 export default function RegistrationForm({ users }) {
     const _registrationFields = useRegistrationFields();
 
-    const usernameRef = _registrationFields.find(({ name }) => {
-        return name === "username";
-    })?.ref;
-    
-    const emailRef = _registrationFields.find(({ name }) => {
-        return name === "email";
-    })?.ref;
-
-    const passwordRef = _registrationFields.find(({ name }) => {
-        return name === "password";
-    })?.ref;
-
-    const confirmPasswordRef = _registrationFields.find(({ name }) => {
-        return name === "confirmPassword";
-    })?.ref;
+    const usernameRef        = findRefByName(_registrationFields, "username");
+    const emailRef           = findRefByName(_registrationFields, "email");
+    const passwordRef        = findRefByName(_registrationFields, "password");
+    const confirmPasswordRef = findRefByName(_registrationFields, "confirmPassword");
 
     const { 
         formErrors, 
         validatePassword 
     } = useRegistrationFormValidation({ 
         passwordRef,
-        confirmPasswordRef,
+        confirmPasswordRef
     });
 
     const registrationFields = _registrationFields.map((field) => {
@@ -62,13 +58,23 @@ export default function RegistrationForm({ users }) {
         }
     }
 
+    const [foo, setFoo] = useState();
+    const [key, setKey] = useState(0)
+
+    useEffect(() => {
+        console.log("FOO");
+    }, [foo])
+
     return (
         <Form 
             className = {styles.RegistrationForm}
             onSubmit  = {handleRegistration}
             errors    = {formErrors}
             fieldsets = {registrationFieldsets}
-            onChange  = {(formData) => console.log(formData)}
+            onChange  = {(formData) => {
+                setFoo(formData);
+                console.log(foo);
+            }}
         />
     );
 }

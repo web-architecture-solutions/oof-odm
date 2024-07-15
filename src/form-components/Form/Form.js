@@ -48,7 +48,9 @@ export default function Form({
             ) : null}
             
             {isFormError ? formErrors.map(({ message }, index) => 
-                <span key={index}>{message}</span>
+                <span key={index}>
+                    {message}
+                </span>
             ) : null}
         </form>
     );

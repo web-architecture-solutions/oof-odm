@@ -39,8 +39,8 @@ export default function Fieldset({
 
             {fields ? fields.map((field, index) =>
                 <Field 
-                    className = {fieldClassName}
-                    key       = {index}
+                    className     = {fieldClassName}
+                    key           = {index}
                     onFieldChange = {onFieldChange}
                     {...field}
                 />
