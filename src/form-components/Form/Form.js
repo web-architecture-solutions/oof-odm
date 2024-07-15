@@ -3,26 +3,26 @@ import Button   from "../Button/Button";
 
 export default function Form({ 
     onSubmit,
-    className          = "",
-    fieldsetClassName  = "",
-    fieldClassName     = "",
-    buttonClassName    = "",
-    errors: formErrors = [],
-    fieldsets          = null,
-    buttonLabel        = "Submit",
-    onChange           = null
+    className                = "",
+    fieldsetClassName        = "",
+    fieldClassName           = "",
+    buttonClassName          = "",
+    buttonLabel              = "Submit",
+    onChange                 = null,
+    errors: formErrors       = [],
+    schema: fieldsetSchemata = null,
 }) {
     const isFormError = formErrors.length > 0;
 
     return (
         <form className={className}>
-            {fieldsets ? fieldsets.map((fieldset, index) =>
+            {fieldsetSchemata ? fieldsetSchemata.map((fieldsetSchema, index) =>
                 <Fieldset 
                     className      = {fieldsetClassName}
                     onChange       = {onChange ? onChange(index) : null}
                     fieldClassName = {fieldClassName}
                     key            = {index}
-                    {...fieldset}  
+                    {...fieldsetSchema}  
                 />
             ) : null}
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-export default function useFormData(fieldsets) {
-    const initialFormData = new Array(fieldsets.length).fill({});
+export default function useFormData(formLength) {
+    const initialFormData = new Array(formLength).fill({});
 
     const [formData, setFormData] = useState(initialFormData)
 

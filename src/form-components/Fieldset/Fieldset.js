@@ -4,15 +4,15 @@ import Field from "../Field/Field";
 
 export default function Fieldset({ 
     legend,
-    className      = "",
-    fieldClassName = "",
-    fields         = null,
-    fieldMap       = null,
-    condition      = null,
-    onChange       = null
+    className             = "",
+    fieldClassName        = "",
+    fieldMap              = null,
+    condition             = null,
+    onChange              = null,
+    fields: fieldSchemata = null,
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
-        fields = fieldMap[condition];
+        fieldSchemata = fieldMap[condition];
     } else if (condition && fieldMap) {
         throw new Error(
             "No field was found in the provided fieldMap for the given condition"
@@ -45,7 +45,7 @@ export default function Fieldset({
 
     useEffect(() => {
         if (onChange) onChange(fieldsetData);
-    }, [fieldsetData]);
+    }, [onChange, fieldsetData]);
 
     return (
         <fieldset className={className}>
@@ -53,12 +53,12 @@ export default function Fieldset({
                 <legend>{legend}</legend>
             ) : null}
 
-            {fields ? fields.map((field, index) =>
+            {fieldSchemata ? fieldSchemata.map((fieldSchema, index) =>
                 <Field 
                     className          = {fieldClassName}
                     key                = {index}
                     updateFieldsetData = {updateFieldsetData}
-                    {...field}
+                    {...fieldSchema}
                 />
             ) : null}
         </fieldset>
