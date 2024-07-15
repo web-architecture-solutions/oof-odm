@@ -23,7 +23,11 @@ export default function Fieldset({
         );
     }
 
-    const [fieldsetData, setFieldsetData] = useState({ legend, fields: {}});
+    const initialFieldRecords = fieldSchemata.map(({ name }) => [name, null]);
+    const initialFields       = Object.fromEntries(initialFieldRecords);
+    const initialFieldsetData = { legend, fields: initialFields }
+    
+    const [fieldsetData, setFieldsetData] = useState(initialFieldsetData);
     
     function updateFieldsetData(fieldData) {
         setFieldsetData((prevFieldsetData) => {

@@ -4,23 +4,25 @@ import Form from "../../../form-components/Form/Form";
 
 import registrationFormSchema from "./registrationFormSchema";
 
-import useRegistrationFormValidation from "./useRegistrationFormValidation";
-
-import useFormData from "../../../form-components/Form/useFormData";
+import useFormData           from "../../../form-components/Form/useFormData";
+import useEnrichedFormSchema from "../../../form-components/Form/useEnrichedFormData";
 
 import styles from "./RegistrationForm.module.css";
 
-function useEnrichedFormSchema(registrationFormSchema, registrationFormControls) {
-    const enrichedRegistrationFormSchema = registrationFormSchema.map((fieldset, index) => {
-        const fieldsetControls   = registrationFormControls[index];
-        const fieldsWithControls = fieldset.fields.map((field) => {
-            const fieldControls = fieldsetControls[field.name];
-            return { ...field, ...fieldControls };
-        });
-        const newFieldset = { ...fieldset, fields: fieldsWithControls };
-        return newFieldset;
-    });
-    return enrichedRegistrationFormSchema;
+import { useCallback, useReducer } from "react";
+
+import { PasswordError } from "../../errors";
+
+const initialErrors = { "auth/passwords-do-not-match": null };
+
+function errorReducer(formErrors, error) {
+    return error === null ? { 
+        ...formErrors, 
+        "auth/passwords-do-not-match": null  
+    } : { 
+        ...formErrors, 
+        [error.code]: error 
+    };
 }
 
 export default function RegistrationForm({ users }) {
@@ -28,12 +30,27 @@ export default function RegistrationForm({ users }) {
         formData, 
         handleOnFormChange 
     } = useFormData(registrationFormSchema);
-
-    const { 
-        formErrors, 
-        validatePassword 
-    } = useRegistrationFormValidation(formData);
     
+    const [
+        _formErrors, 
+        dispatchError
+    ] = useReducer(errorReducer, initialErrors);
+
+    const { password, confirmPassword } = formData[0].fields;
+
+    const validatePassword = useCallback(() => {
+        const doPasswordsMatch = password === confirmPassword;
+        const passwordsDoNotMatchError = !doPasswordsMatch
+            ? new PasswordError({
+                code   : "auth/passwords-do-not-match",
+                message: "Passwords do not match",
+            })
+            : null;
+        dispatchError(passwordsDoNotMatchError);
+    }, [password, confirmPassword]);
+
+    const formErrors = Object.values(_formErrors).filter(Boolean);
+
     const usernameRef        = useRef();
     const emailRef           = useRef();
     const passwordRef        = useRef();
