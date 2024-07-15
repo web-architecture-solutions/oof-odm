@@ -7,23 +7,9 @@ import registrationFormSchema from "./registrationFormSchema";
 import useFormData           from "../../../form-components/Form/useFormData";
 import useEnrichedFormSchema from "../../../form-components/Form/useEnrichedFormData";
 
+import useRegistrationFormValidation from "./useRegistrationFormValidation";
+
 import styles from "./RegistrationForm.module.css";
-
-import { useCallback, useReducer } from "react";
-
-import { PasswordError } from "../../errors";
-
-const initialErrors = { "auth/passwords-do-not-match": null };
-
-function errorReducer(formErrors, error) {
-    return error === null ? { 
-        ...formErrors, 
-        "auth/passwords-do-not-match": null  
-    } : { 
-        ...formErrors, 
-        [error.code]: error 
-    };
-}
 
 export default function RegistrationForm({ users }) {
     const { 
@@ -31,25 +17,17 @@ export default function RegistrationForm({ users }) {
         handleOnFormChange 
     } = useFormData(registrationFormSchema);
     
-    const [
-        _formErrors, 
-        dispatchError
-    ] = useReducer(errorReducer, initialErrors);
+    const { 
+        username, 
+        email, 
+        password, 
+        confirmPassword 
+    } = formData[0].fields;
 
-    const { password, confirmPassword } = formData[0].fields;
-
-    const validatePassword = useCallback(() => {
-        const doPasswordsMatch = password === confirmPassword;
-        const passwordsDoNotMatchError = !doPasswordsMatch
-            ? new PasswordError({
-                code   : "auth/passwords-do-not-match",
-                message: "Passwords do not match",
-            })
-            : null;
-        dispatchError(passwordsDoNotMatchError);
-    }, [password, confirmPassword]);
-
-    const formErrors = Object.values(_formErrors).filter(Boolean);
+    const { 
+        formErrors, 
+        validatePassword 
+    } = useRegistrationFormValidation({ password, confirmPassword });
 
     const usernameRef        = useRef();
     const emailRef           = useRef();
@@ -79,7 +57,6 @@ export default function RegistrationForm({ users }) {
     );
 
     function handleSubmitRegistration () {
-        const { username, email, password } = formData[0].fields;
         if (
             formErrors.length === 0
             && username 

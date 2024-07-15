@@ -14,31 +14,23 @@ function errorReducer(formErrors, error) {
     };
 }
 
-export default function useRegistrationFormValidation(formData) {
+export default function useRegistrationFormValidation({ 
+    password, 
+    confirmPassword 
+}) {
     const [formErrors, dispatchError] = useReducer(errorReducer, initialErrors);
-    
-    const { 
-        password, 
-        confirmPassword 
-    } = formData[0].fields ?? { 
-        password       : null,
-        confirmPassword: null
-    };
 
     const validatePassword = useCallback(() => {
-        if (formData[0].fields) {
-            const doPasswordsMatch = password === confirmPassword;
-        
-            const passwordsDoNotMatchError = !doPasswordsMatch
-                ? new PasswordError({
-                    code   : "auth/passwords-do-not-match",
-                    message: "Passwords do not match",
-                })
-                : null;
-        
-            dispatchError(passwordsDoNotMatchError);
-        }
+        const doPasswordsMatch = password === confirmPassword;
+        const passwordsDoNotMatchError = !doPasswordsMatch
+            ? new PasswordError({
+                code   : "auth/passwords-do-not-match",
+                message: "Passwords do not match",
+            })
+            : null;
+        dispatchError(passwordsDoNotMatchError);
     }, [password, confirmPassword]);
+
     
     return {
         formErrors: Object.values(formErrors).filter(Boolean),
