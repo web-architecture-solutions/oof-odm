@@ -10,11 +10,11 @@ function errorReducer(formErrors, error) {
         "auth/passwords-do-not-match": null  
     } : { 
         ...formErrors, 
-        [error.code] : error 
+        [error.code]: error 
     };
 }
 
-export default function useRegistrationFormValidation({ formData }) {
+export default function useRegistrationFormValidation(formData) {
     const [formErrors, dispatchError] = useReducer(errorReducer, initialErrors);
     
     const { 

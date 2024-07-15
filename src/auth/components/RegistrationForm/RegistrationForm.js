@@ -1,31 +1,65 @@
+import { useRef } from "react";
+
 import Form from "../../../form-components/Form/Form";
 
-import useRegistrationFormSchema     from "./useRegistrationFormSchema";
+import registrationFormSchema from "./registrationFormSchema";
+
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
 import useFormData from "../../../form-components/Form/useFormData";
 
 import styles from "./RegistrationForm.module.css";
 
-export default function RegistrationForm({ users }) {
-    const registrationFormSchema = useRegistrationFormSchema();
+function useEnrichedFormSchema(registrationFormSchema, registrationFormControls) {
+    const enrichedRegistrationFormSchema = registrationFormSchema.map((fieldset, index) => {
+        const fieldsetControls   = registrationFormControls[index];
+        const fieldsWithControls = fieldset.fields.map((field) => {
+            const fieldControls = fieldsetControls[field.name];
+            return { ...field, ...fieldControls };
+        });
+        const newFieldset = { ...fieldset, fields: fieldsWithControls };
+        return newFieldset;
+    });
+    return enrichedRegistrationFormSchema;
+}
 
+export default function RegistrationForm({ users }) {
     const { 
         formData, 
         handleOnFormChange 
-    } = useFormData(registrationFormSchema.length);
+    } = useFormData(registrationFormSchema);
 
     const { 
         formErrors, 
-        //validatePassword 
-    } = useRegistrationFormValidation({ formData });
+        validatePassword 
+    } = useRegistrationFormValidation(formData);
     
-    //const registrationFieldsets = registrationFieldsets[0].map((field) => {
-    //    if (field.name === "password" || field.name === "confirmPassword") {
-    //        return { ...field, onChange: validatePassword };
-    //    }
-    //    return field;
-    //});
+    const usernameRef        = useRef();
+    const emailRef           = useRef();
+    const passwordRef        = useRef();
+    const confirmPasswordRef = useRef();
+
+    const registrationFormControls = [{
+        username: {
+            ref: usernameRef
+        },
+        email: {
+            ref: emailRef
+        },
+        password: {
+            onChange: validatePassword,
+            ref     : passwordRef
+        },
+        confirmPassword: {
+            onChange: validatePassword,
+            ref     : confirmPasswordRef
+        }
+    }];
+
+    const enrichedRegistrationFormSchema = useEnrichedFormSchema(
+        registrationFormSchema, 
+        registrationFormControls
+    );
 
     function handleSubmitRegistration () {
         const { username, email, password } = formData[0].fields;
@@ -49,7 +83,7 @@ export default function RegistrationForm({ users }) {
             className = {styles.RegistrationForm}
             onSubmit  = {handleSubmitRegistration}
             errors    = {formErrors}
-            schema    = {registrationFormSchema}
+            schema    = {enrichedRegistrationFormSchema}
             onChange  = {handleOnFormChange}
         />
     );
