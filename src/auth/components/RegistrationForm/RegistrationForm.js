@@ -4,8 +4,8 @@ import Form from "../../../form-components/Form/Form";
 
 import registrationFormSchema from "./registrationFormSchema";
 
-import useFormData           from "../../../form-components/Form/useFormData";
-import useEnrichedFormSchema from "../../../form-components/Form/useEnrichedFormData";
+import useFormData            from "../../../form-components/Form/useFormData";
+import useFormSchemaWithProps from "../../../form-components/Form/useFormSchemaWithProps";
 
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
@@ -17,12 +17,15 @@ export default function RegistrationForm({ users }) {
         handleOnFormChange 
     } = useFormData(registrationFormSchema);
     
+    const createUserFieldset = formData[0];
+    const createUserFields   = createUserFieldset.fields;
+
     const { 
         username, 
         email, 
         password, 
         confirmPassword 
-    } = formData[0].fields;
+    } = createUserFields;
 
     const { 
         formErrors, 
@@ -34,7 +37,7 @@ export default function RegistrationForm({ users }) {
     const passwordRef        = useRef();
     const confirmPasswordRef = useRef();
 
-    const registrationFormControls = [{
+    const registrationFieldProps = [{
         username: {
             ref: usernameRef
         },
@@ -51,9 +54,9 @@ export default function RegistrationForm({ users }) {
         }
     }];
 
-    const enrichedRegistrationFormSchema = useEnrichedFormSchema(
+    const registrationFormSchemaWithProps = useFormSchemaWithProps(
         registrationFormSchema, 
-        registrationFormControls
+        registrationFieldProps
     );
 
     function handleSubmitRegistration () {
@@ -77,7 +80,7 @@ export default function RegistrationForm({ users }) {
             className = {styles.RegistrationForm}
             onSubmit  = {handleSubmitRegistration}
             errors    = {formErrors}
-            schema    = {enrichedRegistrationFormSchema}
+            schema    = {registrationFormSchemaWithProps}
             onChange  = {handleOnFormChange}
         />
     );

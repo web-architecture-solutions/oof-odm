@@ -2,11 +2,8 @@ import { useState } from "react";
 
 export default function useFormData(formSchema) {
     const initialFormData = formSchema.map((fieldset) => {
-        return {
-            ...fieldset,
-            fields: fieldset.fields.map(({ name }) => ({ [name]: null }))
-            
-        };
+        const fields = fieldset.fields.map(({ name }) => ({ [name]: null }));
+        return { ...fieldset, fields };
     })
     const [formData, setFormData] = useState(initialFormData);
     function handleOnFormChange(index) {
