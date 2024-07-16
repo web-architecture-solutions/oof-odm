@@ -1,25 +1,16 @@
-import { useCallback, useReducer } from "react";
+import { useCallback } from "react";
 
-import { PasswordError } from "../../errors";
+import useFormValidation from "../../../form-components/Form/useFormValidation";
 
-function errorReducer(formErrors, { type, _error }) {
-    switch (type) {
-        case "SET_ERROR":
-            return formErrors.some(({ code }) => code === _error.code)
-                ? formErrors
-                : [...formErrors, new PasswordError(_error)];
-        case "CLEAR_ERROR":
-            return formErrors.filter(({ code }) => code !== _error.code);
-        default:
-            return formErrors;
-    }
-}
+import { RegistrationError } from "../../errors";
+
+import { RegistrationErrorCode } from "../../constants";
 
 export default function useRegistrationFormValidation({ 
     password, 
     confirmPassword 
 }) {
-    const [formErrors, dispatchError] = useReducer(errorReducer, []);
+    const { formErrors, setFormError, clearFormError } = useFormValidation();    
 
     const validatePassword = useCallback(() => {
         const  arePasswordsFalsy = !password && !confirmPassword;
@@ -28,22 +19,21 @@ export default function useRegistrationFormValidation({
         const  isPasswordSilly   
             =  password === "silly" || confirmPassword === "silly";
 
-        dispatchError({
-            type  : !doPasswordsMatch ? "SET_ERROR" : "CLEAR_ERROR",
-            _error: {
-                code   : "auth/passwords-do-not-match",
-                message: "Passwords do not match"
-            }
-        });
+        !doPasswordsMatch ? setFormError(
+            new RegistrationError({
+                code   : RegistrationErrorCode.passwordsDoNotMatch,
+                message: "Passwords do not match",
+            })
+        ) : clearFormError(RegistrationErrorCode.passwordsDoNotMatch);
         
-        dispatchError({
-            type  : isPasswordSilly ? "SET_ERROR" : "CLEAR_ERROR",
-            _error: {
-                code   : "auth/passwords-is-silly",
+        isPasswordSilly ? setFormError(
+            new RegistrationError({
+                code   : RegistrationErrorCode.passwordIsSilly,
                 message: "Password is too silly"
-            }
-        });
-    }, [password, confirmPassword]);
+            })
+        ) : clearFormError(RegistrationErrorCode.passwordIsSilly);
+        
+    }, [password, confirmPassword, setFormError, clearFormError]);
 
     return { formErrors, validatePassword };
 }
