@@ -1,4 +1,4 @@
-export default function useFormSchemaProps(formSchema, fieldProps) {
+export default function useFieldsetSchemataWithProps(formSchema, fieldProps) {
     const formSchemaWithProps = formSchema.map((fieldsetSchema, index) => {
         const fieldsetProps        = fieldProps[index];
         const fieldSchemata        = fieldsetSchema.fields;

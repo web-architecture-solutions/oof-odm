@@ -3,14 +3,14 @@ import Button   from "../Button/Button";
 
 export default function Form({ 
     onSubmit,
-    className                = "",
-    fieldsetClassName        = "",
-    fieldClassName           = "",
-    buttonClassName          = "",
-    buttonLabel              = "Submit",
-    onChange                 = null,
-    errors: formErrors       = [],
-    schema: fieldsetSchemata = null,
+    className          = "",
+    fieldsetClassName  = "",
+    fieldClassName     = "",
+    buttonClassName    = "",
+    buttonLabel        = "Submit",
+    onChange           = null,
+    errors: formErrors = [],
+    fieldsetSchemata   = null,
 }) {
     const isFormError = formErrors.length > 0;
 

@@ -11,7 +11,7 @@ const passwordLabel        = password.uppercase;
 const confirmPasswordName  = "confirmPassword";
 const confirmPasswordLabel = "Confirm Password";
 
-const registrationFormSchema = [{
+const registrationFieldsetSchemata = [{
     name  : "createUserProfile",
     legend: "Create User Profile",
     fields: [{
@@ -45,4 +45,4 @@ const registrationFormSchema = [{
     }]
 }];
 
-export default registrationFormSchema;
+export default registrationFieldsetSchemata;

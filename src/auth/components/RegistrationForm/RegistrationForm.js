@@ -2,10 +2,10 @@ import { useRef } from "react";
 
 import Form from "../../../form-components/Form/Form";
 
-import registrationFormSchema from "./registrationFormSchema";
+import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
 
-import useFormData            from "../../../form-components/Form/useFormData";
-import useFormSchemaWithProps from "../../../form-components/Form/useFormSchemaWithProps";
+import useFormData                  from "../../../form-components/Form/useFormData";
+import useFieldsetSchemataWithProps from "../../../form-components/Form/useFieldsetSchemataWithProps";
 
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
 
@@ -15,17 +15,14 @@ export default function RegistrationForm({ users }) {
     const { 
         formData, 
         handleOnFormChange 
-    } = useFormData(registrationFormSchema);
-
-    const createUserProfileFieldset = formData.createUserProfile;
-    const createUserProfileFields   = createUserProfileFieldset.fields;
+    } = useFormData(registrationFieldsetSchemata);
 
     const { 
         username, 
         email, 
         password, 
         confirmPassword 
-    } = createUserProfileFields;
+    } = formData.createUserProfile.fields;
 
     const { 
         formErrors, 
@@ -54,8 +51,8 @@ export default function RegistrationForm({ users }) {
         }
     }];
 
-    const registrationFormSchemaWithProps = useFormSchemaWithProps(
-        registrationFormSchema, 
+    const registrationFieldsetSchemataWithProps = useFieldsetSchemataWithProps(
+        registrationFieldsetSchemata, 
         registrationFieldProps
     );
 
@@ -77,11 +74,11 @@ export default function RegistrationForm({ users }) {
 
     return (
         <Form 
-            className = {styles.RegistrationForm}
-            onSubmit  = {handleSubmitRegistration}
-            errors    = {formErrors}
-            schema    = {registrationFormSchemaWithProps}
-            onChange  = {handleOnFormChange}
+            className        = {styles.RegistrationForm}
+            onSubmit         = {handleSubmitRegistration}
+            errors           = {formErrors}
+            fieldsetSchemata = {registrationFieldsetSchemataWithProps}
+            onChange         = {handleOnFormChange}
         />
     );
 }
