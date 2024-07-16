@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Field from "../Field/Field";
 
 export default function Fieldset({ 
+    name,
     legend,
     className             = "",
     fieldClassName        = "",
@@ -25,7 +26,7 @@ export default function Fieldset({
 
     const initialFieldRecords = fieldSchemata.map(({ name }) => [name, null]);
     const initialFields       = Object.fromEntries(initialFieldRecords);
-    const initialFieldsetData = { legend, fields: initialFields }
+    const initialFieldsetData = { name, legend, fields: initialFields }
     
     const [fieldsetData, setFieldsetData] = useState(initialFieldsetData);
     

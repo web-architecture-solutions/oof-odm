@@ -12,6 +12,7 @@ const confirmPasswordName  = "confirmPassword";
 const confirmPasswordLabel = "Confirm Password";
 
 const registrationFormSchema = [{
+    name  : "createUserProfile",
     legend: "Create User Profile",
     fields: [{
         autoComplete: AutoComplete.username,

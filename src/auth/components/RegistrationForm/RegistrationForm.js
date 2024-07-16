@@ -16,16 +16,16 @@ export default function RegistrationForm({ users }) {
         formData, 
         handleOnFormChange 
     } = useFormData(registrationFormSchema);
-    
-    const createUserFieldset = formData[0];
-    const createUserFields   = createUserFieldset.fields;
+
+    const createUserProfileFieldset = formData.createUserProfile;
+    const createUserProfileFields   = createUserProfileFieldset.fields;
 
     const { 
         username, 
         email, 
         password, 
         confirmPassword 
-    } = createUserFields;
+    } = createUserProfileFields;
 
     const { 
         formErrors, 
