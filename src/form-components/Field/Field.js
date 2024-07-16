@@ -20,16 +20,15 @@ function Field({
 }, ref) {
     const [value, setValue] = useState(null);
 
-    const fieldData    = { [name]: value };
     const fieldErrors  = useFieldValidation({ isRequired, value });
     const isFieldError = fieldErrors.length > 0;
 
     useEffect(() => {
-        updateFieldsetData(fieldData);
+        updateFieldsetData({ [name]: value });
     }, [name, value, updateFieldsetData]);
     
     useEffect(() => {
-        if (onChange) onChange(fieldData);
+        if (onChange) onChange({ [name]: value });
     }, [name, value, onChange]);
 
     useEffect(() => {
