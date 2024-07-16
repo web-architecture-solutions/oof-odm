@@ -1,10 +1,20 @@
 import { useCallback, useReducer } from "react";
+
 import { PasswordError } from "../../errors";
 
-// Initialize the errors up front
+const passwordsDoNotMatch = {
+    code   : "auth/passwords-do-not-match",
+    message: "Passwords do not match"
+};
+
+const passwordIsSilly = {
+    code   : "auth/passwords-is-silly",
+    message: "Password is too silly"
+};
+
 const initialErrors = {
-    "auth/passwords-do-not-match": null,
-    "auth/password-is-silly"     : null
+    [passwordsDoNotMatch.code]: null,
+    [passwordIsSilly.code]    : null
 };
 
 function errorReducer(formErrors, action) {
@@ -12,27 +22,17 @@ function errorReducer(formErrors, action) {
         case "SET_ERROR":
             return {
                 ...formErrors,
-                [action.payload.code]: action.payload
+                [action.payload.code]: new PasswordError(action.payload)
             };
         case "CLEAR_ERROR":
-            return {
-                ...formErrors,
-                [action.payload.code]: null
-            };
+            const clearedErrorEntries = Object.entries(formErrors).filter(([code]) => {
+                return code !== action.payload.code;
+            })
+            return Object.fromEntries(clearedErrorEntries);
         default:
             return formErrors;
     }
 }
-
-const passwordsDoNotMatchError = new PasswordError({
-    code   : "auth/passwords-do-not-match",
-    message: "Passwords do not match",
-});
-
-const passwordIsSillyError = new PasswordError({
-    code   : "auth/password-is-silly",
-    message: "You're a silly goose",
-});
 
 export default function useRegistrationFormValidation({ 
     password, 
@@ -42,23 +42,21 @@ export default function useRegistrationFormValidation({
 
     const validatePassword = useCallback(() => {
         const doPasswordsMatch = password === confirmPassword;
-        const passwordIsSilly  = password === "silly";
+        const isPasswordSilly  = password === "silly";
 
         dispatchError({
-            type: doPasswordsMatch ? "CLEAR_ERROR" : "SET_ERROR",
-            payload: passwordsDoNotMatchError
+            type   : !doPasswordsMatch ? "SET_ERROR" : "CLEAR_ERROR",
+            payload: passwordsDoNotMatch
         });
-
+        
         dispatchError({
-            type: passwordIsSilly ? "SET_ERROR" : "CLEAR_ERROR",
-            payload: passwordIsSillyError
+            type   : isPasswordSilly ? "SET_ERROR" : "CLEAR_ERROR",
+            payload: passwordIsSilly
         });
     }, [password, confirmPassword]);
 
-    console.log(formErrors)
-
     return {
-        formErrors: Object.values(formErrors).filter(Boolean),
+        formErrors: Object.values(formErrors),
         validatePassword
     };
 }
