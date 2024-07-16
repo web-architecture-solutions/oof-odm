@@ -15,20 +15,16 @@ function errorReducer(formErrors, { type, payload }) {
 
 export default function useFormValidation() {
     const [formErrors, dispatchFormError] = useReducer(errorReducer, []);
-    
-    const setFormError = useCallback((payload) => {
-        dispatchFormError({
-            type  : "SET_ERROR",
-            payload: payload
-        }); 
+    const registerFormErrors = useCallback((validationSchema) => {
+        validationSchema.forEach(({ condition, error, code, message }) => {
+            condition ? dispatchFormError({
+                type  : "SET_ERROR",
+                payload: new error({ code, message })
+            }) : dispatchFormError({
+                type  : "CLEAR_ERROR",
+                payload: code
+            });
+        });
     }, []);
-
-    const clearFormError = useCallback((payload) => {
-        dispatchFormError({
-            type  : "CLEAR_ERROR",
-            payload: payload
-        }); 
-    }, []);
-
-    return { formErrors, setFormError, clearFormError };
+    return { formErrors, registerFormErrors };
 }

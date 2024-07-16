@@ -10,7 +10,7 @@ export default function useRegistrationFormValidation({
     password, 
     confirmPassword 
 }) {
-    const { formErrors, setFormError, clearFormError } = useFormValidation();    
+    const { formErrors, registerFormErrors } = useFormValidation();    
 
     const validatePassword = useCallback(() => {
         const  arePasswordsFalsy = !password && !confirmPassword;
@@ -19,21 +19,20 @@ export default function useRegistrationFormValidation({
         const  isPasswordSilly   
             =  password === "silly" || confirmPassword === "silly";
 
-        !doPasswordsMatch ? setFormError(
-            new RegistrationError({
-                code   : RegistrationErrorCode.passwordsDoNotMatch,
-                message: "Passwords do not match",
-            })
-        ) : clearFormError(RegistrationErrorCode.passwordsDoNotMatch);
-        
-        isPasswordSilly ? setFormError(
-            new RegistrationError({
-                code   : RegistrationErrorCode.passwordIsSilly,
-                message: "Password is too silly"
-            })
-        ) : clearFormError(RegistrationErrorCode.passwordIsSilly);
-        
-    }, [password, confirmPassword, setFormError, clearFormError]);
+        const validationSchema = [{
+            condition: !doPasswordsMatch,
+            error    : RegistrationError,
+            code     : RegistrationErrorCode.passwordsDoNotMatch,
+            message  : "Passwords do not match"
+        }, {
+            condition: isPasswordSilly,
+            error    : RegistrationError,
+            code     : RegistrationErrorCode.passwordIsSilly,
+            message  : "Password is too silly"
+        }];
+
+        registerFormErrors(validationSchema);
+    }, [password, confirmPassword, registerFormErrors]);
 
     return { formErrors, validatePassword };
 }
