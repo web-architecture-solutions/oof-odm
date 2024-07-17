@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 
-import { FieldError } from "../errors";
+import { FieldError } from "../../errors";
 
 function fieldErrorReducer(fieldErrors, error) {
     if (error === null) return fieldErrors;

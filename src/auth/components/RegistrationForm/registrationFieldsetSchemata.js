@@ -1,4 +1,4 @@
-import FieldsetSchemata from "../../../form-components/FieldsetSchemata";
+import FieldsetSchemata from "../../../form/FieldsetSchemata";
 
 import { AutoComplete, FieldType } from "../../../constants";
 
@@ -13,7 +13,7 @@ const passwordLabel        = password.uppercase;
 const confirmPasswordName  = "confirmPassword";
 const confirmPasswordLabel = "Confirm Password";
 
-const registrationFieldsetSchemata = [{
+const registrationFieldsetSchemata = new FieldsetSchemata({
     name  : "createUserProfile",
     legend: "Create User Profile",
     fields: [{
@@ -45,6 +45,6 @@ const registrationFieldsetSchemata = [{
         type        : FieldType.password,
         isRequired  : true
     }]
-}];
+});
 
-export default new FieldsetSchemata(...registrationFieldsetSchemata);
+export default registrationFieldsetSchemata;

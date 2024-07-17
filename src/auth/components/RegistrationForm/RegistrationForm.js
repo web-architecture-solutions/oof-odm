@@ -2,13 +2,10 @@ import { useRef } from "react";
 
 import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
 
-import useFormData from "../../../form-components/Form/useFormData";
+import useFormData from "../../../form/useFormData";
+import Form        from "../../../form/components/Form/Form";
 
-import useValidation from "../../../form-components/Form/useValidation";
-
-import Form from "../../../form-components/Form/Form";
-
-import { RegistrationError } from "../../errors";
+import useRegistrationFormValidation from "./useRegistrationFormValidation"
 
 import { AND } from "../../../logic";
 
@@ -27,29 +24,10 @@ export default function RegistrationForm({ users }) {
         confirmPassword 
     } = formData.createUserProfile.fields;
 
-    const [
-        passwordErrors, 
-        validatePassword
-    ] = useValidation(() => {
-        const  arePasswordsFalsy = !password && !confirmPassword;
-        const _doPasswordsMatch  =  password === confirmPassword;
-        const  doPasswordsMatch  = _doPasswordsMatch || arePasswordsFalsy;
-        const  isPasswordSilly   
-            =  password === "silly" || confirmPassword === "silly";
-        return [{
-            condition: !doPasswordsMatch,
-            error    : RegistrationError,
-            code     : "auth/passwords-do-not-match",
-            message  : "Passwords do not match"
-        }, {
-            condition: isPasswordSilly,
-            error    : RegistrationError,
-            code     : "auth/password-is-silly",
-            message  : "Password is too silly"
-        }];
-    }, [password, confirmPassword]);
-
-    const formErrors = [...passwordErrors];
+    const { 
+        formErrors, 
+        validatePassword 
+    } = useRegistrationFormValidation({ password, confirmPassword });
 
     const usernameRef        = useRef();
     const emailRef           = useRef();

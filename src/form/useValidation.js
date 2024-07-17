@@ -18,9 +18,9 @@ function errorReducer(errors, { type, payload }) {
     }
 }
 
-export default function useValidation(_validator, triggers) {
+export default function useValidation(validationSchema, triggers) {
     const [errors, dispatchError] = useReducer(errorReducer, []);
-    const dispatchErrors = useCallback((validationSchema) => {
+    const validator = useCallback(() => {
         validationSchema.forEach(({ condition, error, code, message }) => {
             condition ? dispatchError({
                 type   : ValidationAction.SET_ERROR,
@@ -30,7 +30,6 @@ export default function useValidation(_validator, triggers) {
                 payload: code
             });
         });
-    }, []);
-    const validator = useCallback(() => dispatchErrors(_validator()), triggers);
+    }, triggers);
     return [errors, validator];
 }

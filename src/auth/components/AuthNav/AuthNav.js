@@ -1,4 +1,4 @@
-import Button from "../../../form-components/Button/Button";
+import Button from "../../../form/components/Button/Button";
 
 export default function AuthNav({ 
     currentUser, 
