@@ -4,9 +4,11 @@ import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
 
 import useFormData from "../../../form-components/Form/useFormData";
 
-import useRegistrationFormValidation from "./useRegistrationFormValidation";
+import useFormValidation from "../../../form-components/Form/useFormValidation";
 
 import Form from "../../../form-components/Form/Form";
+
+import { RegistrationError } from "../../errors";
 
 import styles from "./RegistrationForm.module.css";
 
@@ -25,11 +27,25 @@ export default function RegistrationForm({ users }) {
 
     const { 
         formErrors, 
-        validatePassword 
-    } = useRegistrationFormValidation({ 
-        password, 
-        confirmPassword 
-    });
+        validator: validatePassword 
+    } = useFormValidation((password, confirmPassword) => {
+        const  arePasswordsFalsy = !password && !confirmPassword;
+        const _doPasswordsMatch  =  password === confirmPassword;
+        const  doPasswordsMatch  = _doPasswordsMatch || arePasswordsFalsy;
+        const  isPasswordSilly   
+            =  password === "silly" || confirmPassword === "silly";
+        return [{
+            condition: !doPasswordsMatch,
+            error    : RegistrationError,
+            code     : "auth/passwords-do-not-match",
+            message  : "Passwords do not match"
+        }, {
+            condition: isPasswordSilly,
+            error    : RegistrationError,
+            code     : "auth/passwords-is-silly",
+            message  : "Password is too silly"
+        }];
+    }, [password, confirmPassword]);
 
     const usernameRef        = useRef();
     const emailRef           = useRef();
