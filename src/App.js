@@ -20,7 +20,7 @@ export default function App() {
         setView(isLoading ? View.loading : View.default);
     }, [isLoading])
 
-    const users       = firebase.users;
+    const Users       = firebase.users;
     const currentUser = useCurrentUser({ firebase, setIsLoading });
 
     console.log("currentUser:", currentUser);
@@ -28,14 +28,14 @@ export default function App() {
     if (isLoading) return <Loading />;
     switch (view) {
         case View.register:
-            return <RegistrationForm users={users} />;
+            return <RegistrationForm Users={Users} />;
         case View.signIn:
-            return <SignInForm users={users} />;
+            return <SignInForm Users={Users} />;
         default:
             return (
                 <AuthNav 
                     currentUser      = {currentUser}
-                    handleOnSignOut  = {() => users.signOut()}
+                    handleOnSignOut  = {() => Users.signOut()}
                     handleOnSignIn   = {() => setView("signIn")}
                     handleOnRegister = {() => setView("register")}
                 />

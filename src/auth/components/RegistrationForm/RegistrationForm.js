@@ -11,7 +11,7 @@ import { AND } from "../../../logic";
 
 import styles from "./RegistrationForm.module.css";
 
-export default function RegistrationForm({ users }) {
+export default function RegistrationForm({ Users }) {
     const { 
         formData, 
         handleOnFormChange 
@@ -22,7 +22,7 @@ export default function RegistrationForm({ users }) {
         email, 
         password, 
         confirmPassword 
-    } = formData.credentials.fields;
+    } = formData.credentials;
 
     const { 
         formErrors, 
@@ -51,7 +51,7 @@ export default function RegistrationForm({ users }) {
         const isFormError = formErrors.length === 0;
         if (AND(!isFormError, username, email, password)) {
             const profile = { username };
-            users.createWithEmailAndPassword(
+            Users.createWithEmailAndPassword(
                 profile, 
                 email,
                 password

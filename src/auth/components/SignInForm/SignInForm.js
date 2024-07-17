@@ -6,13 +6,13 @@ import useFormData from "../../../form/useFormData";
 
 import Form from "../../../form/components/Form/Form";
 
-export default function SignInForm({ users }) {
+export default function SignInForm({ Users }) {
     const { 
         formData, 
         handleOnFormChange 
     } = useFormData(signInFieldsetSchemata);
 
-    const { email, password } = formData.credentials.fields;
+    const { email, password } = formData.credentials;
 
     const emailRef    = useRef();
     const passwordRef = useRef();
@@ -23,7 +23,7 @@ export default function SignInForm({ users }) {
     }]);
 
     async function handleSignIn() {
-        await users.signInWithEmailAndPassword(
+        await Users.signInWithEmailAndPassword(
             email, 
             password
         );    

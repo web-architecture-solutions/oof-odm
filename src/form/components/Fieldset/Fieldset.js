@@ -26,21 +26,20 @@ export default function Fieldset({
 
     const initialFieldRecords = fieldSchemata.map(({ name }) => [name, null]);
     const initialFields       = Object.fromEntries(initialFieldRecords);
-    const initialFieldsetData = { name, legend, fields: initialFields }
     
-    const [fieldsetData, setFieldsetData] = useState(initialFieldsetData);
+    const [fieldsetData, setFieldsetData] = useState(initialFields);
     
     function updateFieldsetData(fieldData) {
         setFieldsetData((prevFieldsetData) => {
             const [name, value] = Object.entries(fieldData)[0];
-            if (prevFieldsetData.fields[name] !== value) {
+            if (prevFieldsetData[name] !== value) {
                 const newFields = {
-                    ...prevFieldsetData.fields,
+                    ...prevFieldsetData,
                     [name]: value
                 };
                 const newFieldsetData = {
                     ...prevFieldsetData,
-                    fields: newFields
+                    ...newFields
                 };
                 return newFieldsetData;
             }
