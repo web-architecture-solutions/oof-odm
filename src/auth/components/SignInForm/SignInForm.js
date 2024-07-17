@@ -2,9 +2,9 @@ import { useRef } from "react";
 
 import signInFieldsetSchemata from "./signInFieldsetSchemata";
 
-import Form from "../../../form/components/Form/Form";
-
 import useFormData from "../../../form/useFormData";
+
+import Form from "../../../form/components/Form/Form";
 
 export default function SignInForm({ users }) {
     const { 
@@ -12,14 +12,14 @@ export default function SignInForm({ users }) {
         handleOnFormChange 
     } = useFormData(signInFieldsetSchemata);
 
-    const { email, password } = formData.signIn.fields;
+    const { email, password } = formData.credentials.fields;
 
     const emailRef    = useRef();
     const passwordRef = useRef();
 
     signInFieldsetSchemata.initializeProps([{
-        email   : { ref: emailRef },
-        password: { ref: passwordRef}
+        email   : { ref:    emailRef },
+        password: { ref: passwordRef }
     }]);
 
     async function handleSignIn() {

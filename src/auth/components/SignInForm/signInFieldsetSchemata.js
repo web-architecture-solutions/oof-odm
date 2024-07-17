@@ -5,8 +5,8 @@ import { email, password } from "../../terms";
 import { AutoComplete, FieldType } from "../../../constants";
 
 const signInFieldsetSchemata = new FieldsetSchemata({ 
-    name  : "signIn",
-    legend: "Sign in",
+    name  : "credentials",
+    legend: "Enter User Credentials",
     fields: [{
         name        : email.lowercase,
         label       : email.uppercase,

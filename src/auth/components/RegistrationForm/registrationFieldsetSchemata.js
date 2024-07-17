@@ -14,8 +14,8 @@ const confirmPasswordName  = "confirmPassword";
 const confirmPasswordLabel = "Confirm Password";
 
 const registrationFieldsetSchemata = new FieldsetSchemata({
-    name  : "createUserProfile",
-    legend: "Create User Profile",
+    name  : "credentials",
+    legend: "Enter User Credentials",
     fields: [{
         autoComplete: AutoComplete.username,
         name        : usernameName,

@@ -22,7 +22,7 @@ export default function RegistrationForm({ users }) {
         email, 
         password, 
         confirmPassword 
-    } = formData.createUserProfile.fields;
+    } = formData.credentials.fields;
 
     const { 
         formErrors, 
