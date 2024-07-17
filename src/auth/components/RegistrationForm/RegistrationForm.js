@@ -1,8 +1,6 @@
 import { useRef } from "react";
 
-import _registrationFieldsetSchemata from "./_registrationFieldsetSchemata";
-
-import FieldsetSchemata from "../../../form-components/FieldsetSchemata";
+import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
 
 import useFormData from "../../../form-components/Form/useFormData";
 
@@ -13,9 +11,6 @@ import Form from "../../../form-components/Form/Form";
 import styles from "./RegistrationForm.module.css";
 
 export default function RegistrationForm({ users }) {
-    const registrationFieldsetSchemata 
-        = new FieldsetSchemata(..._registrationFieldsetSchemata);
-    
     const { 
         formData, 
         handleOnFormChange 

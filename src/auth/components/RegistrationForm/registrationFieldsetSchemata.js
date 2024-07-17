@@ -1,3 +1,5 @@
+import FieldsetSchemata from "../../../form-components/FieldsetSchemata";
+
 import { AutoComplete, FieldType } from "../../../constants";
 
 import { username, email, password } from "../../terms";
@@ -45,4 +47,4 @@ const registrationFieldsetSchemata = [{
     }]
 }];
 
-export default registrationFieldsetSchemata;
+export default new FieldsetSchemata(...registrationFieldsetSchemata);
