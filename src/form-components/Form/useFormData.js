@@ -21,5 +21,5 @@ export default function useFormData(formSchema) {
             });
         };
     }
-    return { formData, handleOnFormChange }
+    return { formData, handleOnFormChange };
 }

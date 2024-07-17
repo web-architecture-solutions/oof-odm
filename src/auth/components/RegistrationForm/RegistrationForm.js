@@ -1,21 +1,24 @@
 import { useRef } from "react";
 
-import Form from "../../../form-components/Form/Form";
-
 import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
 
-import useFormData                  from "../../../form-components/Form/useFormData";
-import useFieldsetSchemataWithProps from "../../../form-components/Form/useFieldsetSchemataWithProps";
+import FormSchema from "../../../form-components/FormSchema";
+
+import useFormData from "../../../form-components/Form/useFormData";
 
 import useRegistrationFormValidation from "./useRegistrationFormValidation";
+
+import Form from "../../../form-components/Form/Form";
 
 import styles from "./RegistrationForm.module.css";
 
 export default function RegistrationForm({ users }) {
+    const registrationFormSchema = new FormSchema(registrationFieldsetSchemata);
+    
     const { 
         formData, 
         handleOnFormChange 
-    } = useFormData(registrationFieldsetSchemata);
+    } = useFormData(registrationFormSchema.current);
 
     const { 
         username, 
@@ -27,14 +30,34 @@ export default function RegistrationForm({ users }) {
     const { 
         formErrors, 
         validatePassword 
-    } = useRegistrationFormValidation({ password, confirmPassword });
+    } = useRegistrationFormValidation({ 
+        password, 
+        confirmPassword 
+    });
+
+    function handleOnSubmit () {
+        const isFormError = formErrors.length === 0;
+        if (
+            !isFormError
+            && username 
+            && email
+            && password
+        ) {
+            const profile = { username };
+            users.createWithEmailAndPassword(
+                profile, 
+                email,
+                password
+            );
+        }
+    }
 
     const usernameRef        = useRef();
     const emailRef           = useRef();
     const passwordRef        = useRef();
     const confirmPasswordRef = useRef();
 
-    const registrationFieldProps = [{
+    registrationFormSchema.props = [{
         username: {
             ref: usernameRef
         },
@@ -51,33 +74,12 @@ export default function RegistrationForm({ users }) {
         }
     }];
 
-    const registrationFieldsetSchemataWithProps = useFieldsetSchemataWithProps(
-        registrationFieldsetSchemata, 
-        registrationFieldProps
-    );
-
-    function handleSubmitRegistration () {
-        if (
-            formErrors.length === 0
-            && username 
-            && email
-            && password
-        ) {
-            const profile = { username };
-            users.createWithEmailAndPassword(
-                profile, 
-                email,
-                password
-            );
-        }
-    }
-
     return (
         <Form 
             className        = {styles.RegistrationForm}
-            onSubmit         = {handleSubmitRegistration}
+            onSubmit         = {handleOnSubmit}
             errors           = {formErrors}
-            fieldsetSchemata = {registrationFieldsetSchemataWithProps}
+            fieldsetSchemata = {registrationFormSchema.current}
             onChange         = {handleOnFormChange}
         />
     );
