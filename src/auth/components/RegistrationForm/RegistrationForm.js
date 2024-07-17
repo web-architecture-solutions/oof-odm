@@ -25,10 +25,10 @@ export default function RegistrationForm({ users }) {
         confirmPassword 
     } = formData.createUserProfile.fields;
 
-    const { 
-        formErrors, 
-        validator: validatePassword 
-    } = useFormValidation((password, confirmPassword) => {
+    const [
+        passwordErrors, 
+        validatePassword
+    ] = useFormValidation((password, confirmPassword) => {
         const  arePasswordsFalsy = !password && !confirmPassword;
         const _doPasswordsMatch  =  password === confirmPassword;
         const  doPasswordsMatch  = _doPasswordsMatch || arePasswordsFalsy;
@@ -42,10 +42,12 @@ export default function RegistrationForm({ users }) {
         }, {
             condition: isPasswordSilly,
             error    : RegistrationError,
-            code     : "auth/passwords-is-silly",
+            code     : "auth/password-is-silly",
             message  : "Password is too silly"
         }];
     }, [password, confirmPassword]);
+
+    const formErrors = [...passwordErrors];
 
     const usernameRef        = useRef();
     const emailRef           = useRef();
@@ -69,7 +71,7 @@ export default function RegistrationForm({ users }) {
         }
     }]);
 
-    function handleOnSubmit () {
+    function handleOnSubmit() {
         const isFormError = formErrors.length === 0;
         if (
             !isFormError
