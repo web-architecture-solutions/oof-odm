@@ -1,34 +1,39 @@
 import { useRef } from "react";
 
+import signInFieldsetSchemata from "./signInFieldsetSchemata";
+
 import Form from "../../../form/components/Form/Form";
 
-import useSignInFields from "./useSignInFields";
+import useFormData from "../../../form/useFormData";
 
 export default function SignInForm({ users }) {
+    const { 
+        formData, 
+        handleOnFormChange 
+    } = useFormData(signInFieldsetSchemata);
+
+    const { email, password } = formData.signIn.fields;
+
     const emailRef    = useRef();
     const passwordRef = useRef();
 
-    const signInFields = useSignInFields({ 
-        emailRef, 
-        passwordRef 
-    }); 
-    
-    const signInFieldsets = [{ 
-        legend: "Sign in", 
-        fields: signInFields 
-    }];
+    signInFieldsetSchemata.initializeProps([{
+        email   : { ref: emailRef },
+        password: { ref: passwordRef}
+    }]);
 
     async function handleSignIn() {
         await users.signInWithEmailAndPassword(
-            emailRef.current.value, 
-            passwordRef.current.value
+            email, 
+            password
         );    
     }
 
     return (
         <Form 
-            onSubmit  = {handleSignIn}
-            fieldsets = {signInFieldsets}
+            onSubmit         = {handleSignIn}
+            onChange         = {handleOnFormChange}
+            fieldsetSchemata = {signInFieldsetSchemata}
         />
     );
 }
