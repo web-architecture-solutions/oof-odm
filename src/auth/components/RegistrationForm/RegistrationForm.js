@@ -4,11 +4,13 @@ import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
 
 import useFormData from "../../../form-components/Form/useFormData";
 
-import useFormValidation from "../../../form-components/Form/useFormValidation";
+import useValidation from "../../../form-components/Form/useValidation";
 
 import Form from "../../../form-components/Form/Form";
 
 import { RegistrationError } from "../../errors";
+
+import { AND } from "../../../logic";
 
 import styles from "./RegistrationForm.module.css";
 
@@ -28,7 +30,7 @@ export default function RegistrationForm({ users }) {
     const [
         passwordErrors, 
         validatePassword
-    ] = useFormValidation(() => {
+    ] = useValidation(() => {
         const  arePasswordsFalsy = !password && !confirmPassword;
         const _doPasswordsMatch  =  password === confirmPassword;
         const  doPasswordsMatch  = _doPasswordsMatch || arePasswordsFalsy;
@@ -55,12 +57,8 @@ export default function RegistrationForm({ users }) {
     const confirmPasswordRef = useRef();
 
     registrationFieldsetSchemata.initializeProps([{
-        username: {
-            ref: usernameRef
-        },
-        email: {
-            ref: emailRef
-        },
+        username: { ref: usernameRef },
+        email   : { ref: emailRef },
         password: {
             onChange: validatePassword,
             ref     : passwordRef
@@ -73,12 +71,7 @@ export default function RegistrationForm({ users }) {
 
     function handleOnSubmit() {
         const isFormError = formErrors.length === 0;
-        if (
-            !isFormError
-            && username 
-            && email
-            && password
-        ) {
+        if (AND(!isFormError, username, email, password)) {
             const profile = { username };
             users.createWithEmailAndPassword(
                 profile, 
