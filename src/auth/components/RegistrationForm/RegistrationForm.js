@@ -28,7 +28,7 @@ export default function RegistrationForm({ users }) {
     const [
         passwordErrors, 
         validatePassword
-    ] = useFormValidation((password, confirmPassword) => {
+    ] = useFormValidation(() => {
         const  arePasswordsFalsy = !password && !confirmPassword;
         const _doPasswordsMatch  =  password === confirmPassword;
         const  doPasswordsMatch  = _doPasswordsMatch || arePasswordsFalsy;
