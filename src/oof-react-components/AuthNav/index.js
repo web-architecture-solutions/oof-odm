@@ -1,4 +1,4 @@
-import Button from "../../schematic-hook-form/Button";
+import Button from "../../schematic-react-forms/Button";
 
 export default function AuthNav({ 
     currentUser, 

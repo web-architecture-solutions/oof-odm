@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { useValidation } from "../../schematic-hook-form/hooks";
+import { useValidation } from "../../schematic-react-forms/hooks";
 
 import { RegistrationError } from "../errors";
 

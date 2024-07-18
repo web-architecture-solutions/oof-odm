@@ -1,8 +1,8 @@
-import FieldsetSchemata from "../../schematic-hook-form/FieldsetSchemata";
+import FieldsetSchemata from "../../schematic-react-forms/FieldsetSchemata";
 
 import { email, password } from "../terms";
 
-import { AutoComplete, FieldType } from "../../schematic-hook-form/constants";
+import { AutoComplete, FieldType } from "../../schematic-react-forms/constants";
 
 const signInFieldsetSchemata = new FieldsetSchemata({ 
     name  : "credentials",
