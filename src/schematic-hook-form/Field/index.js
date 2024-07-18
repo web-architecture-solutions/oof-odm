@@ -12,6 +12,7 @@ function Field({
     onChange         = null,
     onError          = null,
     isRequired       = false,
+    pattern          = "",
     className        = "",
     controlClassName = "",
     autoComplete     = null,
@@ -20,7 +21,7 @@ function Field({
 }, ref) {
     const [value, setValue] = useState(null);
 
-    const fieldErrors  = useFieldValidation({ isRequired, value });
+    const fieldErrors  = useFieldValidation({ isRequired, value, type });
     const isFieldError = fieldErrors.length > 0;
 
     useEffect(() => {
@@ -44,9 +45,11 @@ function Field({
                 className    = {controlClassName}
                 type         = {type}
                 name         = {name}
+                isRequired   = {isRequired}
                 value        = {value ?? ""}
                 onChange     = {({ target }) => setValue(target.value)}
                 options      = {options}
+                pattern      = {pattern}
                 placeholder  = {placeholder}
                 ref          = {ref}
             />

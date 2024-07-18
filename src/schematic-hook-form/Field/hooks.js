@@ -4,27 +4,35 @@ import { FieldError } from "../errors";
 
 import { useValidation } from "../hooks";
 
-export function useFieldValidation({ isRequired, value }) {
+import { FieldType } from "../constants";
+
+export function useFieldValidation({ isRequired, value, type }) {
     const _validateField = useCallback(() => {
-        const hasUserEdited   = value !== null;
-        const valueIsTooSilly = value === "silly";
+        const hasUserEdited       = value !== null;
+        const isEmailAddressField = type === FieldType.email;
+        const isValidEmailAddress = value?.match(/^\S+@\S+\.\S+$/);
+        
+        const isRequiredError 
+            = hasUserEdited && isRequired && !value;
+        const isInvalidEmailError 
+            = !isRequiredError && isEmailAddressField && !isValidEmailAddress;
         
         return [{
-            condition: isRequired && !value & hasUserEdited,
+            condition: isRequiredError,
             error    : FieldError,
             code     : "form/field-is-required",
             message  : "Field is required",
         }, {
-            condition: valueIsTooSilly,
+            condition: isInvalidEmailError,
             error    : FieldError,
-            code     : "form/value-is-too-silly",
-            message  : "You're a silly goose"
+            code     : "form/field-is-not-valid-email",
+            message  : "Please enter a valid email address"
         }];
-    }, [isRequired, value]);
+    }, [isRequired, value, type]);
 
     const [fieldErrors, validateField] = useValidation(_validateField);
 
-    useEffect(() => validateField(), [value, isRequired, validateField])
+    useEffect(() => validateField(), [value, isRequired, validateField]);
 
     return fieldErrors;
 }

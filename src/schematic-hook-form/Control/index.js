@@ -11,20 +11,23 @@ function Control({
     value, 
     onChange, 
     className    = "",
+    pattern      = "",
     autoComplete = null,
     placeholder  = null,
-    options      = null 
+    options      = null,
+    isRequired   = false
 }, ref) {    
     switch (type) {
         case ControlType.select:
             return (
                 <Select 
-                    className   = {className}
-                    name        = {name}
-                    value       = {value}
-                    onChange    = {onChange}
-                    options     = {options}
-                    ref         = {ref}
+                    className = {className}
+                    name      = {name}
+                    value     = {value}
+                    onChange  = {onChange}
+                    required  = {isRequired}
+                    options   = {options}
+                    ref       = {ref}
                 />
             );
         default:
@@ -35,6 +38,8 @@ function Control({
                     name         = {name}
                     type         = {type}
                     value        = {value}
+                    required     = {isRequired}
+                    pattern      = {pattern}
                     onChange     = {onChange}
                     placeholder  = {placeholder}
                     ref          = {ref}
