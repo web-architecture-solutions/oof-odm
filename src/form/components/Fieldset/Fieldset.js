@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Field from "../Field/Field";
 
 export default function Fieldset({ 
-    name,
     legend,
     className             = "",
     fieldClassName        = "",
