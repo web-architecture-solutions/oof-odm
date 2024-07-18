@@ -2,7 +2,7 @@ import { useCallback, useReducer } from "react";
 
 const ValidationAction = {
     CLEAR_ERROR: "CLEAR_ERROR",
-    SET_ERROR  : "SET_ERROR"
+    SET_ERROR: "SET_ERROR"
 };
 
 function errorReducer(errors, { type, payload }) {
@@ -18,18 +18,23 @@ function errorReducer(errors, { type, payload }) {
     }
 }
 
-export default function useValidation(validationSchema, triggers) {
+export default function useValidation(validator) {
     const [errors, dispatchError] = useReducer(errorReducer, []);
-    const validator = useCallback(() => {
+    const validate = useCallback(() => {
+        const validationSchema = validator();
         validationSchema.forEach(({ condition, error, code, message }) => {
-            condition ? dispatchError({
-                type   : ValidationAction.SET_ERROR,
-                payload: new error({ code, message })
-            }) : dispatchError({
-                type   : ValidationAction.CLEAR_ERROR,
-                payload: code
-            });
+            if (condition) {
+                dispatchError({
+                    type: ValidationAction.SET_ERROR,
+                    payload: new error({ code, message })
+                });
+            } else {
+                dispatchError({
+                    type: ValidationAction.CLEAR_ERROR,
+                    payload: code
+                });
+            }
         });
-    }, triggers);
-    return [errors, validator];
+    }, [validator]);
+    return [errors, validate];
 }

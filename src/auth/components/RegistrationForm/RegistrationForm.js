@@ -17,8 +17,6 @@ export default function RegistrationForm({ Users }) {
         handleOnFormChange 
     } = useFormData(registrationFieldsetSchemata);
 
-    console.log(formData);
-
     const { 
         username, 
         email, 

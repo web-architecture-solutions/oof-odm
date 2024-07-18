@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import useValidation from "../../../form/hooks/useValidation";
 
 import { RegistrationError } from "../../errors";
@@ -6,13 +8,12 @@ export default function useRegistrationFormValidation({
     password, 
     confirmPassword 
 }) {
-    const  arePasswordsFalsy = !password && !confirmPassword;
-    const _doPasswordsMatch  =  password === confirmPassword;
-    const  doPasswordsMatch  = _doPasswordsMatch || arePasswordsFalsy;
-    const  isPasswordSilly   
-            =  password === "silly" || confirmPassword === "silly";
+    const arePasswordsFalsy = !password && !confirmPassword;
+    const doPasswordsMatch  = password === confirmPassword || arePasswordsFalsy;
+    const isPasswordSilly   
+        = password === "silly" || confirmPassword === "silly";
 
-    const [passwordErrors, validatePassword] = useValidation([{
+    const _validatePassword = useMemo(() => () => ([{
         condition: !doPasswordsMatch,
         error    : RegistrationError,
         code     : "auth/passwords-do-not-match",
@@ -22,7 +23,9 @@ export default function useRegistrationFormValidation({
         error    : RegistrationError,
         code     : "auth/password-is-silly",
         message  : "Password is too silly"
-    }], [doPasswordsMatch, isPasswordSilly]);
+    }]), [doPasswordsMatch, isPasswordSilly]);
+
+    const [passwordErrors, validatePassword] = useValidation(_validatePassword);
 
     return { formErrors: [...passwordErrors], validatePassword };
 }
