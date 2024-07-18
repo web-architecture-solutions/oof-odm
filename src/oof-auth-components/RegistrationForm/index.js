@@ -2,9 +2,9 @@ import { useRef } from "react";
 
 import registrationFieldsetSchemata from "./schemata";
 
-import { useFormData } from "../../../schematic-hook-form/hooks";
+import { useFormData } from "../../schematic-hook-form/hooks";
 
-import Form from "../../../schematic-hook-form/Form";
+import Form from "../../schematic-hook-form/Form";
 
 import { useRegistrationFormValidation } from "./hooks"
 

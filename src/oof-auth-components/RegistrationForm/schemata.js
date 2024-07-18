@@ -1,6 +1,6 @@
-import FieldsetSchemata from "../../../schematic-hook-form/FieldsetSchemata";
+import FieldsetSchemata from "../../schematic-hook-form/FieldsetSchemata";
 
-import { AutoComplete, FieldType } from "../../../schematic-hook-form/constants";
+import { AutoComplete, FieldType } from "../../schematic-hook-form/constants";
 
 import { username, email, password } from "../terms";   
 

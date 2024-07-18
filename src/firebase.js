@@ -1,4 +1,4 @@
-import Firebase from "./oof/odm/Firebase";
+import Firebase from "./oof-odm/Firebase";
 
 const configuration = {
     apiKey           : "AIzaSyBwWR9xDtEYBA2s0cpckaRaNHvbKvlNl4Q",

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { useCurrentUser } from "./oof/auth-components/hooks";
+import { useCurrentUser } from "./oof-auth-components/hooks";
 
-import AuthNav          from "./oof/auth-components/AuthNav";
-import RegistrationForm from "./oof/auth-components/RegistrationForm";
-import SignInForm       from "./oof/auth-components/SignInForm";
+import AuthNav          from "./oof-auth-components/AuthNav";
+import RegistrationForm from "./oof-auth-components/RegistrationForm";
+import SignInForm       from "./oof-auth-components/SignInForm";
 
 import firebase from "./firebase.js";
 
