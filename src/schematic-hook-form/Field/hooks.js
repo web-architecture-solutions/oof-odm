@@ -6,16 +6,26 @@ import { useValidation } from "../hooks";
 
 import { FieldType } from "../constants";
 
+import { AND } from "../../logic";
+
 export function useFieldValidation({ isRequired, value, type }) {
     const _validateField = useCallback(() => {
         const hasUserEdited       = value !== null;
         const isEmailAddressField = type === FieldType.email;
         const isValidEmailAddress = value?.match(/^\S+@\S+\.\S+$/);
         
-        const isRequiredError 
-            = hasUserEdited && isRequired && !value;
-        const isInvalidEmailError 
-            = !isRequiredError && isEmailAddressField && !isValidEmailAddress;
+        const isRequiredError = AND(
+            hasUserEdited, 
+            isRequired, 
+            !value
+        );
+        
+        const isInvalidEmailError = AND(
+            hasUserEdited, 
+            !isRequiredError, 
+            isEmailAddressField, 
+            !isValidEmailAddress
+        );
         
         return [{
             condition: isRequiredError,
@@ -32,7 +42,7 @@ export function useFieldValidation({ isRequired, value, type }) {
 
     const [fieldErrors, validateField] = useValidation(_validateField);
 
-    useEffect(() => validateField(), [value, isRequired, validateField]);
+    useEffect(() => validateField(), [validateField]);
 
     return fieldErrors;
 }

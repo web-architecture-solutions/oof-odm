@@ -14,7 +14,7 @@ const signInFieldsetSchemata = new FieldsetSchemata({
         type        : FieldType.email,
         autoComplete: AutoComplete.email,
         isRequired  : true,
-        pattern     : "/^\S+@\S+\.\S+$/"
+        pattern     : /^\S+@\S+\.\S+$/
     }, {
         name        : password.lowercase,
         label       : password.uppercase,
