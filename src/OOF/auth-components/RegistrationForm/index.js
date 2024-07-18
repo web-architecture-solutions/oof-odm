@@ -1,13 +1,12 @@
 import { useRef } from "react";
 
-import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
+import registrationFieldsetSchemata from "./schemata";
 
-import useFormData from "../../../form/hooks/useFormData";
-import Form        from "../../../form/components/Form/Form";
+import { useFormData } from "../../../form/hooks";
 
-import useRegistrationFormValidation from "./useRegistrationFormValidation"
+import Form from "../../../form/Form";
 
-import styles from "./RegistrationForm.module.css";
+import { useRegistrationFormValidation } from "./hooks"
 
 export default function RegistrationForm({ Users }) {
     const { 
@@ -65,7 +64,6 @@ export default function RegistrationForm({ Users }) {
 
     return (
         <Form 
-            className        = {styles.RegistrationForm}
             onSubmit         = {handleOnSubmit}
             errors           = {formErrors}
             fieldsetSchemata = {registrationFieldsetSchemata}

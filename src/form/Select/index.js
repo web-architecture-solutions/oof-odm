@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-import Option from "../Option/Option";
+import Option from "../Option";
 
 function Select({ 
     name, 

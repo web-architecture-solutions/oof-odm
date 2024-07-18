@@ -6,11 +6,11 @@ import { View } from "./constants.js";
 
 import Loading from "./components/Loading/Loading.js";
 
-import AuthNav          from "./auth/components/AuthNav/AuthNav.js";
-import RegistrationForm from "./auth/components/RegistrationForm/RegistrationForm.js";
-import SignInForm       from "./auth/components/SignInForm/SignInForm.js";
+import AuthNav          from "./oof/auth-components/AuthNav";
+import RegistrationForm from "./oof/auth-components/RegistrationForm";
+import SignInForm       from "./oof/auth-components/SignInForm";
 
-import useCurrentUser   from "./auth/hooks/useCurrentUser.js";
+import { useCurrentUser } from "./oof/auth-components/hooks";
 
 export default function App() {
     const [view     ,      setView] = useState(View.default);

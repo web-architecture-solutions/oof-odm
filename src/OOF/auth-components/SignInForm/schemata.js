@@ -1,8 +1,8 @@
 import FieldsetSchemata from "../../../form/FieldsetSchemata";
 
-import { email, password } from "../../terms";
+import { email, password } from "../terms";
 
-import { AutoComplete, FieldType } from "../../../constants";
+import { AutoComplete, FieldType } from "../../../form/constants";
 
 const signInFieldsetSchemata = new FieldsetSchemata({ 
     name  : "credentials",

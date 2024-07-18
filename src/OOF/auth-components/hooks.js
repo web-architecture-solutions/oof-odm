@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function useCurrentUser({ firebase, setIsLoading }) {
+export function useCurrentUser({ firebase, setIsLoading }) {
     const [currentUser, setCurrentUser] = useState(null);
     useEffect(() => {
         const unsubscribeFromCurrentUser = firebase.onUserChange(

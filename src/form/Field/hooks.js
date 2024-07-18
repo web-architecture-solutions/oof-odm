@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 
-import { FieldError } from "../../errors";
+import { FieldError } from "../errors";
 
 function fieldErrorReducer(fieldErrors, error) {
     if (error === null) return fieldErrors;
@@ -8,14 +8,14 @@ function fieldErrorReducer(fieldErrors, error) {
         case "form/field-is-required":        
             const updatedErrors = fieldErrors.filter((_error) => {
                 return _error.code !== error.code;
-            });
+            }); 
             return [...updatedErrors, error];
         default:
             return fieldErrors;
     }
 }
 
-export default function useFieldValidation({ isRequired, value }) {
+export function useFieldValidation({ isRequired, value }) {
     const [fieldErrors, dispatchFieldError] = useReducer(fieldErrorReducer, []);
 
     const hasUserEdited = value !== null;

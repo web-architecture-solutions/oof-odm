@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Field from "../Field/Field";
+import Field from "../Field";
 
 export default function Fieldset({ 
     legend,

@@ -1,10 +1,10 @@
 import { useRef } from "react";
 
-import signInFieldsetSchemata from "./signInFieldsetSchemata";
+import signInFieldsetSchemata from "./schemata";
 
-import useFormData from "../../../form/hooks/useFormData";
+import { useFormData } from "../../../form/hooks";
 
-import Form from "../../../form/components/Form/Form";
+import Form from "../../../form/Form";
 
 export default function SignInForm({ Users }) {
     const { 

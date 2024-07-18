@@ -1,8 +1,8 @@
 import { forwardRef, useEffect, useState } from "react";
 
-import Control from "../Control/Control";
+import Control from "../Control";
 
-import useFieldValidation from "./useFieldValidation";
+import { useFieldValidation } from "./hooks";
 
 function Field({
     name,

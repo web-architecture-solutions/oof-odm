@@ -1,5 +1,5 @@
-import Fieldset from "../Fieldset/Fieldset";
-import Button   from "../Button/Button";
+import Fieldset from "../Fieldset";
+import Button   from "../Button"
 
 export default function Form({ 
     onSubmit,

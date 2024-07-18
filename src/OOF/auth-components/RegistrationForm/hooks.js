@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 
-import useValidation from "../../../form/hooks/useValidation";
+import { useValidation } from "../../../form/hooks";
 
-import { RegistrationError } from "../../errors";
+import { RegistrationError } from "../errors";
 
-export default function useRegistrationFormValidation({ 
+export function useRegistrationFormValidation({ 
     password, 
     confirmPassword 
 }) {
