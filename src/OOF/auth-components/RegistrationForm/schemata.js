@@ -1,8 +1,8 @@
-import FieldsetSchemata from "../../../form/FieldsetSchemata";
+import FieldsetSchemata from "../../../schematic-hook-form/FieldsetSchemata";
 
-import { AutoComplete, FieldType } from "../../../form/constants";
+import { AutoComplete, FieldType } from "../../../schematic-hook-form/constants";
 
-import { username, email, password } from "../terms";
+import { username, email, password } from "../terms";   
 
 const usernameName         = username.lowercase;
 const usernameLabel        = username.uppercase;

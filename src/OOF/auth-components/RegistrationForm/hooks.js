@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useValidation } from "../../../form/hooks";
+import { useValidation } from "../../../schematic-hook-form/hooks";
 
 import { RegistrationError } from "../errors";
 
