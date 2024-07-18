@@ -1,37 +1,30 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect } from "react";
 
 import { FieldError } from "../errors";
 
-function fieldErrorReducer(fieldErrors, error) {
-    if (error === null) return fieldErrors;
-    switch (error.code) {
-        case "form/field-is-required":        
-            const updatedErrors = fieldErrors.filter((_error) => {
-                return _error.code !== error.code;
-            }); 
-            return [...updatedErrors, error];
-        default:
-            return fieldErrors;
-    }
-}
+import { useValidation } from "../hooks";
 
 export function useFieldValidation({ isRequired, value }) {
-    const [fieldErrors, dispatchFieldError] = useReducer(fieldErrorReducer, []);
-
-    const hasUserEdited = value !== null;
-
-    useEffect(() => {
-        const isRequiredFieldSatisfied = !isRequired || value || !hasUserEdited;
+    const _validateField = useCallback(() => {
+        const hasUserEdited   = value !== null;
+        const valueIsTooSilly = value === "silly";
         
-        const isRequiredError = !isRequiredFieldSatisfied
-            ? new FieldError({
-                  code   : "form/field-is-required",
-                  message: "Field is required",
-              })
-            : null;
-        
-        dispatchFieldError(isRequiredError);
-    }, [isRequired, value, hasUserEdited]);
+        return [{
+            condition: isRequired && !value & hasUserEdited,
+            error    : FieldError,
+            code     : "form/field-is-required",
+            message  : "Field is required",
+        }, {
+            condition: valueIsTooSilly,
+            error    : FieldError,
+            code     : "form/value-is-too-silly",
+            message  : "You're a silly goose"
+        }];
+    }, [isRequired, value]);
+
+    const [fieldErrors, validateField] = useValidation(_validateField);
+
+    useEffect(() => validateField(), [value, isRequired, validateField])
 
     return fieldErrors;
 }

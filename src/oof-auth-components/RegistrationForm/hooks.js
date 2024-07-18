@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback } from "react";
 
 import { useValidation } from "../../schematic-hook-form/hooks";
 
@@ -13,17 +13,19 @@ export function useRegistrationFormValidation({
     const isPasswordSilly   
         = password === "silly" || confirmPassword === "silly";
 
-    const _validatePassword = useMemo(() => () => ([{
-        condition: !doPasswordsMatch,
-        error    : RegistrationError,
-        code     : "auth/passwords-do-not-match",
-        message  : "Passwords do not match"
-    }, {
-        condition: isPasswordSilly,
-        error    : RegistrationError,
-        code     : "auth/password-is-silly",
-        message  : "Password is too silly"
-    }]), [doPasswordsMatch, isPasswordSilly]);
+    const _validatePassword = useCallback(() => {
+        return [{
+            condition: !doPasswordsMatch,
+            error    : RegistrationError,
+            code     : "auth/passwords-do-not-match",
+            message  : "Passwords do not match"
+        }, {
+            condition: isPasswordSilly,
+            error    : RegistrationError,
+            code     : "auth/password-is-silly",
+            message  : "Password is too silly"
+        }];
+    }, [doPasswordsMatch, isPasswordSilly]);
 
     const [passwordErrors, validatePassword] = useValidation(_validatePassword);
 
