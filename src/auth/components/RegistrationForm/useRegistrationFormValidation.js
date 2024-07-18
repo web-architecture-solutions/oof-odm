@@ -1,4 +1,4 @@
-import useValidation from "../../../form/useValidation";
+import useValidation from "../../../form/hooks/useValidation";
 
 import { RegistrationError } from "../../errors";
 

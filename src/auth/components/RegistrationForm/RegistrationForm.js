@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import registrationFieldsetSchemata from "./registrationFieldsetSchemata";
 
-import useFormData from "../../../form/useFormData";
+import useFormData from "../../../form/hooks/useFormData";
 import Form        from "../../../form/components/Form/Form";
 
 import useRegistrationFormValidation from "./useRegistrationFormValidation"
