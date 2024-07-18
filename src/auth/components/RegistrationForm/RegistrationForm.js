@@ -7,8 +7,6 @@ import Form        from "../../../form/components/Form/Form";
 
 import useRegistrationFormValidation from "./useRegistrationFormValidation"
 
-import { AND } from "../../../logic";
-
 import styles from "./RegistrationForm.module.css";
 
 export default function RegistrationForm({ Users }) {
@@ -48,8 +46,14 @@ export default function RegistrationForm({ Users }) {
     }]);
 
     function handleOnSubmit() {
-        const isFormError = formErrors.length === 0;
-        if (AND(!isFormError, username, email, password)) {
+        const isFormError = formErrors.length > 0;
+        if (isFormError) {
+            // TODO: Report error code to user
+            console.error(
+                "There are unhandled form errors preventing submission:",
+                ...formErrors
+            );
+        } else if (username && email && password) {
             const profile = { username };
             Users.createWithEmailAndPassword(
                 profile, 
