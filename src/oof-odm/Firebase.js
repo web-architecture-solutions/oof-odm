@@ -38,7 +38,6 @@ export default class Firebase {
     initializeAuthentication = () => {
         const authentication = getAuth(this.application);    
         this.authentication = authentication
-        // TODO: do I need these?
         this.currentUserId  = authentication?.currentUser?.uid || null;
         this.currentUser    = null;
         return this;
@@ -131,14 +130,12 @@ export default class Firebase {
     _makeCurrentUser = async (_currentUserData) => {
         const currentUserId   = _currentUserData.uid;
         const profileData     = await this._getUserProfileData(currentUserId);
-        // Integrate utility IDs and profile data
         const currentUserData = {
             id    : currentUserId,
             userId: currentUserId,  
             ..._currentUserData,
             ...profileData
         };
-        // Build currentUser document
         const currentUser = new this.UserDocument({ 
             collection: this.users,
             data      : currentUserData
