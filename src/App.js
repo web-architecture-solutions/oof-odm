@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 
-import firebase from "./firebase.js";
-
-import { View } from "./constants.js";
-
-import Loading from "./components/Loading/Loading.js";
+import { useCurrentUser } from "./oof/auth-components/hooks";
 
 import AuthNav          from "./oof/auth-components/AuthNav";
 import RegistrationForm from "./oof/auth-components/RegistrationForm";
 import SignInForm       from "./oof/auth-components/SignInForm";
 
-import { useCurrentUser } from "./oof/auth-components/hooks";
+import firebase from "./firebase.js";
+
+import Loading from "./components/Loading/Loading.js";
+
+import { View } from "./constants.js";
 
 export default function App() {
     const [view     ,      setView] = useState(View.default);
