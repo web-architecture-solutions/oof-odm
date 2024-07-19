@@ -14,24 +14,33 @@ export default function Form({
     errors: formErrors = [],
     fieldsetSchemata   = null,
 }) {
-    const [_formErrors, set_formErrors] = useState({});
+    const [fieldsetErrors, setFieldsetErrors] = useState({});
 
-    const isFormError = formErrors.length > 0;
+    const fieldErrors = Object
+        .values(fieldsetErrors)
+        .reduce((accumulatedFieldsetErrors, currentFieldsetErrors) => {
+            const flattendFieldsetErrors 
+                = Object.values(currentFieldsetErrors).flat();
+            return [...accumulatedFieldsetErrors, ...flattendFieldsetErrors];
+        }, []);
+
+    const errors = [...formErrors, ...fieldErrors];
+
+    const isFormError = errors.length > 0;
 
     function updateFormErrors(fieldsetErrorObject) {
-        set_formErrors((prev_formErrors) => {
-            const [fieldsetName, fieldsetErrors] = Object.entries(fieldsetErrorObject)[0];
-            if (prev_formErrors[fieldsetName] !== fieldsetErrors) {
+        setFieldsetErrors((prevFieldsetErrors) => {
+            const [fieldsetName, fieldsetErrors] 
+                = Object.entries(fieldsetErrorObject)[0];
+            if (prevFieldsetErrors[fieldsetName] !== fieldsetErrors) {
                 return { 
-                    ...prev_formErrors,
+                    ...prevFieldsetErrors,
                     [fieldsetName]: fieldsetErrors
                 };
             }
-            return prev_formErrors;
-        })
+            return prevFieldsetErrors;
+        });
     }
-
-    console.log(_formErrors)
 
     return (
         <form className={className}>
