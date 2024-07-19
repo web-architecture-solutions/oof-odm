@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Field from "../Field";
 
 export default function Fieldset({ 
+    name,
     legend,
     className             = "",
     fieldClassName        = "",
@@ -10,6 +11,7 @@ export default function Fieldset({
     condition             = null,
     onChange              = null,
     fields: fieldSchemata = null,
+    updateFormErrors
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
         fieldSchemata = fieldMap[condition];
@@ -29,6 +31,10 @@ export default function Fieldset({
     const [fieldsetData  ,   setFieldsetData] = useState(initialFields);
     const [fieldsetErrors, setFieldsetErrors] = useState({});
     
+    useEffect(() => {
+        updateFormErrors({ [name]: fieldsetErrors });
+    }, [name, fieldsetErrors, updateFormErrors]);
+
     function updateFieldsetData(fieldData) {
         setFieldsetData((prevFieldsetData) => {
             const [name, value] = Object.entries(fieldData)[0];
@@ -59,8 +65,6 @@ export default function Fieldset({
             return prevFieldsetErrors;
         });
     }
-    
-    console.log(fieldsetErrors)
 
     useEffect(() => {
         if (onChange) onChange(fieldsetData);

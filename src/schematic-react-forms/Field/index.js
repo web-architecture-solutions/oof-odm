@@ -31,7 +31,7 @@ function Field({
 
     useEffect(() => {
         updateFieldsetErrors({ [name]: fieldErrors });
-    }, [fieldErrors, updateFieldsetErrors]);
+    }, [name, fieldErrors, updateFieldsetErrors]);
     
     useEffect(() => {
         if (onChange) onChange({ [name]: value });
