@@ -9,23 +9,18 @@ export function useRegistrationFormValidation({
     confirmPassword 
 }) {
     const arePasswordsFalsy = !password && !confirmPassword;
-    const doPasswordsMatch  = password === confirmPassword || arePasswordsFalsy;
-    const isPasswordSilly   
-        = password === "silly" || confirmPassword === "silly";
+    const doPasswordsMatch  = password === confirmPassword;
+    
+    const isPasswordMatchError = !arePasswordsFalsy && !doPasswordsMatch;
 
     const _validatePassword = useCallback(() => {
         return [{
-            condition: !doPasswordsMatch,
+            condition: isPasswordMatchError,
             error    : RegistrationError,
-            code     : "auth/passwords-do-not-match",
+            code     : "oof-react-components/passwords-do-not-match",
             message  : "Passwords do not match"
-        }, {
-            condition: isPasswordSilly,
-            error    : RegistrationError,
-            code     : "auth/password-is-silly",
-            message  : "Password is too silly"
         }];
-    }, [doPasswordsMatch, isPasswordSilly]);
+    }, [isPasswordMatchError]);
 
     const [passwordErrors, validatePassword] = useValidation(_validatePassword);
 

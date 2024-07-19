@@ -30,12 +30,12 @@ export function useFieldValidation({ isRequired, value, type }) {
         return [{
             condition: isRequiredError,
             error    : FieldError,
-            code     : "form/field-is-required",
+            code     : "schematic-react-forms/field-is-required",
             message  : "Field is required",
         }, {
             condition: isInvalidEmailError,
             error    : FieldError,
-            code     : "form/field-is-not-valid-email",
+            code     : "schematic-react-forms/field-is-not-valid-email",
             message  : "Please enter a valid email address"
         }];
     }, [isRequired, value, type]);
