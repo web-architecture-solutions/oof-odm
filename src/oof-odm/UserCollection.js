@@ -81,14 +81,15 @@ export default class UserCollection extends FirebaseCollection {
         setError = (error) => console.error(error)
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
-            .catch(({ code, message }) => {
-                console.error(code, message)
+            .catch(({ code }) => {
                 if (setError) setError(code);
             });
     }
 
     signOut = (callback = null) => { 
-        signOut(this.authentication).then(() => callback && callback()); 
+        signOut(this.authentication).then(() => {
+            if (callback) callback();
+        }); 
     }
 
     /* #endregion Sign in/out Methods */

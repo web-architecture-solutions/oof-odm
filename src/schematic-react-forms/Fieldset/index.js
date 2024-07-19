@@ -26,7 +26,8 @@ export default function Fieldset({
     const initialFieldRecords = fieldSchemata.map(({ name }) => [name, null]);
     const initialFields       = Object.fromEntries(initialFieldRecords);
     
-    const [fieldsetData, setFieldsetData] = useState(initialFields);
+    const [fieldsetData  ,   setFieldsetData] = useState(initialFields);
+    const [fieldsetErrors, setFieldsetErrors] = useState({});
     
     function updateFieldsetData(fieldData) {
         setFieldsetData((prevFieldsetData) => {
@@ -46,6 +47,21 @@ export default function Fieldset({
         });
     }  
 
+    function updateFieldsetErrors(fieldErrorObject) {
+        setFieldsetErrors((prevFieldsetErrors) => {
+            const [fieldName, fieldErrors] = Object.entries(fieldErrorObject)[0];
+            if (prevFieldsetErrors[fieldName] !== fieldErrors) {
+                return { 
+                    ...prevFieldsetErrors,
+                    [fieldName]: fieldErrors
+                };
+            }
+            return prevFieldsetErrors;
+        });
+    }
+    
+    console.log(fieldsetErrors)
+
     useEffect(() => {
         if (onChange) onChange(fieldsetData);
     }, [onChange, fieldsetData]);
@@ -58,9 +74,10 @@ export default function Fieldset({
 
             {fieldSchemata ? fieldSchemata.map((fieldSchema, index) =>
                 <Field 
-                    className          = {fieldClassName}
-                    key                = {index}
-                    updateFieldsetData = {updateFieldsetData}
+                    className            = {fieldClassName}
+                    key                  = {index}
+                    updateFieldsetData   = {updateFieldsetData}
+                    updateFieldsetErrors = {updateFieldsetErrors}
                     {...fieldSchema}
                 />
             ) : null}
