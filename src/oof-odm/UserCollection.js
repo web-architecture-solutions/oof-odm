@@ -12,6 +12,14 @@ import UserDocument       from "./UserDocument";
 
 import ErrorMessage from "./ErrorMessage";
 
+class AuthError extends Error {
+    constructor({ code, message }) {
+        super(message); 
+        this.code = code;
+        this.name = "AuthError";
+    }
+}
+
 function _handleError(errorCode) {
     console.error(`${errorCode}:`, ErrorMessage[errorCode]);
 }
@@ -82,7 +90,10 @@ export default class UserCollection extends FirebaseCollection {
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
             .catch(({ code }) => {
-                if (setError) setError(code);
+                if (setError) setError(new AuthError({
+                    code,
+                    message: "Email or password are incorrect"
+                }));
             });
     }
 

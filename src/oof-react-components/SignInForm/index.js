@@ -8,8 +8,6 @@ import Form from "../../schematic-react-forms/Form";
 
 export default function SignInForm({ Users }) {
     const [serverError, setServerError] = useState(null);
-    
-    console.log(serverError);
 
     const { 
         formData, 
@@ -35,10 +33,15 @@ export default function SignInForm({ Users }) {
     }
 
     return (
-        <Form 
-            onSubmit         = {handleSignIn}
-            onChange         = {handleOnFormChange}
-            fieldsetSchemata = {signInFieldsetSchemata}
-        />
+        <>
+            <Form 
+                onSubmit         = {handleSignIn}
+                onChange         = {handleOnFormChange}
+                fieldsetSchemata = {signInFieldsetSchemata}
+            />
+            {serverError ? (
+                <span>{serverError.message}</span>
+            ) : null}
+        </>
     );
 }

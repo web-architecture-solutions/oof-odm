@@ -26,7 +26,7 @@ export default function Form({
 
     const errors = [...formErrors, ...fieldErrors];
 
-    const isFormError = errors.length > 0;
+    const isError = errors.length > 0;
 
     function updateFormErrors(fieldsetErrorObject) {
         setFieldsetErrors((prevFieldsetErrors) => {
@@ -58,14 +58,14 @@ export default function Form({
             {onSubmit ? (
                 <Button 
                     onClick   = {onSubmit}
-                    disabled  = {isFormError}
+                    disabled  = {isError}
                     className = {buttonClassName}
                 >
                     {buttonLabel}
                 </Button>
             ) : null}
             
-            {isFormError ? formErrors.map(({ message }, index) => 
+            {isError ? formErrors.map(({ message }, index) => 
                 <span key={index}>
                     {message}
                 </span>
