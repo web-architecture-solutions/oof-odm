@@ -7,8 +7,6 @@ import { useFormData } from "../../schematic-react-forms/hooks";
 import Form from "../../schematic-react-forms/Form";
 
 export default function SignInForm({ Users }) {
-    const [serverError, setServerError] = useState(null);
-
     const { 
         formData, 
         handleOnFormChange 
@@ -24,6 +22,8 @@ export default function SignInForm({ Users }) {
         password: { ref: passwordRef }
     }]);
 
+    const [serverError, setServerError] = useState(null);
+
     async function handleSignIn() {
         await Users.signInWithEmailAndPassword(
             email, 
@@ -35,13 +35,11 @@ export default function SignInForm({ Users }) {
     return (
         <>
             <Form 
+                serverError      = {serverError}
                 onSubmit         = {handleSignIn}
                 onChange         = {handleOnFormChange}
                 fieldsetSchemata = {signInFieldsetSchemata}
             />
-            {serverError ? (
-                <span>{serverError.message}</span>
-            ) : null}
         </>
     );
 }

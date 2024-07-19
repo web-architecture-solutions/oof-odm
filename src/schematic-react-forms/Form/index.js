@@ -9,6 +9,7 @@ export default function Form({
     fieldsetClassName  = "",
     fieldClassName     = "",
     buttonClassName    = "",
+    serverError        = null,
     buttonLabel        = "Submit",
     onChange           = null,
     errors: formErrors = [],
@@ -25,6 +26,8 @@ export default function Form({
         }, []);
 
     const errors = [...formErrors, ...fieldErrors];
+
+    const isFormError = formErrors.length > 0;
 
     const isError = errors.length > 0;
 
@@ -65,10 +68,14 @@ export default function Form({
                 </Button>
             ) : null}
             
-            {isError ? formErrors.map(({ message }, index) => 
+            {isFormError ? formErrors.map(({ message }, index) => 
                 <span key={index}>
                     {message}
                 </span>
+            ) : null}
+
+            {serverError ? (
+                <span>{serverError.message}</span>
             ) : null}
         </form>
     );
