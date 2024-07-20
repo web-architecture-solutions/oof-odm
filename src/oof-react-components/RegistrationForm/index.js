@@ -8,7 +8,7 @@ import { useRegistrationFormValidation } from "./hooks";
 
 import Form from "../../schematic-react-forms/Form";
 
-export default function RegistrationForm({ Users }) {
+export default function RegistrationForm({ Logs, Users }) {
     const { 
         formData, 
         handleOnFormChange 
@@ -48,11 +48,11 @@ export default function RegistrationForm({ Users }) {
     function handleOnSubmit() {
         const isFormError = formErrors.length > 0;
         if (isFormError) {
-            // TODO: Handle logging and reporting error to user
-            console.error(
-                "There are unhandled form errors preventing submission:",
-                ...formErrors
-            );
+            Logs.add({
+                code   : "auth/front-end-validation-error",
+                message: "There are unhandled form errors",
+                formErrors: formErrors.map(({ code, message }) => ({ code, message }))
+            });
         } else if (username && email && password) {
             const profile = { username };
             Users.createWithEmailAndPassword(

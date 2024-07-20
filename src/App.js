@@ -20,6 +20,7 @@ export default function App() {
         setView(isLoading ? View.loading : View.default);
     }, [isLoading])
 
+    const Logs        = firebase.logs;
     const Users       = firebase.users;
     const currentUser = useCurrentUser({ firebase, setIsLoading });
 
@@ -28,7 +29,7 @@ export default function App() {
     if (isLoading) return <Loading />;
     switch (view) {
         case View.register:
-            return <RegistrationForm Users={Users} />;
+            return <RegistrationForm Logs={Logs} Users={Users} />;
         case View.signIn:
             return <SignInForm Users={Users} />;
         default:
