@@ -19,6 +19,15 @@ export default class UserCollection extends FirebaseCollection {
         return UserDocument;
     }
 
+    static _serverErrorHandlerFactory = (setServerError) => {
+        return ({ code }) => {
+            const _message = "There was a user authentication error";
+            const message  = ErrorMessage[code] || _message;
+            const error    = new AuthError({ code, message });
+            setServerError ? setServerError([error]) : console.error(error);
+        }
+    }
+
     doesUsernameExist = async (username) => {
         return await this.includesWithValue("username", username);
     }
@@ -44,7 +53,7 @@ export default class UserCollection extends FirebaseCollection {
         const usernameExists = await this.doesUsernameExist(profile.username);
         if (usernameExists) {
             const handleServerError 
-                = UserCollection.serverErrorHandlerFactory(setServerError);
+                = UserCollection._serverErrorHandlerFactory(setServerError);
             handleServerError({ code: "auth/username-already-exists" });
         } else {
             const onSuccess = async ({ user }) => {
@@ -58,7 +67,7 @@ export default class UserCollection extends FirebaseCollection {
             };
             createUserWithEmailAndPassword(this.authentication, email, password)
                 .then(onSuccess)
-                .catch(UserCollection.serverErrorHandlerFactory(setServerError));    
+                .catch(UserCollection._serverErrorHandlerFactory(setServerError));    
         }
     }
 
@@ -80,15 +89,6 @@ export default class UserCollection extends FirebaseCollection {
 
     /* #region Sign in/out Methods */
 
-    static serverErrorHandlerFactory(setServerError) {
-        return ({ code }) => {
-            const _message = "There was a user authentication error";
-            const message  = ErrorMessage[code] || _message;
-            const error    = new AuthError({ code, message });
-            setServerError ? setServerError([error]) : console.error(error);
-        }
-    }
-
     signInWithEmailAndPassword = async (
         email, 
         password, 
@@ -97,13 +97,13 @@ export default class UserCollection extends FirebaseCollection {
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
             .then(() => callback && callback())
-            .catch(UserCollection.serverErrorHandlerFactory(setServerError));
+            .catch(UserCollection._serverErrorHandlerFactory(setServerError));
     }
 
     signOut = (callback = null) => { 
         signOut(this.authentication)
             .then(() => callback && callback())
-            .catch(UserCollection.serverErrorHandlerFactory());
+            .catch(UserCollection._serverErrorHandlerFactory());
     }
 
     /* #endregion Sign in/out Methods */
