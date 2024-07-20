@@ -10,13 +10,9 @@ import { where } from "firebase/firestore";
 import FirebaseCollection from "./FirebaseCollection";
 import UserDocument       from "./UserDocument";
 
-import ErrorMessage from "./ErrorMessage";
-
 import { AuthError } from "./errors";
 
-function _handleError(errorCode) {
-    console.error(`${errorCode}:`, ErrorMessage[errorCode]);
-}
+import ErrorMessage from "./ErrorMessage";
 
 export default class UserCollection extends FirebaseCollection {
     static get FirebaseDocument () {
@@ -42,12 +38,20 @@ export default class UserCollection extends FirebaseCollection {
         profile, 
         email, 
         password, 
-        handleError = _handleError,
+        setError,
         callback = null
     ) => {
+        console.log(profile)
         const usernameExists = await this.doesUsernameExist(profile.username);
-        if (usernameExists) {
-            handleError("auth/username-already-exists");    
+        console.log(usernameExists)
+        if (usernameExists && setError) {
+            const code = "auth/username-already-exists";
+            setError(
+                new AuthError({
+                    code,
+                    message: ErrorMessage[code]
+                })
+            );
         } else {
             const onSuccess = async ({ user }) => {
                 if (profile.username) {
@@ -60,7 +64,17 @@ export default class UserCollection extends FirebaseCollection {
             };
             createUserWithEmailAndPassword(this.authentication, email, password)
                 .then(onSuccess)
-                .catch((error) => handleError(error.code));    
+                .catch(({ code }) => {
+                    console.error(code);
+                    if (setError) {
+                        setError(
+                            new AuthError({
+                                code,
+                                message: ErrorMessage[code]
+                            })
+                        );
+                    }
+                });    
         }
     }
 
@@ -80,14 +94,19 @@ export default class UserCollection extends FirebaseCollection {
     signInWithEmailAndPassword = async (
         email, 
         password, 
-        setError = (error) => console.error(error)
+        setError
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
             .catch(({ code }) => {
-                if (setError) setError(new AuthError({
-                    code,
-                    message: "Email or password are incorrect"
-                }));
+                console.error(code);
+                if (setError) {
+                    setError(
+                        new AuthError({
+                            code,
+                            message: ErrorMessage[code]
+                        })
+                    );
+                }
             });
     }
 
