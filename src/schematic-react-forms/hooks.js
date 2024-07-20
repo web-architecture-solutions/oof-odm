@@ -3,13 +3,7 @@ import { useCallback, useReducer, useState } from "react";
 import { ValidationAction } from "./constants";
 
 export function useFormData(fieldsetSchemata) {
-    const _initialFormDataRecords = fieldsetSchemata.map(({ name, fields }) => {
-        return [name, fields.initialValues];
-    });
-
-    const initialFormData = Object.fromEntries(_initialFormDataRecords);
-
-    const [formData, setFormData] = useState(initialFormData);
+    const [formData, setFormData] = useState(fieldsetSchemata.initialValues);
 
     function handleOnFormChange(index) {
         return (fieldsetData) => {

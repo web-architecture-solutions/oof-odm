@@ -5,17 +5,7 @@ import Button   from "../Button";
 
 import { AND } from "../../logic";
 
-function fieldsetErrorReducer(
-    accumulatedFieldsetErrors, 
-    currentFieldsetErrors
-) {
-    const flattendFieldsetErrors = Object.values(currentFieldsetErrors).flat();
-    return [...accumulatedFieldsetErrors, ...flattendFieldsetErrors];
-}
-
-function aggregateFieldsetErrors(fieldsetErrors) {
-    return Object.values(fieldsetErrors).reduce(fieldsetErrorReducer, []);
-}
+import useFieldErrors from "./hooks";
 
 export default function Form({ 
     onSubmit,
@@ -34,7 +24,7 @@ export default function Form({
     const [hasUserEdited ,  setHasUserEdited] = useState(initialEditState);
 
     const hasUserEditedAllFields = AND(...Object.values(hasUserEdited));
-    const fieldErrors            = aggregateFieldsetErrors(fieldsetErrors);
+    const fieldErrors            = useFieldErrors(fieldsetErrors);
     const errors                 = [...formErrors, ...fieldErrors];
     const isFormError            = formErrors.length > 0;
     const isError                = errors.length > 0;

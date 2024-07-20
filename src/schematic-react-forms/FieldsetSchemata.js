@@ -13,6 +13,12 @@ export default class FieldsetSchemata extends Array {
         }
     }
 
+    get initialValues() {
+        return Object.fromEntries(this.map(({ name, fields }) => {
+            return [name, fields.initialValues];
+        }));
+    }
+
     static fieldReducerFactory(fieldAccumulator) {
         return (accumulatedFields, { name }) => {
             return [ ...accumulatedFields, fieldAccumulator(name)];
