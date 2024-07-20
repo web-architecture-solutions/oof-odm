@@ -4,9 +4,9 @@ import registrationFieldsetSchemata from "./schemata";
 
 import { useFormData } from "../../schematic-react-forms/hooks";
 
-import Form from "../../schematic-react-forms/Form";
+import { useRegistrationFormValidation } from "./hooks";
 
-import { useRegistrationFormValidation } from "./hooks"
+import Form from "../../schematic-react-forms/Form";
 
 export default function RegistrationForm({ Users }) {
     const { 
@@ -36,12 +36,12 @@ export default function RegistrationForm({ Users }) {
         username: { ref: usernameRef },
         email   : { ref: emailRef },
         password: {
-            validate: validatePassword,
-            ref     : passwordRef
+            onValidate: validatePassword,
+            ref       : passwordRef
         },
         confirmPassword: {
-            validate: validatePassword,
-            ref     : confirmPasswordRef
+            onValidate: validatePassword,
+            ref       : confirmPasswordRef
         }
     }]);
 

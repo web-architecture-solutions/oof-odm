@@ -12,7 +12,7 @@ function Field({
     updateFieldsetErrors,
     setHasUserEditedForm,
     onChange         = null,
-    validate         = null,
+    onValidate       = null,
     isRequired       = false,
     pattern          = "",
     className        = "",
@@ -55,8 +55,8 @@ function Field({
     }, [name, value, onChange]);
 
     useEffect(() => {
-        if (validate) validate({ [name]: value });
-    }, [name, value, validate]);
+        if (onValidate) onValidate({ [name]: value });
+    }, [name, value, onValidate]);
 
     return (
         <div className={className}>
