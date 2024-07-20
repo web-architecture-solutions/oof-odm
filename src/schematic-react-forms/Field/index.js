@@ -31,7 +31,7 @@ function Field({
                 return { ...prevMap, [name]: true };
             });        
         }
-    }, [hasUserEdited, setHasUserEditedForm]);
+    }, [name, hasUserEdited, setHasUserEditedForm]);
     
     const fieldErrors  = useFieldValidation({ 
         isRequired, 
