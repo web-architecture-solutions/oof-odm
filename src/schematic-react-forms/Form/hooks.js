@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function fieldsetErrorReducer(
     accumulatedFieldsetErrors, 
     currentFieldsetErrors
@@ -6,6 +8,11 @@ function fieldsetErrorReducer(
     return [...accumulatedFieldsetErrors, ...flattendFieldsetErrors];
 }
 
-export default function useFieldErrors(fieldsetErrors) {
-    return Object.values(fieldsetErrors).reduce(fieldsetErrorReducer, []);
+export default function useFieldErrors() {
+    const [serverErrors  ,   setServerErrors] = useState([]);
+    const [fieldsetErrors, setFieldsetErrors] = useState({});
+    
+    const fieldErrors = Object.values(fieldsetErrors).reduce(fieldsetErrorReducer, []);
+
+    return { fieldErrors, serverErrors, setFieldsetErrors, setServerErrors };
 }

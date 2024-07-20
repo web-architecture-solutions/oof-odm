@@ -51,9 +51,11 @@ export default function RegistrationForm({ Logs, Users }) {
         const isFormError = formErrors.length > 0;
         if (isFormError) {
             Logs.add({
-                code   : "auth/front-end-validation-error",
-                message: "There are unhandled form errors",
-                formErrors: formErrors.map(({ code, message }) => ({ code, message }))
+                code      : "auth/front-end-validation-error",
+                message   : "There are unhandled form errors",
+                formErrors: formErrors.map(({ code, message }) => {
+                    return { code, message };
+                })
             });
         } else if (username && email && password) {
             const profile = { username };
@@ -65,8 +67,6 @@ export default function RegistrationForm({ Logs, Users }) {
             );
         }
     }
-
-    
 
     return (
         <Form 
