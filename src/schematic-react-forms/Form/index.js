@@ -1,7 +1,9 @@
 import { useState } from "react";
 
 import Fieldset from "../Fieldset";
-import Button   from "../Button"
+import Button   from "../Button";
+
+import { AND } from "../../logic";
 
 export default function Form({ 
     onSubmit,
@@ -15,7 +17,19 @@ export default function Form({
     errors: formErrors = [],
     fieldsetSchemata   = null,
 }) {
+    const initialhasUserEdited = Object.fromEntries(fieldsetSchemata.reduce((accumulatedFieldsets, currentFieldset) => {
+        return [            
+            ...accumulatedFieldsets,
+            ...currentFieldset.fields.reduce((accumulatedFields, { name }) => {
+                return [ ...accumulatedFields, [name, false] ];
+            }, [])
+        ]
+    }, []));
+
     const [fieldsetErrors, setFieldsetErrors] = useState({});
+    const [hasUserEditedForm, setHasUserEditedForm] = useState(initialhasUserEdited);
+
+    const hasUserEditedAllFields = AND(...Object.values(hasUserEditedForm));
 
     const fieldErrors = Object
         .values(fieldsetErrors)
@@ -49,11 +63,12 @@ export default function Form({
         <form className={className}>
             {fieldsetSchemata ? fieldsetSchemata.map((fieldsetSchema, index) =>
                 <Fieldset 
-                    className        = {fieldsetClassName}
-                    onChange         = {onChange ? onChange(index) : null}
-                    fieldClassName   = {fieldClassName}
-                    key              = {index}
-                    updateFormErrors = {updateFormErrors}
+                    className            = {fieldsetClassName}
+                    onChange             = {onChange ? onChange(index) : null}
+                    fieldClassName       = {fieldClassName}
+                    key                  = {index}
+                    updateFormErrors     = {updateFormErrors}
+                    setHasUserEditedForm = {setHasUserEditedForm}
                     {...fieldsetSchema}  
                 />
             ) : null}
@@ -61,7 +76,7 @@ export default function Form({
             {onSubmit ? (
                 <Button 
                     onClick   = {onSubmit}
-                    disabled  = {isError}
+                    disabled  = {!hasUserEditedAllFields || isError}
                     className = {buttonClassName}
                 >
                     {buttonLabel}
@@ -72,9 +87,7 @@ export default function Form({
                 <span key={index}>
                     {message}
                 </span>
-            ) : null}
-
-            {serverError ? (
+            ) : serverError ? (
                 <span>{serverError.message}</span>
             ) : null}
         </form>

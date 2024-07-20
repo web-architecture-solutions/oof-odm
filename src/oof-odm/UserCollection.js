@@ -12,13 +12,7 @@ import UserDocument       from "./UserDocument";
 
 import ErrorMessage from "./ErrorMessage";
 
-class AuthError extends Error {
-    constructor({ code, message }) {
-        super(message); 
-        this.code = code;
-        this.name = "AuthError";
-    }
-}
+import { AuthError } from "./errors";
 
 function _handleError(errorCode) {
     console.error(`${errorCode}:`, ErrorMessage[errorCode]);

@@ -11,6 +11,7 @@ export default function Fieldset({
     condition             = null,
     onChange              = null,
     fields: fieldSchemata = null,
+    setHasUserEditedForm,
     updateFormErrors
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
@@ -85,6 +86,7 @@ export default function Fieldset({
                     key                  = {index}
                     updateFieldsetData   = {updateFieldsetData}
                     updateFieldsetErrors = {updateFieldsetErrors}
+                    setHasUserEditedForm = {setHasUserEditedForm}
                     {...fieldSchema}
                 />
             ) : null}

@@ -8,9 +8,8 @@ import { FieldType } from "../constants";
 
 import { AND } from "../../logic";
 
-export function useFieldValidation({ isRequired, value, type }) {
+export function useFieldValidation({ isRequired, value, type, hasUserEdited }) {
     const _validateField = useCallback(() => {
-        const hasUserEdited       = value !== null;
         const isEmailAddressField = type === FieldType.email;
         const isValidEmailAddress = value?.match(/^\S+@\S+\.\S+$/);
         

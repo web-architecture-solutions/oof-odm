@@ -35,11 +35,11 @@ export default function RegistrationForm({ Users }) {
         username: { ref: usernameRef },
         email   : { ref: emailRef },
         password: {
-            onChange: validatePassword,
+            validate: validatePassword,
             ref     : passwordRef
         },
         confirmPassword: {
-            onChange: validatePassword,
+            validate: validatePassword,
             ref     : confirmPasswordRef
         }
     }]);
