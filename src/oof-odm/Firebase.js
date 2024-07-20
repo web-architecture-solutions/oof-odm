@@ -9,6 +9,8 @@ import {
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
+import FirebaseCollection from "./FirebaseCollection";
+
 import UserCollection from "./UserCollection";
 import UserDocument   from "./UserDocument";
 
@@ -16,6 +18,12 @@ export default class Firebase {
     constructor(configuration) {
         const application = initializeApp(configuration);
         this.firestore    = getFirestore(application);    
+        this.logs         = new FirebaseCollection({
+            firebase      : this,
+            isRecursive   : false,
+            collectionPath: ["logs"],
+            collectionName: "logs"
+        });
     }
 
     initializeUsers = (

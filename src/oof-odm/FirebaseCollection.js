@@ -1,3 +1,5 @@
+import _FirebaseDocument from "./FirebaseDocument";
+
 import { 
     and,
     collection,
@@ -19,7 +21,7 @@ export default class FirebaseCollection {
         firebase, 
         isRecursive, 
         collectionPath,
-        FirebaseDocument,
+        FirebaseDocument = _FirebaseDocument,
         collectionName,
         subcollectionSchema
     }) {

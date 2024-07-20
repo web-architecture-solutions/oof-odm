@@ -43,6 +43,7 @@ export default class UserCollection extends FirebaseCollection {
     ) => {
         const usernameExists = await this.doesUsernameExist(profile.username);
         if (usernameExists) {
+            const foo = this.getByUsername(profile.username);
             const handleServerError 
                 = UserCollection.serverErrorHandlerFactory(setServerError);
             handleServerError({ code: "auth/username-already-exists" });
@@ -66,8 +67,9 @@ export default class UserCollection extends FirebaseCollection {
         const whereClause = where("username", "==", username);
         const results     = await this.getWhere(whereClause);
         if (results.length > 1) {
-            // TODO: Handle logging error
-            console.error("More than one user exists with that username.");
+            const code    = "auth/more-than-one-user-with-username";
+            const message = "More than one user exists with that username.";
+            this.firebase.logs.add({ code, message, username });
         }
         // TODO: should this return the *oldest* user just in case?
         return results[0];
