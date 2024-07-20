@@ -24,7 +24,9 @@ export default function RegistrationForm({ Logs, Users }) {
     const { 
         formErrors, 
         validatePassword,
-        setServerErrors
+        setServerErrors,
+        fieldErrors,
+        setFieldsetErrors
     } = useRegistrationFormValidation({ password, confirmPassword });
 
     const usernameRef        = useRef();
@@ -64,12 +66,16 @@ export default function RegistrationForm({ Logs, Users }) {
         }
     }
 
+    
+
     return (
         <Form 
-            onSubmit         = {handleOnSubmit}
-            errors           = {formErrors}
-            fieldsetSchemata = {registrationFieldsetSchemata}
-            onChange         = {handleOnFormChange}
+            onSubmit          = {handleOnSubmit}
+            errors            = {formErrors}
+            fieldsetSchemata  = {registrationFieldsetSchemata}
+            onChange          = {handleOnFormChange}
+            fieldErrors       = {fieldErrors}
+            setFieldsetErrors = {setFieldsetErrors}
         />
     );
 }

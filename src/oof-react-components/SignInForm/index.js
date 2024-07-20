@@ -16,7 +16,12 @@ export default function SignInForm({ Users }) {
 
     const { email, password } = formData.credentials;
 
-    const { formErrors, setServerErrors } = useSignInFormValidation();
+    const { 
+        fieldErrors,
+        setFieldsetErrors,
+        formErrors, 
+        setServerErrors 
+    } = useSignInFormValidation();
 
     const emailRef    = useRef();
     const passwordRef = useRef();
@@ -34,13 +39,17 @@ export default function SignInForm({ Users }) {
         );    
     }
 
+    
+
     return (
         <>
             <Form 
-                errors           = {formErrors}
-                onSubmit         = {handleSignIn}
-                onChange         = {handleOnFormChange}
-                fieldsetSchemata = {signInFieldsetSchemata}
+                errors            = {formErrors}
+                onSubmit          = {handleSignIn}
+                onChange          = {handleOnFormChange}
+                fieldsetSchemata  = {signInFieldsetSchemata}
+                fieldErrors       = {fieldErrors}
+                setFieldsetErrors = {setFieldsetErrors}
             />
         </>
     );

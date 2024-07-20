@@ -5,8 +5,6 @@ import Button   from "../Button";
 
 import { AND } from "../../logic";
 
-import useFieldErrors from "./hooks";
-
 export default function Form({ 
     onSubmit,
     className          = "",
@@ -17,17 +15,21 @@ export default function Form({
     onChange           = null,
     errors: formErrors = [],
     fieldsetSchemata   = null,
+    fieldErrors,
+    setFieldsetErrors
 }) {
     const initialEditState = fieldsetSchemata.initialEditState;
     
-    const [fieldsetErrors, setFieldsetErrors] = useState({});
-    const [hasUserEdited ,  setHasUserEdited] = useState(initialEditState);
+    const [hasUserEdited, setHasUserEdited] = useState(initialEditState);
 
     const hasUserEditedAllFields = AND(...Object.values(hasUserEdited));
-    const fieldErrors            = useFieldErrors(fieldsetErrors);
-    const errors                 = [...formErrors, ...fieldErrors];
-    const isFormError            = formErrors.length > 0;
-    const isError                = errors.length > 0;
+    
+    const errors      = [...formErrors, ...fieldErrors];
+    
+    const isFormError = formErrors.length > 0;
+    const isError     =     errors.length > 0;
+    
+    const disabled = !hasUserEditedAllFields || isError;
 
     function updateFormErrors(fieldsetErrorObject) {
         setFieldsetErrors((prevFieldsetErrors) => {
@@ -57,7 +59,7 @@ export default function Form({
             {onSubmit ? (
                 <Button 
                     onClick   = {onSubmit}
-                    disabled  = {!hasUserEditedAllFields || isError}
+                    disabled  = {disabled}
                     className = {buttonClassName}
                 >
                     {buttonLabel}
