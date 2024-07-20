@@ -4,7 +4,7 @@ import { useValidation } from "../../schematic-react-forms/hooks";
 
 import { RegistrationError } from "../errors";
 
-import useFieldErrors from "../../schematic-react-forms/Form/hooks";
+import useErrors from "../../schematic-react-forms/hooks";
 
 export function useRegistrationFormValidation({ 
     password, 
@@ -15,7 +15,7 @@ export function useRegistrationFormValidation({
         serverErrors, 
         setFieldsetErrors, 
         setServerErrors 
-    } = useFieldErrors();
+    } = useErrors();
 
     const arePasswordsFalsy       = !password && !confirmPassword;
     const doPasswordsMatch        =  password === confirmPassword;

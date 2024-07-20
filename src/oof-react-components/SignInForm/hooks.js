@@ -1,4 +1,4 @@
-import useFieldErrors from "../../schematic-react-forms/Form/hooks";
+import useErrors from "../../schematic-react-forms/hooks";
 
 export function useSignInFormValidation() {
     const { 
@@ -6,7 +6,7 @@ export function useSignInFormValidation() {
         serverErrors, 
         setFieldsetErrors, 
         setServerErrors 
-    } = useFieldErrors();
+    } = useErrors();
     
     return { 
         fieldErrors,
