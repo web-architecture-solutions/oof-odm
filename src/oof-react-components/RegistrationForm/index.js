@@ -49,7 +49,7 @@ export default function RegistrationForm({ Users }) {
     function handleOnSubmit() {
         const isFormError = formErrors.length > 0;
         if (isFormError) {
-            // TODO: Report error code to user
+            // TODO: Handle logging and reporting error to user
             console.error(
                 "There are unhandled form errors preventing submission:",
                 ...formErrors

@@ -17,19 +17,12 @@ export default function Form({
     errors: formErrors = [],
     fieldsetSchemata   = null,
 }) {
-    const initialhasUserEdited = Object.fromEntries(fieldsetSchemata.reduce((accumulatedFieldsets, currentFieldset) => {
-        return [            
-            ...accumulatedFieldsets,
-            ...currentFieldset.fields.reduce((accumulatedFields, { name }) => {
-                return [ ...accumulatedFields, [name, false] ];
-            }, [])
-        ]
-    }, []));
-
+    const initialEditState = fieldsetSchemata.initialEditState;
+    
     const [fieldsetErrors, setFieldsetErrors] = useState({});
-    const [hasUserEditedForm, setHasUserEditedForm] = useState(initialhasUserEdited);
+    const [hasUserEdited ,  setHasUserEdited] = useState(initialEditState);
 
-    const hasUserEditedAllFields = AND(...Object.values(hasUserEditedForm));
+    const hasUserEditedAllFields = AND(...Object.values(hasUserEdited));
 
     const fieldErrors = Object
         .values(fieldsetErrors)
@@ -68,7 +61,7 @@ export default function Form({
                     fieldClassName       = {fieldClassName}
                     key                  = {index}
                     updateFormErrors     = {updateFormErrors}
-                    setHasUserEditedForm = {setHasUserEditedForm}
+                    setHasUserEditedForm = {setHasUserEdited}
                     {...fieldsetSchema}  
                 />
             ) : null}
