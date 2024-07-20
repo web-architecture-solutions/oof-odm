@@ -3,13 +3,14 @@ import { useCallback, useReducer, useState } from "react";
 import { ValidationAction } from "./constants";
 
 export function useFormData(fieldsetSchemata) {
-    const _initialFormDataRecords = fieldsetSchemata.map((fieldsetSchema) => {
-        const fieldRecords = fieldsetSchema.fields.map(({ name }) => ([name, null]));
-        const fields       = Object.fromEntries(fieldRecords);
-        return [fieldsetSchema.name, fields];
+    const _initialFormDataRecords = fieldsetSchemata.map(({ name, fields }) => {
+        return [name, fields.initialValues];
     });
+
     const initialFormData = Object.fromEntries(_initialFormDataRecords);
+
     const [formData, setFormData] = useState(initialFormData);
+
     function handleOnFormChange(index) {
         return (fieldsetData) => {
             setFormData((prevFormData) => {
@@ -23,6 +24,7 @@ export function useFormData(fieldsetSchemata) {
             });
         };
     }
+
     return { formData, handleOnFormChange };
 }
 
@@ -41,6 +43,7 @@ function errorReducer(errors, { type, payload }) {
 
 export function useValidation(validator) {
     const [errors, dispatchError] = useReducer(errorReducer, []);
+    
     const validate = useCallback(() => {
         const validationSchema = validator();
         validationSchema.forEach(({ condition, error, code, message }) => {
@@ -57,5 +60,6 @@ export function useValidation(validator) {
             }
         });
     }, [validator]);
+    
     return [errors, validate];
 }
