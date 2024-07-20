@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { useValidation } from "../../schematic-react-forms/hooks";
 
@@ -8,6 +8,8 @@ export function useRegistrationFormValidation({
     password, 
     confirmPassword 
 }) {
+    const [serverErrors, setServerErrors] = useState([]);
+
     const arePasswordsFalsy = !password && !confirmPassword;
     const doPasswordsMatch  = password === confirmPassword;
     
@@ -24,5 +26,9 @@ export function useRegistrationFormValidation({
 
     const [passwordErrors, validatePassword] = useValidation(_validatePassword);
 
-    return { formErrors: [...passwordErrors], validatePassword };
+    return { 
+        formErrors: [...passwordErrors, ...serverErrors], 
+        validatePassword, 
+        setServerErrors 
+    };
 }

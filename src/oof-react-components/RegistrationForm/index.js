@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import registrationFieldsetSchemata from "./schemata";
 
@@ -23,7 +23,8 @@ export default function RegistrationForm({ Users }) {
 
     const { 
         formErrors, 
-        validatePassword 
+        validatePassword,
+        setServerErrors
     } = useRegistrationFormValidation({ password, confirmPassword });
 
     const usernameRef        = useRef();
@@ -43,10 +44,6 @@ export default function RegistrationForm({ Users }) {
             ref     : confirmPasswordRef
         }
     }]);
-
-    
-
-    const [serverErrors, setServerErrors] = useState([]);
 
     function handleOnSubmit() {
         const isFormError = formErrors.length > 0;
@@ -70,7 +67,7 @@ export default function RegistrationForm({ Users }) {
     return (
         <Form 
             onSubmit         = {handleOnSubmit}
-            errors           = {[...formErrors, ...serverErrors]}
+            errors           = {formErrors}
             fieldsetSchemata = {registrationFieldsetSchemata}
             onChange         = {handleOnFormChange}
         />
