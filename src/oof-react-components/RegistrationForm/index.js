@@ -44,7 +44,11 @@ export default function RegistrationForm({ Users }) {
         }
     }]);
 
-    const [serverError, setServerError] = useState(null);
+    
+
+    const [serverErrors, setServerErrors] = useState([]);
+
+    console.log(formErrors, serverErrors)
 
     function handleOnSubmit() {
         const isFormError = formErrors.length > 0;
@@ -60,16 +64,15 @@ export default function RegistrationForm({ Users }) {
                 profile, 
                 email,
                 password,
-                setServerError
+                setServerErrors
             );
         }
     }
 
     return (
         <Form 
-            serverError      = {serverError}
             onSubmit         = {handleOnSubmit}
-            errors           = {formErrors}
+            errors           = {[...formErrors, ...serverErrors]}
             fieldsetSchemata = {registrationFieldsetSchemata}
             onChange         = {handleOnFormChange}
         />

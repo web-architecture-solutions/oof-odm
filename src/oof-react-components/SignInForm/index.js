@@ -22,20 +22,20 @@ export default function SignInForm({ Users }) {
         password: { ref: passwordRef }
     }]);
 
-    const [serverError, setServerError] = useState(null);
+    const [serverErrors, setServerErrors] = useState([]);
 
     async function handleSignIn() {
         await Users.signInWithEmailAndPassword(
             email, 
             password,
-            setServerError
+            setServerErrors
         );    
     }
 
     return (
         <>
             <Form 
-                serverError      = {serverError}
+                errors           = {[...serverErrors]}
                 onSubmit         = {handleSignIn}
                 onChange         = {handleOnFormChange}
                 fieldsetSchemata = {signInFieldsetSchemata}

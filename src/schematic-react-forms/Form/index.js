@@ -23,7 +23,6 @@ export default function Form({
     fieldsetClassName  = "",
     fieldClassName     = "",
     buttonClassName    = "",
-    serverError        = null,
     buttonLabel        = "Submit",
     onChange           = null,
     errors: formErrors = [],
@@ -77,8 +76,6 @@ export default function Form({
             
             {isFormError ? formErrors.map(({ message }, index) => 
                 <span key={index}>{message}</span>
-            ) : serverError ? (
-                <span>{serverError.message}</span>
             ) : null}
         </form>
     );

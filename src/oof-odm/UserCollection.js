@@ -38,12 +38,12 @@ export default class UserCollection extends FirebaseCollection {
         profile, 
         email, 
         password, 
-        setError = null,
+        setServerError = null,
         callback = null
     ) => {
         const usernameExists = await this.doesUsernameExist(profile.username);
         if (usernameExists) {
-            const handleError = UserCollection.errorHandlerFactory(setError);
+            const handleError = UserCollection.errorHandlerFactory(setServerError);
             handleError({ code: "auth/username-already-exists" });
         } else {
             const onSuccess = async ({ user }) => {
@@ -57,7 +57,7 @@ export default class UserCollection extends FirebaseCollection {
             };
             createUserWithEmailAndPassword(this.authentication, email, password)
                 .then(onSuccess)
-                .catch(UserCollection.errorHandlerFactory(setError));    
+                .catch(UserCollection.errorHandlerFactory(setServerError));    
         }
     }
 
@@ -76,24 +76,24 @@ export default class UserCollection extends FirebaseCollection {
 
     /* #region Sign in/out Methods */
 
-    static errorHandlerFactory(setError) {
+    static errorHandlerFactory(setServerError) {
         return ({ code }) => {
             const _message = "There was a user authentication error";
             const message  = ErrorMessage[code] || _message;
             const error    = new AuthError({ code, message });
-            setError ? setError(error) : console.error(error);
+            setServerError ? setServerError([error]) : console.error(error);
         }
     }
 
     signInWithEmailAndPassword = async (
         email, 
         password, 
-        setError = null,
+        setServerError = null,
         callback = null
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
             .then(() => callback && callback())
-            .catch(UserCollection.errorHandlerFactory(setError));
+            .catch(UserCollection.errorHandlerFactory(setServerError));
     }
 
     signOut = (callback = null) => { 
