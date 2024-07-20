@@ -4,10 +4,7 @@ export default class FieldsetSchemata extends Array {
             const fieldsetSchema       = this[index]
             const fieldsetProps        = props[index];
             const fieldSchemata        = fieldsetSchema.fields;
-            const fieldSchemaWithProps = fieldSchemata.map((fieldSchema) => {
-                const fieldProps = fieldsetProps[fieldSchema.name];
-                return { ...fieldSchema, ...fieldProps };
-            });
+            const fieldSchemaWithProps = fieldSchemata.initializeProps(fieldsetProps);
             const fieldsetSchemaWithProps = { 
                 ...fieldsetSchema, 
                 fields: fieldSchemaWithProps 

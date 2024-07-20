@@ -26,13 +26,9 @@ export default function Fieldset({
         );
     }
 
-    const initialFields = Object.fromEntries(
-        fieldSchemata.map(({ name }) => {
-            return [name, null];
-        })
-    );
+    const initialFieldsetData = fieldSchemata.initialValues;
     
-    const [fieldsetData  ,   setFieldsetData] = useState(initialFields);
+    const [fieldsetData  ,   setFieldsetData] = useState(initialFieldsetData);
     const [fieldsetErrors, setFieldsetErrors] = useState({});
     
     useEffect(() => {

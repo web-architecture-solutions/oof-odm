@@ -1,4 +1,5 @@
 import FieldsetSchemata from "../../schematic-react-forms/FieldsetSchemata";
+import FieldSchemata    from "../../schematic-react-forms/FieldSchemata";
 
 import { email, password } from "../terms";
 
@@ -7,7 +8,7 @@ import { AutoComplete, FieldType } from "../../schematic-react-forms/constants";
 const signInFieldsetSchemata = new FieldsetSchemata({ 
     name  : "credentials",
     legend: "Enter User Credentials",
-    fields: [{
+    fields: new FieldSchemata({
         name        : email.lowercase,
         label       : email.uppercase,
         placeholder : email.uppercase,
@@ -22,7 +23,7 @@ const signInFieldsetSchemata = new FieldsetSchemata({
         type        : FieldType.password,
         autoComplete: AutoComplete.currentPassword,
         isRequired  : true
-    }] 
+    }) 
 });
 
 export default signInFieldsetSchemata;

@@ -1,4 +1,5 @@
 import FieldsetSchemata from "../../schematic-react-forms/FieldsetSchemata";
+import FieldSchemata    from "../../schematic-react-forms/FieldSchemata";
 
 import { AutoComplete, FieldType } from "../../schematic-react-forms/constants";
 
@@ -16,7 +17,7 @@ const confirmPasswordLabel = "Confirm Password";
 const registrationFieldsetSchemata = new FieldsetSchemata({
     name  : "credentials",
     legend: "Enter User Credentials",
-    fields: [{
+    fields: new FieldSchemata({
         autoComplete: AutoComplete.username,
         name        : usernameName,
         label       : usernameLabel,
@@ -44,7 +45,7 @@ const registrationFieldsetSchemata = new FieldsetSchemata({
         placeholder : confirmPasswordLabel,
         type        : FieldType.password,
         isRequired  : true
-    }]
+    })
 });
 
 export default registrationFieldsetSchemata;
