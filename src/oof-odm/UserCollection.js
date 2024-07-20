@@ -38,25 +38,18 @@ export default class UserCollection extends FirebaseCollection {
         profile, 
         email, 
         password, 
-        setError,
+        setError = null,
         callback = null
     ) => {
-        console.log(profile)
         const usernameExists = await this.doesUsernameExist(profile.username);
-        console.log(usernameExists)
-        if (usernameExists && setError) {
-            const code = "auth/username-already-exists";
-            setError(
-                new AuthError({
-                    code,
-                    message: ErrorMessage[code]
-                })
-            );
+        if (usernameExists) {
+            const errorHandler = UserCollection.errorHandlerFactory(setError);
+            errorHandler({ code: "auth/username-already-exists" });
         } else {
             const onSuccess = async ({ user }) => {
-                if (profile.username) {
-                    profile.caseInsensitiveUsername 
-                        = profile.username.toLowerCase();
+                const { username } = profile;
+                if (username) {
+                    profile.caseInsensitiveUsername = username.toLowerCase();
                 }
                 await this.set(profile, user.uid);
                 await sendEmailVerification(user);
@@ -64,17 +57,7 @@ export default class UserCollection extends FirebaseCollection {
             };
             createUserWithEmailAndPassword(this.authentication, email, password)
                 .then(onSuccess)
-                .catch(({ code }) => {
-                    console.error(code);
-                    if (setError) {
-                        setError(
-                            new AuthError({
-                                code,
-                                message: ErrorMessage[code]
-                            })
-                        );
-                    }
-                });    
+                .catch(UserCollection.errorHandlerFactory(setError));    
         }
     }
 
@@ -82,6 +65,7 @@ export default class UserCollection extends FirebaseCollection {
         const whereClause = where("username", "==", username);
         const results     = await this.getWhere(whereClause);
         if (results.length > 1) {
+            // TODO: Handle logging this error
             console.error("More than one user exists with that username.");
         }
         return results[0];
@@ -91,29 +75,29 @@ export default class UserCollection extends FirebaseCollection {
 
     /* #region Sign in/out Methods */
 
+    static errorHandlerFactory(setError) {
+        return ({ code }) => {
+            const message = ErrorMessage[code];
+            const error   = new AuthError({ code, message });
+            setError ? setError(error) : console.error(error);
+        }
+    }
+
     signInWithEmailAndPassword = async (
         email, 
         password, 
-        setError
+        setError = null,
+        callback = null
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
-            .catch(({ code }) => {
-                console.error(code);
-                if (setError) {
-                    setError(
-                        new AuthError({
-                            code,
-                            message: ErrorMessage[code]
-                        })
-                    );
-                }
-            });
+            .then(() => callback && callback())
+            .catch(UserCollection.errorHandlerFactory(setError));
     }
 
     signOut = (callback = null) => { 
-        signOut(this.authentication).then(() => {
-            if (callback) callback();
-        }); 
+        signOut(this.authentication)
+            .then(() => callback && callback())
+            .catch(UserCollection.errorHandlerFactory());
     }
 
     /* #endregion Sign in/out Methods */
