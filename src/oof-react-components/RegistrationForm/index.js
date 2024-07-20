@@ -48,8 +48,6 @@ export default function RegistrationForm({ Users }) {
 
     const [serverErrors, setServerErrors] = useState([]);
 
-    console.log(formErrors, serverErrors)
-
     function handleOnSubmit() {
         const isFormError = formErrors.length > 0;
         if (isFormError) {

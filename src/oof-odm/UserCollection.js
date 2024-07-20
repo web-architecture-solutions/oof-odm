@@ -43,8 +43,9 @@ export default class UserCollection extends FirebaseCollection {
     ) => {
         const usernameExists = await this.doesUsernameExist(profile.username);
         if (usernameExists) {
-            const handleError = UserCollection.errorHandlerFactory(setServerError);
-            handleError({ code: "auth/username-already-exists" });
+            const handleServerError 
+                = UserCollection.serverErrorHandlerFactory(setServerError);
+            handleServerError({ code: "auth/username-already-exists" });
         } else {
             const onSuccess = async ({ user }) => {
                 const { username } = profile;
@@ -57,7 +58,7 @@ export default class UserCollection extends FirebaseCollection {
             };
             createUserWithEmailAndPassword(this.authentication, email, password)
                 .then(onSuccess)
-                .catch(UserCollection.errorHandlerFactory(setServerError));    
+                .catch(UserCollection.serverErrorHandlerFactory(setServerError));    
         }
     }
 
@@ -76,7 +77,7 @@ export default class UserCollection extends FirebaseCollection {
 
     /* #region Sign in/out Methods */
 
-    static errorHandlerFactory(setServerError) {
+    static serverErrorHandlerFactory(setServerError) {
         return ({ code }) => {
             const _message = "There was a user authentication error";
             const message  = ErrorMessage[code] || _message;
@@ -93,13 +94,13 @@ export default class UserCollection extends FirebaseCollection {
     ) => {
         signInWithEmailAndPassword(this.authentication, email, password)
             .then(() => callback && callback())
-            .catch(UserCollection.errorHandlerFactory(setServerError));
+            .catch(UserCollection.serverErrorHandlerFactory(setServerError));
     }
 
     signOut = (callback = null) => { 
         signOut(this.authentication)
             .then(() => callback && callback())
-            .catch(UserCollection.errorHandlerFactory());
+            .catch(UserCollection.serverErrorHandlerFactory());
     }
 
     /* #endregion Sign in/out Methods */
