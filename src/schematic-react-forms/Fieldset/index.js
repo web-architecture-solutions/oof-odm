@@ -12,6 +12,7 @@ export default function Fieldset({
     onChange              = null,
     fields: fieldSchemata = null,
     setHasUserEditedForm,
+    setServerErrors,
     updateFormErrors
 }) {
     if (condition && fieldMap && fieldMap[condition]) {
@@ -65,6 +66,10 @@ export default function Fieldset({
             return prevFieldsetErrors;
         });
     }
+
+    useEffect(() => {
+        setServerErrors([]);
+    }, [fieldsetData, setServerErrors]);
 
     useEffect(() => {
         if (onChange) onChange(fieldsetData);

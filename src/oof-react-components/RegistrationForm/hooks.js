@@ -4,19 +4,10 @@ import { useValidation } from "../../schematic-react-forms/hooks";
 
 import { RegistrationError } from "../errors";
 
-import useErrors from "../../schematic-react-forms/hooks";
-
 export function useRegistrationFormValidation({ 
     password, 
     confirmPassword 
 }) {
-    const { 
-        fieldErrors, 
-        serverErrors, 
-        setFieldsetErrors, 
-        setServerErrors 
-    } = useErrors();
-
     const arePasswordsFalsy       = !password && !confirmPassword;
     const doPasswordsMatch        =  password === confirmPassword;
     const isPasswordMismatchError = !arePasswordsFalsy && !doPasswordsMatch;
@@ -32,11 +23,5 @@ export function useRegistrationFormValidation({
 
     const [passwordErrors, validatePassword] = useValidation(_validatePassword);
 
-    return { 
-        formErrors: [...passwordErrors, ...serverErrors], 
-        validatePassword, 
-        setServerErrors,
-        fieldErrors,
-        setFieldsetErrors
-    };
+    return { passwordErrors, validatePassword };
 }

@@ -6,6 +6,8 @@ import { useFormData } from "../../schematic-react-forms/hooks";
 
 import { useRegistrationFormValidation } from "./hooks";
 
+import { useErrors } from "../../schematic-react-forms/hooks";
+
 import Form from "../../schematic-react-forms/Form";
 
 export default function RegistrationForm({ Logs, Users }) {
@@ -22,12 +24,16 @@ export default function RegistrationForm({ Logs, Users }) {
     } = formData.credentials;
 
     const { 
-        formErrors, 
-        validatePassword,
-        setServerErrors,
-        fieldErrors,
-        setFieldsetErrors
+        passwordErrors,
+        validatePassword
     } = useRegistrationFormValidation({ password, confirmPassword });
+
+    const { 
+        isError,
+        errors,
+        setFieldErrors, 
+        setServerErrors 
+    } = useErrors(passwordErrors);
 
     const usernameRef        = useRef();
     const emailRef           = useRef();
@@ -48,13 +54,11 @@ export default function RegistrationForm({ Logs, Users }) {
     }]);
 
     function handleOnSubmit() {
-        // TODO: add log handling for fieldErrors
-        const isFormError = formErrors.length > 0;
-        if (isFormError) {
+        if (isError) {
             Logs.add({
                 code      : "auth/front-end-validation-error",
-                message   : "There are unhandled form errors",
-                formErrors: formErrors.map(({ code, message }) => {
+                message   : "There are unhandled errors",
+                formErrors: Object.values(errors).flat().map(({ code, message }) => {
                     return { code, message };
                 })
             });
@@ -71,12 +75,13 @@ export default function RegistrationForm({ Logs, Users }) {
 
     return (
         <Form 
-            onSubmit          = {handleOnSubmit}
-            errors            = {formErrors}
-            fieldsetSchemata  = {registrationFieldsetSchemata}
-            onChange          = {handleOnFormChange}
-            fieldErrors       = {fieldErrors}
-            setFieldsetErrors = {setFieldsetErrors}
+            isError          = {isError}
+            onSubmit         = {handleOnSubmit}
+            errors           = {errors}
+            fieldsetSchemata = {registrationFieldsetSchemata}
+            onChange         = {handleOnFormChange}
+            setFieldErrors   = {setFieldErrors}
+            setServerErrors  = {setServerErrors}
         />
     );
 }

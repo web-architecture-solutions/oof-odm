@@ -6,6 +6,8 @@ import Button   from "../Button";
 import { AND } from "../../logic";
 
 export default function Form({ 
+    isError,
+    errors,
     onSubmit,
     className          = "",
     fieldsetClassName  = "",
@@ -13,22 +15,15 @@ export default function Form({
     buttonClassName    = "",
     buttonLabel        = "Submit",
     onChange           = null,
-    errors: formErrors = [],
     fieldsetSchemata   = null,
-    fieldErrors,
-    setFieldsetErrors
+    setFieldErrors: setFieldsetErrors,
+    setServerErrors
 }) {
     const initialEditState = fieldsetSchemata.initialEditState;
     
     const [hasUserEdited, setHasUserEdited] = useState(initialEditState);
 
     const hasUserEditedAllFields = AND(...Object.values(hasUserEdited));
-    
-    // TODO: lift into form validation handling (with field errors, etc.)
-    const errors      = [...formErrors, ...fieldErrors];
-    
-    const isFormError = formErrors.length > 0;
-    const isError     =     errors.length > 0;
     
     const disabled = !hasUserEditedAllFields || isError;
 
@@ -53,6 +48,7 @@ export default function Form({
                     key                  = {index}
                     updateFormErrors     = {updateFormErrors}
                     setHasUserEditedForm = {setHasUserEdited}
+                    setServerErrors      = {setServerErrors}
                     {...fieldsetSchema}  
                 />
             ) : null}
@@ -67,7 +63,7 @@ export default function Form({
                 </Button>
             ) : null}
             
-            {isFormError ? formErrors.map(({ message }, index) => 
+            {isError ? errors.map(({ message }, index) => 
                 <span key={index}>{message}</span>
             ) : null}
         </form>

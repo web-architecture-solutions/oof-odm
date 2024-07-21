@@ -4,7 +4,7 @@ import signInFieldsetSchemata from "./schemata";
 
 import { useFormData } from "../../schematic-react-forms/hooks";
 
-import { useSignInFormValidation } from "./hooks";
+import { useErrors } from "../../schematic-react-forms/hooks";
 
 import Form from "../../schematic-react-forms/Form";
 
@@ -17,11 +17,11 @@ export default function SignInForm({ Users }) {
     const { email, password } = formData.credentials;
 
     const { 
-        fieldErrors,
-        setFieldsetErrors,
-        formErrors, 
+        isError,
+        errors,
+        setFieldErrors, 
         setServerErrors 
-    } = useSignInFormValidation();
+    } = useErrors([]);
 
     const emailRef    = useRef();
     const passwordRef = useRef();
@@ -42,12 +42,12 @@ export default function SignInForm({ Users }) {
     return (
         <>
             <Form 
-                errors            = {formErrors}
-                onSubmit          = {handleSignIn}
-                onChange          = {handleOnFormChange}
-                fieldsetSchemata  = {signInFieldsetSchemata}
-                fieldErrors       = {fieldErrors}
-                setFieldsetErrors = {setFieldsetErrors}
+                isError          = {isError}
+                errors           = {errors}
+                onSubmit         = {handleSignIn}
+                onChange         = {handleOnFormChange}
+                fieldsetSchemata = {signInFieldsetSchemata}
+                setFieldErrors   = {setFieldErrors}
             />
         </>
     );
