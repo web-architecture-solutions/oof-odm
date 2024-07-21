@@ -4,11 +4,9 @@ import signInFieldsetSchemata from "./schemata";
 
 import { useFormData } from "../../schematic-react-forms/hooks";
 
-import { useErrors } from "../../schematic-react-forms/hooks";
-
-import { useOnSubmit } from "../hooks";
-
 import Form from "../../schematic-react-forms/Form";
+
+import { useFormSubmission } from "../hooks";
 
 export default function SignInForm({ Logs, Users }) {
     const { 
@@ -18,41 +16,42 @@ export default function SignInForm({ Logs, Users }) {
 
     const { email, password } = formData.credentials;
 
-    const { 
-        isError,
-        errors,
-        formErrors,
-        setFieldErrors, 
-        setServerErrors 
-    } = useErrors([]);
-
-    const emailRef    = useRef();
-    const passwordRef = useRef();
-
-    signInFieldsetSchemata.initializeProps([{
-        email   : { ref:    emailRef },
-        password: { ref: passwordRef }
-    }]);
-
-    const handleSignIn = useOnSubmit(async () => {
+    async function handleSignIn() {
         await Users.signInWithEmailAndPassword(
             email, 
             password,
             setServerErrors
         );
-    }, {
+    }
+
+    const emailRef    = useRef();
+    const passwordRef = useRef();
+
+    const formConfiguration = {
+        fieldsetSchemata: signInFieldsetSchemata,
+        fieldsetProps   : [{
+            email   : { ref:    emailRef },
+            password: { ref: passwordRef }
+        }],
+        requiredFields: [email, password],
+        formErrors      : [],
+        handleOnSubmit: handleSignIn,
+        Logs
+    };
+
+    const { 
         isError,
-        setServerErrors,
-        Logs,
-        errors,
-        requiredFields: [email, password]
-    });
+        formErrors, 
+        setFieldErrors, 
+        setServerErrors, 
+        handleOnSubmit 
+    } = useFormSubmission(formConfiguration);
 
     return (
         <Form 
             isError          = {isError}
             errors           = {formErrors}
-            onSubmit         = {handleSignIn}
+            onSubmit         = {handleOnSubmit}
             onChange         = {handleOnFormChange}
             fieldsetSchemata = {signInFieldsetSchemata}
             setFieldErrors   = {setFieldErrors}

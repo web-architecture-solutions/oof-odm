@@ -1,8 +1,9 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useContext, useEffect, useState } from "react";
 
 import Control from "../Control";
 
 import { useFieldValidation } from "./hooks";
+import FormContext from "../Form/context";
 
 function Field({
     name,
@@ -10,7 +11,6 @@ function Field({
     type,
     updateFieldsetData,
     updateFieldsetErrors,
-    setHasUserEditedForm,
     onChange         = null,
     onValidate       = null,
     isRequired       = false,
@@ -21,6 +21,8 @@ function Field({
     options          = null,
     placeholder      = null
 }, ref) {
+    const { setHasUserEditedForm } = useContext(FormContext);
+
     const [value, setValue] = useState(null);
 
     const hasUserEdited = value !== null;

@@ -1,18 +1,18 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
+
+import { useValidation } from "../../schematic-react-forms/hooks";
 
 import registrationFieldsetSchemata from "./schemata";
 
 import { useFormData } from "../../schematic-react-forms/hooks";
 
-import { useRegistrationFormValidation } from "./hooks";
+import { RegistrationError } from "../errors";
 
-import { useErrors } from "../../schematic-react-forms/hooks";
-
-import { useOnSubmit } from "../hooks";
+import { useFormSubmission } from "../hooks";
 
 import Form from "../../schematic-react-forms/Form";
 
-export default function RegistrationForm({ Logs, Users }) {
+export default function RegistrationForm({ Logs, Users }) {   
     const { 
         formData, 
         handleOnFormChange 
@@ -25,38 +25,20 @@ export default function RegistrationForm({ Logs, Users }) {
         confirmPassword 
     } = formData.credentials;
 
-    const { 
-        passwordErrors,
-        validatePassword
-    } = useRegistrationFormValidation({ password, confirmPassword });
+    const arePasswordsFalsy       = !password && !confirmPassword;
+    const doPasswordsMatch        =  password === confirmPassword;
+    const isPasswordMismatchError = !arePasswordsFalsy && !doPasswordsMatch;
 
-    const { 
-        isError,
-        errors,
-        formErrors,
-        setFieldErrors, 
-        setServerErrors 
-    } = useErrors(passwordErrors);
+    const _validatePassword = useCallback(() => {
+        return [{
+            condition: isPasswordMismatchError,
+            error    : RegistrationError,
+            code     : "oof-react-components/passwords-do-not-match",
+            message  : "Passwords do not match"
+        }];
+    }, [isPasswordMismatchError]);
 
-    const usernameRef        = useRef();
-    const emailRef           = useRef();
-    const passwordRef        = useRef();
-    const confirmPasswordRef = useRef();
-
-    registrationFieldsetSchemata.initializeProps([{
-        username: { ref: usernameRef },
-        email   : { ref: emailRef },
-        password: {
-            onValidate: validatePassword,
-            ref       : passwordRef
-        },
-        confirmPassword: {
-            onValidate: validatePassword,
-            ref       : confirmPasswordRef
-        }
-    }]);
-
-    const handleOnSubmit = useOnSubmit(() => {
+    function _handleOnSubmit() {
         const profile = { username };
         Users.createWithEmailAndPassword(
             profile, 
@@ -64,13 +46,42 @@ export default function RegistrationForm({ Logs, Users }) {
             password,
             setServerErrors
         );
-    }, {
+    }
+
+    const [passwordErrors, validatePassword] = useValidation(_validatePassword);
+
+    const usernameRef        = useRef();
+    const emailRef           = useRef();
+    const passwordRef        = useRef();
+    const confirmPasswordRef = useRef();
+
+    const formConfiguration = {
+        fieldsetSchemata: registrationFieldsetSchemata,
+        fieldsetProps   : [{
+            username: { ref: usernameRef },
+            email   : { ref: emailRef },
+            password: {
+                onValidate: validatePassword,
+                ref       : passwordRef
+            },
+            confirmPassword: {
+                onValidate: validatePassword,
+                ref       : confirmPasswordRef
+            }
+        }],
+        requiredFields: [username, email, password, confirmPassword],
+        formErrors      : [...passwordErrors],
+        handleOnSubmit: _handleOnSubmit,
+        Logs
+    };
+
+    const { 
         isError,
-        setServerErrors,
-        Logs,
-        errors,
-        requiredFields: [username, email, password, confirmPassword]
-    });
+        formErrors, 
+        setFieldErrors, 
+        setServerErrors, 
+        handleOnSubmit 
+    } = useFormSubmission(formConfiguration);
 
     return (
         <Form 

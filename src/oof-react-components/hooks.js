@@ -4,6 +4,8 @@ import { OOFReactError } from "./errors";
 
 import { AND } from "../logic";
 
+import { useErrors } from "../schematic-react-forms/hooks";
+
 export function useCurrentUser({ firebase, setIsLoading }) {
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -73,3 +75,38 @@ export function useOnSubmit(callback, {
         }
     }
 };
+
+export function useFormSubmission({
+    formErrors: _formErrors,
+    fieldsetSchemata,
+    fieldsetProps,
+    handleOnSubmit: _handleOnSubmit,
+    requiredFields,
+    Logs = null
+}) {
+    fieldsetSchemata.initializeProps(fieldsetProps);
+
+    const { 
+        isError,
+        errors,
+        formErrors,
+        setFieldErrors, 
+        setServerErrors 
+    } = useErrors(_formErrors);
+
+    const handleOnSubmit = useOnSubmit(_handleOnSubmit, {
+        isError,
+        setServerErrors,
+        Logs,
+        errors,
+        requiredFields
+    });
+
+    return { 
+        isError, 
+        formErrors, 
+        setFieldErrors, 
+        setServerErrors, 
+        handleOnSubmit 
+    };
+}

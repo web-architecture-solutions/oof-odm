@@ -5,17 +5,19 @@ import Button   from "../Button";
 
 import { AND } from "../../logic";
 
+import FormContext from "./context";
+
 export default function Form({ 
     isError,
     errors,
     onSubmit,
-    className          = "",
-    fieldsetClassName  = "",
-    fieldClassName     = "",
-    buttonClassName    = "",
-    buttonLabel        = "Submit",
-    onChange           = null,
-    fieldsetSchemata   = null,
+    className         = "",
+    fieldsetClassName = "",
+    fieldClassName    = "",
+    buttonClassName   = "",
+    buttonLabel       = "Submit",
+    onChange          = null,
+    fieldsetSchemata  = null,
     setFieldErrors: setFieldsetErrors,
     setServerErrors
 }) {
@@ -38,34 +40,37 @@ export default function Form({
         });
     }
 
-    return (
-        <form className={className}>
-            {fieldsetSchemata ? fieldsetSchemata.map((fieldsetSchema, index) =>
-                <Fieldset 
-                    className            = {fieldsetClassName}
-                    onChange             = {onChange ? onChange(index) : null}
-                    fieldClassName       = {fieldClassName}
-                    key                  = {index}
-                    updateFormErrors     = {updateFormErrors}
-                    setHasUserEditedForm = {setHasUserEdited}
-                    setServerErrors      = {setServerErrors}
-                    {...fieldsetSchema}  
-                />
-            ) : null}
+    const formContext = { setHasUserEditedForm: setHasUserEdited };
 
-            {onSubmit ? (
-                <Button 
-                    onClick   = {onSubmit}
-                    disabled  = {disabled}
-                    className = {buttonClassName}
-                >
-                    {buttonLabel}
-                </Button>
-            ) : null}
-            
-            {isError ? errors.map(({ message }, index) => 
-                <span key={index}>{message}</span>
-            ) : null}
-        </form>
+    return (
+        <FormContext.Provider value={formContext}>
+            <form className={className}>
+                {fieldsetSchemata ? fieldsetSchemata.map((fieldsetSchema, index) =>
+                    <Fieldset 
+                        className            = {fieldsetClassName}
+                        onChange             = {onChange ? onChange(index) : null}
+                        fieldClassName       = {fieldClassName}
+                        key                  = {index}
+                        updateFormErrors     = {updateFormErrors}
+                        setServerErrors      = {setServerErrors}
+                        {...fieldsetSchema}  
+                    />
+                ) : null}
+
+                {onSubmit ? (
+                    <Button 
+                        onClick   = {onSubmit}
+                        disabled  = {disabled}
+                        className = {buttonClassName}
+                    >
+                        {buttonLabel}
+                    </Button>
+                ) : null}
+                
+                {isError ? errors.map(({ message }, index) => 
+                    <span key={index}>{message}</span>
+                ) : null}
+            </form>
+        </FormContext.Provider>
     );
 }

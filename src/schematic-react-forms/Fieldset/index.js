@@ -11,7 +11,6 @@ export default function Fieldset({
     condition             = null,
     onChange              = null,
     fields: fieldSchemata = null,
-    setHasUserEditedForm,
     setServerErrors,
     updateFormErrors
 }) {
@@ -77,9 +76,7 @@ export default function Fieldset({
 
     return (
         <fieldset className={className}>
-            {legend ? (
-                <legend>{legend}</legend>
-            ) : null}
+            {legend ? <legend>{legend}</legend> : null}
 
             {fieldSchemata ? fieldSchemata.map((fieldSchema, index) =>
                 <Field 
@@ -87,7 +84,6 @@ export default function Fieldset({
                     key                  = {index}
                     updateFieldsetData   = {updateFieldsetData}
                     updateFieldsetErrors = {updateFieldsetErrors}
-                    setHasUserEditedForm = {setHasUserEditedForm}
                     {...fieldSchema}
                 />
             ) : null}
