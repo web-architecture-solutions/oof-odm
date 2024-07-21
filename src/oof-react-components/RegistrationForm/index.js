@@ -64,7 +64,7 @@ export default function RegistrationForm({ Logs, Users }) {
                     return { code, message };
                 })
             });
-        } else if (username && email && password) {
+        } else if (username && email && password && confirmPassword) {
             const profile = { username };
             Users.createWithEmailAndPassword(
                 profile, 
@@ -73,6 +73,7 @@ export default function RegistrationForm({ Logs, Users }) {
                 setServerErrors
             );
         } else {
+            console.error("Check useErrors")
             Logs.add({
                 code   : "auth/front-end-validation-error",
                 message: "There are unhandled errors",
