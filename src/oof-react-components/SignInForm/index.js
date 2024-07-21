@@ -6,6 +6,8 @@ import { useFormData } from "../../schematic-react-forms/hooks";
 
 import { useErrors } from "../../schematic-react-forms/hooks";
 
+import { OOFReactError } from "../errors";
+
 import Form from "../../schematic-react-forms/Form";
 
 export default function SignInForm({ Logs, Users }) {
@@ -33,7 +35,12 @@ export default function SignInForm({ Logs, Users }) {
     }]);
 
     async function handleSignIn() {
-        if (isError) {
+        if (isError) {            
+            setServerErrors([new OOFReactError({
+                code   : "auth/front-end-validation-error",
+                message: "There are unhandled errors",
+            })]);
+            console.error("There are unhandled errors. Check Form component implementation");
             Logs.add({
                 code   : "auth/front-end-validation-error",
                 message: "There are unhandled errors",
@@ -49,6 +56,11 @@ export default function SignInForm({ Logs, Users }) {
                 setServerErrors
             );
         } else {
+            setServerErrors([new OOFReactError({
+                code   : "auth/front-end-validation-error",
+                message: "There are unhandled errors",
+            })]);
+            console.error("There are unhandled errors. Check useErrors hook implementation");
             Logs.add({
                 code   : "auth/front-end-validation-error",
                 message: "There are unhandled errors",
