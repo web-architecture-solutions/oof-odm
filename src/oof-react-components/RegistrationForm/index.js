@@ -31,6 +31,7 @@ export default function RegistrationForm({ Logs, Users }) {
     const { 
         isError,
         errors,
+        formErrors,
         setFieldErrors, 
         setServerErrors 
     } = useErrors(passwordErrors);
@@ -58,7 +59,7 @@ export default function RegistrationForm({ Logs, Users }) {
             Logs.add({
                 code      : "auth/front-end-validation-error",
                 message   : "There are unhandled errors",
-                formErrors: Object.values(errors).flat().map(({ code, message }) => {
+                formErrors: errors.map(({ code, message }) => {
                     return { code, message };
                 })
             });
@@ -77,7 +78,7 @@ export default function RegistrationForm({ Logs, Users }) {
         <Form 
             isError          = {isError}
             onSubmit         = {handleOnSubmit}
-            errors           = {errors}
+            errors           = {formErrors}
             fieldsetSchemata = {registrationFieldsetSchemata}
             onChange         = {handleOnFormChange}
             setFieldErrors   = {setFieldErrors}

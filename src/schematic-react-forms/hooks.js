@@ -66,7 +66,7 @@ function fieldsetErrorReducer(
     return [...accumulatedFieldsetErrors, ...flattendFieldsetErrors];
 }
 
-export function useErrors(formErrors) {
+export function useErrors(_formErrors) {
     const [serverErrors  ,   setServerErrors] = useState([]);
     const [fieldsetErrors, setFieldsetErrors] = useState({});
     
@@ -74,16 +74,18 @@ export function useErrors(formErrors) {
         .values(fieldsetErrors)
         .reduce(fieldsetErrorReducer, []);
 
-    const isFormError   =   formErrors.length > 0;
+    const isFormError   =  _formErrors.length > 0;
     const isServerError = serverErrors.length > 0;
     const isFieldError  =  fieldErrors.length > 0;
     const isError       = isFormError || isFieldError || isServerError;
 
-    const errors = [...formErrors, ...serverErrors ];
+    const formErrors = [..._formErrors, ...serverErrors];
+    const errors     = [...formErrors ,  ...fieldErrors];
 
     return { 
         isError,
         errors, 
+        formErrors,
         setFieldErrors: setFieldsetErrors, 
         setServerErrors 
     };
