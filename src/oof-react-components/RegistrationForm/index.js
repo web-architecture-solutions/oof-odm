@@ -8,7 +8,7 @@ import { useRegistrationFormValidation } from "./hooks";
 
 import { useErrors } from "../../schematic-react-forms/hooks";
 
-import { OOFReactError } from "../errors";
+import { useOnSubmit } from "../hooks";
 
 import Form from "../../schematic-react-forms/Form";
 
@@ -18,12 +18,13 @@ export default function RegistrationForm({ Logs, Users }) {
         handleOnFormChange 
     } = useFormData(registrationFieldsetSchemata);
 
+    const fields = formData.credentials;
     const { 
         username, 
         email, 
         password, 
         confirmPassword 
-    } = formData.credentials;
+    } = fields;
 
     const { 
         passwordErrors,
@@ -56,47 +57,21 @@ export default function RegistrationForm({ Logs, Users }) {
         }
     }]);
 
-    function handleOnSubmit() {
-        console.log("FOO")
-        console.log(isError)
-        if (isError) {
-            setServerErrors([new OOFReactError({
-                code   : "auth/front-end-validation-error",
-                message: "There are unhandled errors",
-            })]);
-            console.error("There are unhandled errors. Check Form component implementation");
-            Logs.add({
-                code   : "auth/front-end-validation-error",
-                message: "There are unhandled errors",
-                note   : "Check Form component implementation",
-                errors : errors.map(({ code, message }) => {
-                    return { code, message };
-                })
-            });
-        } else if (username && email && password && confirmPassword) {
-            const profile = { username };
-            Users.createWithEmailAndPassword(
-                profile, 
-                email,
-                password,
-                setServerErrors
-            );
-        } else {
-            setServerErrors([new OOFReactError({
-                code   : "auth/front-end-validation-error",
-                message: "There are unhandled errors",
-            })]);
-            console.error("There are unhandled errors. Check useErrors hook implementation");
-            Logs.add({
-                code   : "auth/front-end-validation-error",
-                message: "There are unhandled errors",
-                note   : "Check useError hook implementation",
-                errors : errors.map(({ code, message }) => {
-                    return { code, message };
-                })
-            });
-        }
-    }
+    const handleOnSubmit = useOnSubmit(() => {
+        const profile = { username };
+        Users.createWithEmailAndPassword(
+            profile, 
+            email,
+            password,
+            setServerErrors
+        );
+    }, {
+        isError,
+        setServerErrors,
+        Logs,
+        errors,
+        fields: Object.values(fields)
+    });
 
     return (
         <Form 

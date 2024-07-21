@@ -1,7 +1,8 @@
 export class OOFReactError extends Error {
-    constructor({ code, message }) {
+    constructor({ code, message, note }) {
         super(message);
         this.code = code;
+        this.note = note;
         this.name = "OOFReactError";
     }
 }
