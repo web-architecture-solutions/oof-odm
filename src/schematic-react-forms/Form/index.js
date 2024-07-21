@@ -24,6 +24,7 @@ export default function Form({
 
     const hasUserEditedAllFields = AND(...Object.values(hasUserEdited));
     
+    // TODO: lift into form validation handling (with field errors, etc.)
     const errors      = [...formErrors, ...fieldErrors];
     
     const isFormError = formErrors.length > 0;

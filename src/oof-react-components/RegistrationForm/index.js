@@ -48,6 +48,7 @@ export default function RegistrationForm({ Logs, Users }) {
     }]);
 
     function handleOnSubmit() {
+        // TODO: add log handling for fieldErrors
         const isFormError = formErrors.length > 0;
         if (isFormError) {
             Logs.add({
