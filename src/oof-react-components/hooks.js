@@ -39,7 +39,7 @@ function handleUnhandledError({
 export function useOnSubmit(callback, {
     isError,
     setServerErrors,
-    fields,
+    requiredFields,
     Logs   = null,
     errors = null
 }) {
@@ -56,7 +56,7 @@ export function useOnSubmit(callback, {
                 errors,
                 Logs
             });
-        } else if (AND(...fields)) {
+        } else if (AND(...requiredFields)) {
             callback();
         } else {
             const error = new OOFReactError({

@@ -18,13 +18,12 @@ export default function RegistrationForm({ Logs, Users }) {
         handleOnFormChange 
     } = useFormData(registrationFieldsetSchemata);
 
-    const fields = formData.credentials;
     const { 
         username, 
         email, 
         password, 
         confirmPassword 
-    } = fields;
+    } = formData.credentials;
 
     const { 
         passwordErrors,
@@ -70,7 +69,7 @@ export default function RegistrationForm({ Logs, Users }) {
         setServerErrors,
         Logs,
         errors,
-        fields: Object.values(fields)
+        requiredFields: [username, email, password, confirmPassword]
     });
 
     return (

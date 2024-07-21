@@ -16,8 +16,7 @@ export default function SignInForm({ Logs, Users }) {
         handleOnFormChange 
     } = useFormData(signInFieldsetSchemata);
 
-    const fields = formData.credentials;
-    const { email, password } = fields;
+    const { email, password } = formData.credentials;
 
     const { 
         isError,
@@ -46,7 +45,7 @@ export default function SignInForm({ Logs, Users }) {
         setServerErrors,
         Logs,
         errors,
-        fields: Object.values(fields)
+        requiredFields: [email, password]
     });
 
     return (
