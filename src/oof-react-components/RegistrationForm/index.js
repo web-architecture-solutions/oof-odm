@@ -88,7 +88,7 @@ export default function RegistrationForm({ Logs, Users }) {
         <Form 
             isError          = {isError}
             onSubmit         = {handleOnSubmit}
-            formErrors       = {formErrors}
+            errors           = {formErrors}
             fieldsetSchemata = {registrationFieldsetSchemata}
             onChange         = {handleOnFormChange}
             setFieldErrors   = {setFieldErrors}
