@@ -57,9 +57,10 @@ export default function RegistrationForm({ Logs, Users }) {
     function handleOnSubmit() {
         if (isError) {
             Logs.add({
-                code      : "auth/front-end-validation-error",
-                message   : "There are unhandled errors",
-                formErrors: errors.map(({ code, message }) => {
+                code   : "auth/front-end-validation-error",
+                message: "There are unhandled errors",
+                note   : "Check Form component implementation",
+                errors : errors.map(({ code, message }) => {
                     return { code, message };
                 })
             });
@@ -71,6 +72,15 @@ export default function RegistrationForm({ Logs, Users }) {
                 password,
                 setServerErrors
             );
+        } else {
+            Logs.add({
+                code   : "auth/front-end-validation-error",
+                message: "There are unhandled errors",
+                note   : "Check useError hook implementation",
+                errors : errors.map(({ code, message }) => {
+                    return { code, message };
+                })
+            });
         }
     }
 
@@ -78,7 +88,7 @@ export default function RegistrationForm({ Logs, Users }) {
         <Form 
             isError          = {isError}
             onSubmit         = {handleOnSubmit}
-            errors           = {formErrors}
+            formErrors       = {formErrors}
             fieldsetSchemata = {registrationFieldsetSchemata}
             onChange         = {handleOnFormChange}
             setFieldErrors   = {setFieldErrors}

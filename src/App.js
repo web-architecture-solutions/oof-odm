@@ -31,7 +31,7 @@ export default function App() {
         case View.register:
             return <RegistrationForm Logs={Logs} Users={Users} />;
         case View.signIn:
-            return <SignInForm Users={Users} />;
+            return <SignInForm Logs={Logs} Users={Users} />;
         default:
             return (
                 <AuthNav 

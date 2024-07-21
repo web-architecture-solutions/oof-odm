@@ -8,7 +8,7 @@ import { useErrors } from "../../schematic-react-forms/hooks";
 
 import Form from "../../schematic-react-forms/Form";
 
-export default function SignInForm({ Users }) {
+export default function SignInForm({ Logs, Users }) {
     const { 
         formData, 
         handleOnFormChange 
@@ -19,6 +19,7 @@ export default function SignInForm({ Users }) {
     const { 
         isError,
         errors,
+        formErrors,
         setFieldErrors, 
         setServerErrors 
     } = useErrors([]);
@@ -32,23 +33,42 @@ export default function SignInForm({ Users }) {
     }]);
 
     async function handleSignIn() {
-        await Users.signInWithEmailAndPassword(
-            email, 
-            password,
-            setServerErrors
-        );    
+        if (isError) {
+            Logs.add({
+                code   : "auth/front-end-validation-error",
+                message: "There are unhandled errors",
+                note   : "Check Form component implementation",
+                errors : errors.map(({ code, message }) => {
+                    return { code, message };
+                })
+            });
+        } else if (email && password) {
+            await Users.signInWithEmailAndPassword(
+                email, 
+                password,
+                setServerErrors
+            );
+        } else {
+            Logs.add({
+                code   : "auth/front-end-validation-error",
+                message: "There are unhandled errors",
+                note   : "Check useError hook implementation",
+                errors : errors.map(({ code, message }) => {
+                    return { code, message };
+                })
+            });
+        }
     }
 
     return (
-        <>
-            <Form 
-                isError          = {isError}
-                errors           = {errors}
-                onSubmit         = {handleSignIn}
-                onChange         = {handleOnFormChange}
-                fieldsetSchemata = {signInFieldsetSchemata}
-                setFieldErrors   = {setFieldErrors}
-            />
-        </>
+        <Form 
+            isError          = {isError}
+            errors           = {formErrors}
+            onSubmit         = {handleSignIn}
+            onChange         = {handleOnFormChange}
+            fieldsetSchemata = {signInFieldsetSchemata}
+            setFieldErrors   = {setFieldErrors}
+            setServerErrors  = {setServerErrors}
+        />
     );
 }
