@@ -80,7 +80,8 @@ export function useFormSubmission({
     formErrors: _formErrors,
     fieldsetSchemata,
     fieldsetProps,
-    handleOnSubmit: _handleOnSubmit,
+    onChange,
+    onSubmit,
     requiredFields,
     Logs = null
 }) {
@@ -94,7 +95,7 @@ export function useFormSubmission({
         setServerErrors 
     } = useErrors(_formErrors);
 
-    const handleOnSubmit = useOnSubmit(_handleOnSubmit, {
+    const handleOnSubmit = useOnSubmit(onSubmit, {
         isError,
         setServerErrors,
         Logs,
@@ -107,6 +108,15 @@ export function useFormSubmission({
         formErrors, 
         setFieldErrors, 
         setServerErrors, 
-        handleOnSubmit 
+        handleOnSubmit,
+        formProps: {
+            isError         : isError,
+            onSubmit        : handleOnSubmit,
+            errors          : formErrors,
+            fieldsetSchemata: fieldsetSchemata,
+            onChange        : onChange,
+            setFieldErrors  : setFieldErrors,
+            setServerErrors : setServerErrors
+        }
     };
 }

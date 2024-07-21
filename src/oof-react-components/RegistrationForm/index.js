@@ -38,7 +38,9 @@ export default function RegistrationForm({ Logs, Users }) {
         }];
     }, [isPasswordMismatchError]);
 
-    function _handleOnSubmit() {
+    const [passwordErrors, validatePassword] = useValidation(_validatePassword);
+
+    function handleRegisterWithEmailAndPassword() {
         const profile = { username };
         Users.createWithEmailAndPassword(
             profile, 
@@ -48,14 +50,12 @@ export default function RegistrationForm({ Logs, Users }) {
         );
     }
 
-    const [passwordErrors, validatePassword] = useValidation(_validatePassword);
-
     const usernameRef        = useRef();
     const emailRef           = useRef();
     const passwordRef        = useRef();
     const confirmPasswordRef = useRef();
 
-    const formConfiguration = {
+    const { setServerErrors, formProps } = useFormSubmission({
         fieldsetSchemata: registrationFieldsetSchemata,
         fieldsetProps   : [{
             username: { ref: usernameRef },
@@ -70,28 +70,11 @@ export default function RegistrationForm({ Logs, Users }) {
             }
         }],
         requiredFields: [username, email, password, confirmPassword],
-        formErrors      : [...passwordErrors],
-        handleOnSubmit: _handleOnSubmit,
+        formErrors    : [...passwordErrors],
+        onChange      : handleOnFormChange,
+        onSubmit      : handleRegisterWithEmailAndPassword,
         Logs
-    };
+    });
 
-    const { 
-        isError,
-        formErrors, 
-        setFieldErrors, 
-        setServerErrors, 
-        handleOnSubmit 
-    } = useFormSubmission(formConfiguration);
-
-    return (
-        <Form 
-            isError          = {isError}
-            onSubmit         = {handleOnSubmit}
-            errors           = {formErrors}
-            fieldsetSchemata = {registrationFieldsetSchemata}
-            onChange         = {handleOnFormChange}
-            setFieldErrors   = {setFieldErrors}
-            setServerErrors  = {setServerErrors}
-        />
-    );
+    return <Form {...formProps} />;
 }

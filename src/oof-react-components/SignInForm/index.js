@@ -27,35 +27,18 @@ export default function SignInForm({ Logs, Users }) {
     const emailRef    = useRef();
     const passwordRef = useRef();
 
-    const formConfiguration = {
+    const { setServerErrors, formProps } = useFormSubmission({
         fieldsetSchemata: signInFieldsetSchemata,
         fieldsetProps   : [{
             email   : { ref:    emailRef },
             password: { ref: passwordRef }
         }],
         requiredFields: [email, password],
-        formErrors      : [],
-        handleOnSubmit: handleSignIn,
+        formErrors    : [],
+        onChange      : handleOnFormChange,
+        onSubmit      : handleSignIn,
         Logs
-    };
+    });
 
-    const { 
-        isError,
-        formErrors, 
-        setFieldErrors, 
-        setServerErrors, 
-        handleOnSubmit 
-    } = useFormSubmission(formConfiguration);
-
-    return (
-        <Form 
-            isError          = {isError}
-            errors           = {formErrors}
-            onSubmit         = {handleOnSubmit}
-            onChange         = {handleOnFormChange}
-            fieldsetSchemata = {signInFieldsetSchemata}
-            setFieldErrors   = {setFieldErrors}
-            setServerErrors  = {setServerErrors}
-        />
-    );
+    return <Form {...formProps} />;
 }
