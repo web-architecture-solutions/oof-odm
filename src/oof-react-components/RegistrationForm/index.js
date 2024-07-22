@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 
 import { useValidation } from "../../schematic-react-forms/hooks";
 
@@ -29,7 +29,7 @@ export default function RegistrationForm({ Logs, Users }) {
     const doPasswordsMatch        =  password === confirmPassword;
     const isPasswordMismatchError = !arePasswordsFalsy && !doPasswordsMatch;
 
-    const _validatePassword = useCallback(() => {
+    const [passwordErrors, validatePassword] = useValidation(() => {
         return [{
             condition: isPasswordMismatchError,
             error    : RegistrationError,
@@ -37,8 +37,6 @@ export default function RegistrationForm({ Logs, Users }) {
             message  : "Passwords do not match"
         }];
     }, [isPasswordMismatchError]);
-
-    const [passwordErrors, validatePassword] = useValidation(_validatePassword);
 
     function handleRegisterWithEmailAndPassword() {
         const profile = { username };

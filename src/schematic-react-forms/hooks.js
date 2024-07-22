@@ -35,7 +35,10 @@ function errorReducer(errors, { type, payload }) {
     }
 }
 
-export function useValidation(validator) {
+export function useValidation(_validator, dependencies) {
+    // eslint-disable-next-line
+    const validator = useCallback(_validator, dependencies);
+    
     const [errors, dispatchError] = useReducer(errorReducer, []);
     
     const validate = useCallback(() => {
